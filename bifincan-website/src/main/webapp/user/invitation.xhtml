@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/resources/layouts/primary-content.xhtml">
+
+
+    <ui:define name="metadata"></ui:define>
+
+    <ui:define name="headIncludes"></ui:define>
+
+    <ui:define name="title">davetlerim - bifincan</ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="davetlerim - bifincan" />
+    </ui:define>
+
+    <ui:define name="pageTitle">davetlerim</ui:define>
+
+    <ui:define name="pageContent">
+
+        <ui:fragment rendered="#{currentUser.age lt 18}">
+            <p class="centerText"><h:graphicImage value="/resources/images/global/500-server-error.png"/></p>
+            <p class="centerText">
+                arkadaşlarına bifincan davetiyesi gönderebilmek için 18 yaşından büyük olman gerekiyor.
+            </p>
+        </ui:fragment>
+
+        <ui:fragment rendered="#{currentUser.age ge 18}">
+            <ui:fragment rendered="#{(userService.countInactiveInviteesByUser(currentUser) gt 0) and !(currentUser.founder or currentUser.ambassador)}">
+                <p class="centerText"><h:graphicImage value="/resources/images/global/500-server-error.png"/></p>
+                <p class="centerText">
+                    biliyorsun davet ettiğin kişilerin bifincan'ın kural ve işleyişine uygun davranacağına güvendiğin ve bu konuda bilgilendirdiğin arkadaşların olmaları gerekiyordu.
+                </p>
+                <p class="centerText">
+                    maalesef kullanım koşullarını ihlal etmiş olma#{userService.countInactiveInviteesByUser(currentUser) eq 1 ? 's' : 'lar'}ından dolayı üyeli#{userService.countInactiveInviteesByUser(currentUser) eq 1 ? 'ğ' : 'kler'}i iptal edilen arkadaş#{userService.countInactiveInviteesByUser(currentUser) eq 1 ? '' : 'lar'}ın oldu ve bu sebeple daha fazla davetiye göndermene müsaade edemiyorum :(
+                </p>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{!((userService.countInactiveInviteesByUser(currentUser) gt 0) and !(currentUser.founder or currentUser.ambassador))}">
+                <p>
+                    Bilinçli tüketiciler birbirlerini tanırlar ;) Sen de görüşlerine güvendiğin arkadaşlarını bifincan'a davet ederek hem öncülerinden olduğun bu topluluğu büyütebilir, hem de kabul edilen her davetinle fi kazanabilirsin.
+                </p>
+
+                <ui:fragment rendered="#{orderService.countSurveyCompletedOrderDetailsByUser(currentUser) eq 0 and !(currentUser.founder or currentUser.ambassador)}">
+                    <p>
+                        Bifincan'a arkadaşlarını davet edebilmeye başlamak için hoşgeldin hediyenle ilgili soruları tamamlamış olman gerekiyor.
+                    </p>
+                    <p>
+                        Çok kısa süre sonra sen de bu sayfa üzerinden arkadaşlarını davet edebileceksin. O günü heyecanla bekliyorum :)
+                    </p>
+                </ui:fragment>
+
+                <ui:fragment rendered="#{orderService.countSurveyCompletedOrderDetailsByUser(currentUser) gt 0 or currentUser.founder or currentUser.ambassador}">
+                    <p>
+                        <ui:fragment rendered="#{inviteFriendAction.numberRemain ge 0}">Tabi bifincan üyesi olmak bir ayrıcalık, dolayısıyla bu ayrıcalığı şimdilik günde #{inviteFriendAction.numberOfInvitationsPerDay} arkadaşınla paylaşabilirsin.</ui:fragment>
+                        <ui:fragment rendered="#{currentUser.ambassador}"> Unutma, sen bir bifincan elçisisin ve büyük bir sorumluluk taşıyorsun. Bifincan'a, tanıdığın ve üye olma ayrıcalığını gerçekten de hakettiğine inandığın bilinçli tüketicileri davet etmelisin ;)</ui:fragment>
+                        <ui:fragment rendered="#{inviteFriendAction.numberRemain gt 0}"> Bugünlük kalan davetiye gönderme hakkın #{inviteFriendAction.numberRemain}.</ui:fragment>
+                        <ui:fragment rendered="#{inviteFriendAction.numberRemain == 0}"> Bugünlük maalesef daha fazla davetiye gönderme hakkın kalmadı.</ui:fragment>
+                        <ui:fragment rendered="#{inviteFriendAction.numberRemain lt 0}"> Sınırsız davet göndermek hakkın var ancak bu davetlerden fi kazanmayacaksın.</ui:fragment>
+                    </p>
+
+                    <ui:fragment rendered="#{inviteFriendAction.numberRemain ne 0}">
+                        <p>
+                            Davet etmek istediğin arkadaşının e-posta adresini yazıp "davet et" butonuna tıklaman yeterli.
+                        </p>
+                        <p>
+                            Sakın unutma, bifincan'a yalnızca "bilinçli tüketici" olduğuna inandığın kişileri davet etmelisin ve davet ettikten sonra da bifincan'ın işleyiş ve kuralları hakkında bilgilendirmelisin.
+                        </p>
+                        <p>
+                            Son olarak, 14 yaşından küçükler bifincan üyesi olamıyorlar. Arkadaşın 14 yaşından büyük ancak 18'den küçükse, mutlaka yasal velisinin rızasını almış olman gerekiyor.
+                        </p>
+                        <div>
+                            <h:form id="emailForm" prependId="false">
+                                <p>
+                                    <h:inputText style="padding: 7px; width: 450px;" id="email" value="#{inviteFriendAction.email}" onkeyup="if (this.value) {
+                                                this.value = this.value.toLowerCase();
+                                                return false;
+                                            }" required="true" requiredMessage=" adres yazmazsan kime davet göndereyim?" validatorMessage=" bu doğru bir adrese benzemiyor pek"/>
+                                    #{' '}<h:commandButton id="change" value="davet et" action="#{inviteFriendAction.sendInvitation}" >
+                                        <f:ajax execute="@form" render="@all"/>
+                                    </h:commandButton>
+                                    <br/><h:message for="email" styleClass="error"/>
+                                </p>
+                            </h:form>
+                        </div>
+                    </ui:fragment>
+
+                </ui:fragment>
+
+                <h:messages id="messages" globalOnly="true" styleClass="invitationError"/>
+
+
+                <h:panelGroup id="historical-invitations" layout="block" rendered="#{not empty inviteFriendAction.historicalInvitations}">
+                    <p>
+                        Şu ana kadar yaptığın davetler ve durumları şöyle:
+                    </p>
+
+                    <h:dataTable value="#{inviteFriendAction.historicalInvitations}" var="_invitation" styleClass="transactionHistory">
+                        <ui:param name="_user" value="#{userService.findUserByEmail(_invitation.email)}"/>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Arkadaşın" />
+                            </f:facet>
+                            <ui:fragment rendered="#{_user eq null}">
+                                <h:outputText value="#{_invitation.email}"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{_user ne null}">
+                                <h:outputLink title="#{_invitation.email} adresine mail atmak için tıkla" value="mailto:#{_invitation.email}" >
+                                    <h:outputText value="#{_user.firstName} #{_user.lastName}" />
+                                </h:outputLink>
+                            </ui:fragment> 
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Davet Zamanı" />
+                            </f:facet>
+                            <h:outputText value="#{_invitation.createTime}" >
+                                <f:converter converterId="org.ocpsoft.PrettyTimeConverter" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Durum" />
+                            </f:facet>
+                            <ui:fragment rendered="#{_user eq null}">
+                                <h:outputText value="#{messages['user.invitation.status.pending']}"  />    
+                            </ui:fragment>
+                            <ui:fragment rendered="#{_user ne null}">
+                                <ui:fragment rendered="#{_user.acceptedInvitation.id eq _invitation.id }">
+                                    <h:outputText value="#{messages['user.invitation.status.acceptedMe']}"  />   
+                                </ui:fragment>
+                                <ui:fragment rendered="#{_user.acceptedInvitation.id ne _invitation.id }">
+                                    <h:outputText value="#{messages['user.invitation.status.acceptedOthers']}"  />   
+                                </ui:fragment>
+                            </ui:fragment> 
+                        </h:column>
+                    </h:dataTable>
+
+                </h:panelGroup>
+            </ui:fragment>
+        </ui:fragment>
+
+    </ui:define>
+</ui:composition>

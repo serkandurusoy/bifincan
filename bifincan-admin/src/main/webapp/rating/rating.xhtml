@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:hh="http://balusc.net/jsf/html"
+                template="/resources/layouts/standard.xhtml">
+    <ui:define name="metadata">
+    </ui:define>
+
+    <ui:define name="browserTitle">product ratings - </ui:define>
+    <ui:define name="content">
+        <h:form id="mainForm">
+	<p:tabView dynamic="true" id="t1"
+		style="border-style:none; padding-left:0px; padding-right: 0px;">
+		<p:tab title="product ratings" id="t11">
+		   <br />	
+		   <p:messages id="messages" autoUpdate="true"/>
+             
+            <p:dataTable id="mainTable" var="rating" value="#{ratingAction.dataModel}" binding="#{ratingAction.dataTable}"
+                         style="height:85%" emptyMessage="No records found" paginator="true" paginatorPosition="bottom" 
+                         paginatorAlwaysVisible="true" rows="12" pageLinks="10">
+                
+                <p:column style="width:25%">
+                    <f:facet name="header">
+                        Opinion
+                    </f:facet>
+                    <h:outputText value="#{rating.opinion}"/>
+                </p:column>
+                <p:column style="width:28%">
+                    <f:facet name="header">
+                        Comment
+                    </f:facet>
+                    <h:outputText value="#{rating.comment}"/>
+                </p:column>                
+                <p:column style="width:7%;text-align:center">
+                    <f:facet name="header">
+                        Star
+                    </f:facet>
+                    <h:outputText value="#{rating.star}"/>
+                </p:column>				 
+                <p:column style="width:10%">
+                    <f:facet name="header">
+                        Create at
+                    </f:facet>
+                    <h:outputText value="#{rating.createTime}"/>
+                </p:column>
+                <p:column style="width:20%">
+                    <f:facet name="header">
+                        By
+                    </f:facet>
+                      <h:outputText value="#{rating.user.name} (#{rating.user.age}, #{messages[rating.user.genderType.label].substring(0, 1).toUpperCase()}, " />
+                      <ui:fragment rendered="#{not empty rating.user.addresses}">
+                          #{rating.user.addresses.iterator().next().area.district.county.city.name}
+                      </ui:fragment>    
+                      <h:outputText value=")" />
+                </p:column>
+                <p:column style="width:10%;text-align:center">
+                    <f:facet name="header">
+                        Action
+                    </f:facet>
+                    <p:commandButton value="Edit" style="right:0px;"
+                       action="#{ratingAction.initEdit(rating)}"
+                       update=":editForm:ratingGrid" onclick="dlg2.show();">
+                       <f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />
+                    </p:commandButton>   
+                </p:column>
+               </p:dataTable> 
+	         </p:tab>
+	      </p:tabView>                
+        </h:form>
+    </ui:define>
+    
+    <ui:define name="afterlayout">
+        <p:dialog header="Rating" widgetVar="dlg2" modal="true"
+                  height="370" width="540">
+
+            <h:form id="editForm">
+                <h:panelGrid id="ratingGrid" width="100%" >
+                	<h:panelGrid columns="2" width="100%" cellpadding="2" cellspacing="2">
+                        <h:outputText value="By:" style="display:block; width:110px"/>
+                        <h:panelGroup>
+                          <h:outputText value="#{ratingAction.currentRating.user.name} (#{ratingAction.currentRating.user.age}, #{messages[ratingAction.currentRating.user.genderType.label].substring(0, 1).toUpperCase()}, " />
+                     	  <ui:fragment rendered="#{not empty ratingAction.currentRating.user.addresses}">
+                            #{ratingAction.currentRating.user.addresses.iterator().next().area.district.county.city.name}
+                      	  </ui:fragment>    
+                     	  <h:outputText value=")" />
+					    </h:panelGroup>
+					    
+                        <h:outputText value="Product:" style="display:block; width:110px"/>
+                        <h:outputText value="#{ratingAction.currentRating.orderDetail.product.name}"/>
+                                                                        
+                        <h:outputText value="Create time:" style="display:block; width:110px"/>
+                        <h:outputText value="#{ratingAction.currentRating.createTime}"/> 
+                        					    
+                        <h:outputText value="Opinion:" style="display:block; width:110px"/>
+                        <h:inputTextarea value="#{ratingAction.currentRating.opinion}" style="width:360px;height:60px"/>
+                        
+                        <h:outputText value="Comment:" style="display:block; width:110px"/>
+                        <h:inputTextarea value="#{ratingAction.currentRating.comment}" style="width:360px;height:100px"/>
+                                                
+                        <h:outputText value="Star:" style="display:block; width:110px"/>
+                        <h:outputText value="#{ratingAction.currentRating.star}"/> 
+                		                                                                                
+ 					</h:panelGrid>
+   
+                    <p:spacer width="100%" height="15"/> 
+                    <f:facet name="footer"> 
+                        <p:commandButton value="Save" action="#{ratingAction.save}" 
+                             update=":mainForm:t1:mainTable" oncomplete="dlg2.hide()"/>	
+                        <p:commandButton value="Cancel" onclick="dlg2.hide();" type="button" />	
+                    </f:facet>     
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+    
+</ui:composition>

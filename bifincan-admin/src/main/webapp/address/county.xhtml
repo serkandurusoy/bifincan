@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/resources/layouts/standard.xhtml">
+    <ui:define name="metadata">
+    </ui:define>
+
+    <ui:define name="browserTitle">counties - </ui:define>
+    <ui:define name="content">
+        <h:form id="mainForm">
+        
+	      <p:tabView dynamic="true" id="t1"
+				style="border-style:none; padding-left:0px; padding-right: 0px;">
+				<p:tab title="counties" id="t11">
+			<p:panel>
+			<p:commandButton value="New" style="right:0px;"
+						action="#{countyAction.initAdd()}"
+						update=":editForm:countyGrid" onclick="dlg2.show();">
+				<f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />		
+			</p:commandButton>			
+			</p:panel>		
+			<p:messages id="messages" autoUpdate="true"/>	
+		        
+            <p:dataTable id="mainTable" var="county" value="#{countyAction.dataModel}" binding="#{countyAction.dataTable}"
+				style="height:85%" emptyMessage="No records found" paginator="true" paginatorPosition="bottom" 
+				paginatorAlwaysVisible="true" rows="12" pageLinks="10">  
+                <p:column style="width:35%">
+                    <f:facet name="header">
+                        Name
+                    </f:facet>
+                    <h:outputText value="#{county.name}"/>
+                </p:column>
+                <p:column style="width:40%">
+                    <f:facet name="header">
+                        City
+                    </f:facet>
+                    <h:outputText value="#{county.city.name}, #{county.city.localRegion.name}, #{county.city.localRegion.country.name}, #{county.city.localRegion.country.globalRegion.name}"/>
+                </p:column>                
+                <p:column style="width:15%">
+                    <f:facet name="header">
+                        Phone Prefix
+                    </f:facet>
+                    <h:outputText value="#{county.phonePrefix}"/>
+                </p:column>
+                <p:column style="width:10%;text-align:center">
+                    <f:facet name="header">
+                        Action
+                    </f:facet>
+                    <p:commandButton value="Edit"
+						action="#{countyAction.initEdit(county)}"
+						update=":editForm:countyGrid" onclick="dlg2.show();">
+						<f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />
+					</p:commandButton>	
+					<p:commandButton value="Delete"
+						action="#{countyAction.initEdit(county)}"
+					 	onclick="dlg3.show();"/>						
+                </p:column>
+            </p:dataTable>     
+	     </p:tab>
+	    </p:tabView>  
+	              
+        </h:form>
+    </ui:define>
+
+    <ui:define name="afterlayout">
+		<p:dialog header="County" widgetVar="dlg2" modal="true"
+				height="160" width="450">
+			<h:form id="editForm">
+				<h:panelGrid id="countyGrid" columns="2" width="100%">
+                    <h:outputText value="City"/>
+                    <h:selectOneMenu value="#{countyAction.currentCounty.city}" converter="#{entityConverter}" required="true" requiredMessage="The city field is required">
+                        <f:selectItems value="#{addressService.cities}" var="r" itemLabel="#{r.name}, #{r.localRegion.name}, #{r.localRegion.country.name}, #{r.localRegion.country.globalRegion.name}"/>
+                    </h:selectOneMenu>
+                    <h:outputText value="Name"/>
+                    <h:inputText value="#{countyAction.currentCounty.name}" required="true" maxlength="250" requiredMessage="The county's name is required"/>
+
+                    <h:outputText value="Phone Prefix"/>
+                    <h:inputText value="#{countyAction.currentCounty.phonePrefix}" required="true" maxlength="6" requiredMessage="The phone prefix field is required"
+                    	validatorMessage="The phone prefix value accepts only digits (positive numbers)" converterMessage="The phone prefix value accepts only digits">
+                    	<f:validateLongRange minimum="1"/>
+                    </h:inputText>
+					<p:spacer width="100%" height="15"/> 
+					<f:facet name="footer">
+						<p:commandButton value="Save" action="#{countyAction.save}"
+							update=":mainForm:t1:mainTable" 
+							oncomplete="dlg2.hide();" />					
+						<p:commandButton value="Cancel" 
+							onclick="dlg2.hide();" type="button" />	
+					</f:facet>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	
+		<p:confirmDialog message="Are you sure to delete the county?"
+			header="Initiating deletion process" severity="alert"
+			widgetVar="dlg3">
+			<h:form id="confirmForm">
+				<p:commandButton value="Yes" actionListener="#{countyAction.delete}"
+					update=":mainForm:t1:mainTable" oncomplete="dlg3.hide()"/>
+				<p:commandButton value="No" onclick="dlg3.hide();" type="button" />
+			</h:form>
+		</p:confirmDialog>	
+		 
+    </ui:define>
+
+</ui:composition>

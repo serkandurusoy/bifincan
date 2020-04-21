@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <img src="#{request.contextPath}/kaptcha.jpg" id="kaptchaImage" />
+        <script type="text/javascript">
+                $(function() {
+                        $('#kaptchaImage').click(function() {
+                                        $(this).hide()
+                                      .attr('src', '#{request.contextPath}/kaptcha.jpg?' + Math.floor(Math.random()*100) )
+                                      .fadeIn();
+                        })
+                });
+        </script>
+        <br />
+        <small>#{messages['signup.kaptcha.cannotread']}</small>
+        <h:inputText id="kaptcha" autocomplete="off" required="true">
+            <f:validator validatorId="kaptchaValidator" />
+        </h:inputText>
+        <h:message for="kaptcha" styleClass="error" />
+    </cc:implementation>
+</html>

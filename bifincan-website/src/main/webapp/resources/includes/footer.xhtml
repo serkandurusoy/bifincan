@@ -1,0 +1,15 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:h="http://java.sun.com/jsf/html">
+
+    <div id="footer">
+        <p>(c) <span class="date">#{utilsBean.thisYear}</span> bifincan.com</p>
+            <ul>
+            <li><h:link outcome="/staticpages/about.xhtml" value="hakkında" /></li>
+            <li><h:link outcome="/staticpages/contact.xhtml" value="iletişim" /></li>
+            <li><h:link outcome="/staticpages/terms.xhtml" value="kullanım koşulları" /></li>
+            <li><h:link outcome="/staticpages/faq.xhtml" value="b.s.s." /></li>
+            </ul>
+    </div>
+
+</ui:composition>

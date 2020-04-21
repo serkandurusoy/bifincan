@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body style="padding: 12px">
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Sevgili ${userfirstname},
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Hediyenin eline sağ salim ulaştığına sevindim.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Ama unutma, sen hediyenin keyfini çıkarırken, senin görüşlerini sabırsızlıkla bekleyen bir marka yöneticisi var, seni dinlemek, görüşlerini almak ve ürününü daha da iyiye ulaştırmak için hazırda bekliyor.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Hediyeni denemen, kullanman, eşe dosta ne kadar da sözü dinlenen, güvenilir ve bilinçli bir tüketici olduğunu anlatarak hava atman için sana <span style="font-weight: bold">${remainingdaysforsurvey} gün</span> veriyorum.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Bu süre sonunda bifincan'da ansızın karşına bu hediyeyle ilgili kısa kısa sorular çıkacak ve sana bol bol fi kazandıracak.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Ha bir de, bu hediyenle ilgili küçük bir sınav var, korkma, tek soruluk. Doğru yanıtı bilirsen daha da fi kazanacaksın, bu sebeple ürünü ve markayı tanımaya çalış.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Sevgiler,<br/>
+            "fi"<br/>
+            <br/>
+            <a style="color: #000000;" href="${baseurl}">www.bifincan.com</a>
+        </p>
+    </body>
+</html>
+

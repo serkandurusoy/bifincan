@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:hh="http://balusc.net/jsf/html"
+                template="/resources/layouts/standard.xhtml">
+    <ui:define name="metadata">
+    </ui:define>
+
+    <ui:define name="browserTitle">pending orders - </ui:define>
+    <ui:define name="content">
+        <h:form id="mainForm">
+            <p:tabView dynamic="true" id="t1"
+                       style="border-style:none; padding-left:0px; padding-right: 0px;">
+                <p:tab title="pending orders" id="t11">
+                    <p:panel>
+            
+                    </p:panel>		
+                    <p:messages id="messages" autoUpdate="true"/>	
+					<p:dataTable id="mainTable" var="order" value="#{pendingOrderAction.dataModel}" binding="#{pendingOrderAction.dataTable}"
+								style="height:85%" emptyMessage="No records found" paginator="true" paginatorPosition="bottom" 
+								paginatorAlwaysVisible="true" rows="12" pageLinks="10" widgetVar="recsTable">            								                              
+                        <p:column sortBy="#{order.address.user.lastName}" filterBy="#{order.address.user.lastName}" > 
+                            <f:facet name="header" style="background-color:red">
+                                Order Owner
+                            </f:facet>
+                            <h:outputText value="#{order.address.user.firstName} #{order.address.user.lastName}" style="#{order.address.user.active ? '':'color: red'}"/>
+                        </p:column>
+                        <p:column sortBy="#{order.address.area.district.county.city.name}" filterBy="#{order.address.area.district.county.city.name}" >
+                            <f:facet name="header" style="background-color:red">
+                                City
+                            </f:facet>
+                            <h:outputText value="#{order.address.area.district.county.city.name}" style="#{order.address.user.active ? '':'color: red'}"/>
+                        </p:column>	                        
+                        <p:column sortBy="#{order.placedTime}">
+                            <f:facet name="header" style="background-color:red">
+                                Placed Time
+                            </f:facet>
+                            <h:outputText value="#{order.placedTime}"  style="#{order.address.user.active ? '':'color: red'}"/>
+                        </p:column>				
+                        <p:column>
+                            <f:facet name="header" style="background-color:red">
+                                Confirmation Code
+                            </f:facet>
+                            <h:outputText value="#{utilsBean.extractCode(order)}" style="#{order.address.user.active ? '':'color: red'}" />
+                        </p:column>				
+                        				
+                        <p:column style="text-align:center">
+                            <f:facet name="header">
+                                Action
+                            </f:facet>
+                            <p:commandButton value="View"
+                                             action="#{pendingOrderAction.initEdit(order)}"
+                                             update=":editForm:orderGrid :editForm:products" onclick="dlg2.show();"/>
+
+                            <p:commandButton value="Set time"
+                                             action="#{pendingOrderAction.initEdit(order)}"
+                                             onclick="dlg1.show();"/>					
+                        </p:column>
+                    </p:dataTable>
+
+                </p:tab>
+            </p:tabView>
+
+        </h:form>
+    </ui:define>
+
+    <ui:define name="afterlayout">
+        <p:dialog header="Order" widgetVar="dlg2" modal="true"
+                  height="420" width="700">
+            <h:form id="editForm">
+                <h:panelGrid id="orderGrid" columns="2" width="100%">
+                          
+				<h:panelGrid id="orderInfo1Grid" columns="4" width="100%">
+                     <h:outputText value="Id: "/>
+					 <h:outputText value="#{pendingOrderAction.currentOrder.id}"/>			 					 
+                     <h:outputText value="Confirmation code: "/>
+					 <h:outputText value="#{utilsBean.extractCode(pendingOrderAction.currentOrder)}"/>                     
+					 
+                     <h:outputText value="Placed time: "/>
+					 <h:outputText value="#{pendingOrderAction.currentOrder.placedTime}"/>
+                     <h:outputText value="Email: "/>
+					 <h:outputText value="#{pendingOrderAction.currentOrder.address.user.email}"/> 
+
+                     <h:outputText value="Name: "/>
+					 <h:outputText value="#{pendingOrderAction.currentOrder.address.user.firstName}"/>                     
+                     <h:outputText value="Lastname: "/>
+					 <h:outputText value="#{pendingOrderAction.currentOrder.address.user.lastName}"/>
+					 		
+                     <h:outputText value="Phone: "/>
+					 <h:outputText value="0 #{pendingOrderAction.currentOrder.address.area.district.county.phonePrefix} #{pendingOrderAction.currentOrder.address.phoneNumber} #{pendingOrderAction.currentOrder.address.phoneExtension}"/>	                    
+                     <h:outputText value="Gsm: "/>
+					 <h:outputText value="#{pendingOrderAction.currentOrder.address.user.gsmVerification.gsmPrefix.code} #{pendingOrderAction.currentOrder.address.user.gsmVerification.gsmNumber}"/>
+					 
+					 <f:facet name="footer">
+                        <h:outputText value="Address: "/>
+						 <h:outputText value="#{pendingOrderAction.currentOrder.address.streetName} #{pendingOrderAction.currentOrder.address.buildingNumber} #{pendingOrderAction.currentOrder.address.apartmentNumber}, 
+					 	#{pendingOrderAction.currentOrder.address.area.district.county.city.name}, #{pendingOrderAction.currentOrder.address.area.district.county.name}, 
+					 	#{pendingOrderAction.currentOrder.address.area.district.name}, #{pendingOrderAction.currentOrder.address.area.name}"/>	
+                     </f:facet> 
+				</h:panelGrid>
+				    	 				                                                                                                                                                                                                    					
+                <p:spacer width="100%" height="15"/> 
+                <f:facet name="footer">
+                   <p:commandButton value="Close" onclick="dlg2.hide();" type="button" />	
+                </f:facet> 
+             </h:panelGrid> 
+ 
+ 			 <p:separator id="separator" style="height:1px"/>
+ 			 <h:outputText value="Order Details" style="font-weight:bold"/>
+ 			 <br/>
+			 <p:dataTable id="products" value="#{pendingOrderAction.items}"  
+					var="item"  emptyMessage="No records found" style="width:100%;padding-top:5px">
+				  <p:column style="width:20%">  
+		            <f:facet name="header">  
+		                Type  
+		            </f:facet>  
+		            <h:outputText value="#{messages[item.type.label]}" />  
+		          </p:column>
+		          	  
+		          <p:column style="width:25%; text-align:center">  
+		            <f:facet name="header">  
+		                Brand  
+		            </f:facet>  
+		            <h:outputText value="#{item.product.brand.name}" />  
+		          </p:column>
+
+		          <p:column style="width:40%; text-align:center">  
+		            <f:facet name="header">  
+		                Product   
+		            </f:facet>  
+		            <h:outputText value="#{item.product.name}" />  
+		          </p:column>
+		          	
+		          <p:column style="width:15%; text-align:center">  
+		            <f:facet name="header">  
+		                Barcode   
+		            </f:facet>  
+		            <h:outputText value="#{item.product.barcode}" />  
+		          </p:column>
+			 </p:dataTable>
+			                
+          </h:form>
+        </p:dialog>
+
+        <p:confirmDialog message="Are you sure to set the 'Sent Time' for this order?"
+                         header="Initiating process" severity="alert"
+                         widgetVar="dlg1">
+            <h:form id="confirmForm">
+                <p:commandButton value="Yes" actionListener="#{pendingOrderAction.setSentTime()}"
+                                 update=":mainForm:t1:mainTable" oncomplete="dlg1.hide()"/>
+                <p:commandButton value="No" onclick="dlg1.hide();" type="button" />
+            </h:form>
+        </p:confirmDialog>	     
+    </ui:define>
+
+</ui:composition>
+
+
+
+
+

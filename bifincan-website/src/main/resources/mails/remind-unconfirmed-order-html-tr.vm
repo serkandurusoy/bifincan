@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body style="padding: 12px">
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Sevgili ${firstName},
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Sana ${sent_time} tarihinde UPS Kargo ile gönderdiğim son hediyenin onay kodunu henüz girmedin.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Paketinin içinden çıkan onay kodunu <a style="color: #000000;" href="${baseurl}/hediyelerim">hediyelerim</a> sayfandan girebilirsin.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Bifincan'dan kargo bedeli dahil hiçbir ücret ödemeden hediye almaya devam edebilmek için bu adımı tamamlaman gerekiyor.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Hediyenden keyif aldığını umarım :)
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Sevgiler,<br/>
+            "fi"<br/>
+            <br/>
+            <a style="color: #000000;" href="${baseurl}">www.bifincan.com</a>
+        </p>
+        <p style="font-style: italic; font-size: 12px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Not: Sana bu hatırlatmayı yapmaya e-posta tercihlerine bakmaksızın devam etmek zorundayım çünkü hakkındaki görüşlerini paylaşabilmek için aldığın bu hediyenin eline sağ salim ulaştığından emin olmam gerekiyor :)
+        </p>
+    </body>
+</html>

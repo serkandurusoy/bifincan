@@ -1,0 +1,587 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:sec="http://www.springframework.org/security/tags"
+                xmlns:p="http://primefaces.org/ui"
+                template="/resources/layouts/secondary-content.xhtml">
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:event listener="#{signupAction.verify}" type="preRenderView" />
+        </f:metadata>
+    </ui:define>
+
+    <ui:define name="robots">
+        <meta name="robots" content="NOINDEX, NOFOLLOW" />
+        <meta http-equiv="pragma" content="no-cache" />
+    </ui:define>
+    <ui:define name="jquery"></ui:define>
+    <ui:define name="headIncludes">
+        <link type="text/css" rel="stylesheet" href="/fi/resources/scripts/jqueryui/jquery-ui-1.8.20.custom.css" />
+        <script type="text/javascript" src="/fi/resources/scripts/jqueryui/jquery-ui-1.8.20.custom.min.js"></script>
+        <script type="text/javascript" src="/fi/resources/scripts/jqueryui/jquery.ui.datepicker-tr.js"></script>
+        <script>
+            $(function() {
+                $('#birthDate').datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: 'dd/mm/yy',
+                    defaultDate: '-30y',
+                    maxDate: '-14y',
+                    minDate: '-100y',
+                    firstDay: 1,
+                    hideIfNoPrevNext: true,
+                    yearRange: 'c-50:c+15'
+                });
+            });
+            
+            String.prototype.toProperCase = function() {
+                return this.replace(/([^\s:/.\(\)\[\],\\\-])([^\s:/.\(\)\[\],\\\-]*)/g,function($0,$1,$2){
+                    return $1.toUpperCase()+$2.toLowerCase();
+                });
+            };
+
+	</script>
+        <link type="text/css" rel="stylesheet" href="/fi/resources/scripts/grumblejs/css/grumble.css" />
+        <script type="text/javascript" src="/fi/resources/scripts/grumblejs/js/bubble.js"></script>
+        <script type="text/javascript" src="/fi/resources/scripts/grumblejs/js/jquery.grumble.js"></script>
+        <script type="text/javascript" src="/fi/resources/scripts/grumblejs/bifincan-signup-grumble.js"></script>
+        <link type="text/css" rel="stylesheet" href="/fi/resources/scripts/videojs/video-js.css" />
+        <script type="text/javascript" src="/fi/resources/scripts/videojs/video.js"></script>
+        <ui:fragment rendered="#{signupAction.signup.editable}">
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    if (typeof firstTimer === 'undefined') {
+                        $('#signupNow').hide();
+                        $('#signupNowButtons').hide();
+                        $('#firstTimer1').show();
+                        firstTimer = 0;
+                    } else {
+                        $('#signupNow').show();
+                    }
+                });
+            </script>
+        </ui:fragment>
+        <script type="text/javascript" src="/fi/resources/scripts/faq/tabber.js"></script>
+    </ui:define>
+    <ui:define name="browserMode">
+        <ui:fragment rendered="#{sec:areAnyGranted('ROLE_USER') eq false}">
+            <script type="text/javascript" src="/fi/resources/scripts/browsermode.js"></script>
+        </ui:fragment>
+    </ui:define>
+
+    <ui:define name="title">bifincan üyeliğimi başlat - bifincan</ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="bifincan üyeliğimi başlat - bifincan" />
+    </ui:define>
+
+    <ui:define name="pageTitle">bifincan üyeliğimi başlat</ui:define>
+
+    <ui:define name="pageContent">
+        <ui:fragment rendered="#{sec:areAnyGranted('ROLE_USER')}">
+            <p class="centerText"><h:graphicImage value="/resources/images/global/500-server-error.png"/></p>	
+            <p class="centerText">hmm... şu anda zaten giriş yapmış görünüyorsun.</p>
+            <p class="centerText">bu bilgisayarı kullanan bir başka arkadaşının üyeliğini başlatmak istiyorsan önce çıkış yapmalısın.</p>
+            <p class="centerText">çıkış yaptıktan sonra davetiyede yer alan bağlantıya tıklayarak arkadaşının üyeliğini başlatabilirsin.</p>
+        </ui:fragment>
+
+        <ui:fragment rendered="#{signupAction.signup.messageId != 0  and signupAction.signup.messageId != 9  and (sec:areAnyGranted('ROLE_USER') eq false)}">
+            <p class="centerText"><h:graphicImage value="/resources/images/global/500-server-error.png"/></p>	
+            <p class="centerText">hmm... davetiyen ile ilgili bir sorun var.</p>
+            <p class="centerText">#{messages[signupAction.signup.messageKey]}</p>
+        </ui:fragment>
+
+        <ui:fragment rendered="#{signupAction.signup.messageId == 9  and (sec:areAnyGranted('ROLE_USER') eq false)}">
+            <p class="centerText"><h:graphicImage value="/resources/images/global/islem-tamam.png"/></p>	
+            <p class="centerText">#{messages[signupAction.signup.messageKey]}</p>
+            <p class="centerText">üyelik işlemlerini tamamlamak için şu andan itibaren <span class="boldText">en geç 3 gün içinde en az 100 soru</span> yanıtlaman gerekiyor ki bu yaklaşık 20 dakikanı alacak. sen bunu yapar yapmaz hoşgeldin hediyeni de sana iletiyor olacağım. bundan sonraki hediyelerini de sen kendin seçebileceksin.</p>
+            <p class="centerText" style="font-weight: bold; font-size: 120%"><a href="/fi/bisoru">kullanıcı adı ve şifren<br/>ile giriş yapabilirsin</a></p>
+        </ui:fragment>
+
+        <h:form id="signupForm" prependId="false" rendered="#{(signupAction.signup.action eq 'signup') and (sec:areAnyGranted('ROLE_USER') eq false)}" >
+
+        <ui:fragment rendered="#{signupAction.signup.editable}">
+            <div id="firstTimer1" style="display: none; min-height: 520px">
+                <p class="link-a" style="margin-bottom: 30px">
+                    <a onclick="_V_('bifincan-video').pause();$('#firstTimer1').fadeOut(400, function(){$('#firstTimer2').fadeIn(600);});">sevdim sanki</a>
+                </p>
+                <p style="font-size: 140%">
+                    #{signupAction.signup.invitor} tarafından <span class="boldText borderbottom">#{signupAction.signup.email}</span> adresine iletilen davetle bifincan üyesi olmak üzeresin. "Bifincan da ne yahu?" diyorsan aşağıdaki <a onclick="_V_('bifincan-video').play();">kısa filmi izlemeni</a> tavsiye ederim, sesi açmayı unutma :)
+                </p>
+                <div>
+                    <p class="video-a" style="margin-left: auto; margin-right: auto">
+                        <video id="bifincan-video" class="video-js vjs-default-skin"
+                                width="640" height="360" controls="controls" preload="auto"
+                                poster="/fi/resources/videos/bifincan-video.jpg" >
+                            <source type="video/mp4" src="/fi/resources/videos/bifincan-video.mp4" />
+                            <source type="video/webm" src="/fi/resources/videos/bifincan-video.webm" />
+                            <source type="video/ogg" src="/fi/resources/videos/bifincan-video.ogv" />
+                            <track kind="subtitles" src="/fi/resources/videos/bifincan-video-tr.vtt" srclang="tr" label="Türkçe" />
+                        </video>
+                        <script type="text/javascript">
+                            _V_.options.flash.swf = "/fi/resources/scripts/videojs/video-js.swf";
+                            _V_("bifincan-video").ready(function(){
+                                var bifincanPlayer = this;
+                                var trackVideoPlay = function(){
+                                    _gaq.push(['_trackEvent', 'Videos', 'Play', 'Bifincan Video']);
+                                    bifincanPlayer.removeEvent("play", trackVideoPlay);
+                                };
+                                bifincanPlayer.addEvent("play", trackVideoPlay);
+                                bifincanPlayer.addEvent("ended", function(){$('#firstTimer1').fadeOut(400, function(){$('#firstTimer2').fadeIn(600);});});
+                            });
+                        </script>
+                    </p>
+                </div>
+            </div>
+            
+            <div id="firstTimer2" style="display: none; min-height: 520px">
+                <div style="float: left; width: 200px; font-size: 140%">
+                    <a onclick="$('#firstTimer2').fadeOut(400, function(){$('#firstTimer1').fadeIn(600);});">&#171; önceki sayfa</a>
+                </div>
+                <div style="float: right; ">
+                    <p class="link-a" style="margin-bottom: 30px">
+                        <a onclick="_V_('bifincan-video').pause();$('#firstTimer2').fadeOut(400, function(){$('#firstTimer3').fadeIn(600);});">kesin sevdim</a>
+                    </p>
+                </div>
+                <p style="clear: both; font-size: 140%">
+                    Gördüğün gibi, bifincan'da markalar ve onların ürün ve hizmetleri hakkında sorular yanıtlayarak, görüşlerini paylaşarak <span class="signuphighlight">"fi", yani puan kazanıyorsun</span> ve biriken fi'lerin ile <span class="signuphighlight">hediyeler sipariş edebiliyorsun</span>. Hem de <strong>kargo dahil hiçbir ücret ödemeden</strong>.
+                </p>
+                <p style="font-size: 140%">
+                    Markalara görüşlerini, fikir ve önerilerini aktarırken seni daha iyi tanımak ve sana en uygun, en çok keyif alacağın hediyeleri seçebilmek için <span class="signuphighlight">seni biraz daha yakından tanımam gerekiyor</span>.
+                </p>
+                <p style="font-size: 140%">
+                    Birazdan sana bifincan'a üye olmak için doldurman gereken bilgi formunu göstereceğim. Bu bilgi formu gözünü korkutmasın, işin tek ve en zor kısmını geçmek üzeresin. Hatta ilk hediyenden sadece dakikalar uzaktasın.
+                </p>
+                <p style="font-size: 140%">
+                    <strong>Yalnız aman dikkat!</strong> <span class="signuphighlight">Bilgilerini ve adresini eksiksiz ve hatasız ver ki hoşgeldin hediyeni hiç bekletmeden</span> sana gönderebileyim :) Hoşgeldin hediyeni gönderemezsem veya bilgilerinde hatalar olursa üyeliğin devam edemez :(
+                </p>
+                <p style="font-size: 140%">
+                    Bu davetiyeyi istersen daha sonra da kullanabilirsin, bu arada <h:link title="tüketici dostu markaların bifincan'da hediye ettiği ürün ve hizmetler" value="hediyelere bakabilir" outcome="/product/all.xhtml" styleClass="boldText" /> ve bifincan'ı daha yakından tanıyabilirsin. Aklına takılan sorular varsa <h:link outcome="/staticpages/faq.xhtml" value="yanıtlarını buraya tıklayarak" styleClass="boldText" style="text-decoration: underline" /> görebilirsin. Tabi unutma, üyeliğini başlatarak <h:link outcome="/staticpages/terms.xhtml" value="kullanım koşullarını" styleClass="boldText" style="text-decoration: underline" /> da kabul etmiş olacaksın.
+                </p>
+            </div>
+            
+            <div id="firstTimer3" style="display: none; min-height: 520px">
+                <div style="float: left; width: 200px; font-size: 140%">
+                    <a onclick="$('#firstTimer3').fadeOut(400, function(){$('#firstTimer2').fadeIn(600);});">&#171; önceki sayfa</a>
+                </div>
+                <div style="float: right; ">
+                    <p class="link-a" style="margin-bottom: 30px">
+                        <a onclick="$('#firstTimer3').fadeOut(400, function(){$('#signupNow,#signupNowButtons').fadeIn(600);});">kabul ediyorum</a>
+                    </p>
+                </div>
+                <p style="clear: both; font-size: 140%; background-color: #D3AB9F; color: #FFFFFF">
+                    Bifincan üyeliğini başlatmadan önce mutlaka aşağıda verilen ve istediğin zaman <h:outputLink value="/staticpages/terms.xhtml" style="text-decoration: underline" styleClass="boldText" target="_blank" title="bifincan kullanım koşulları">kullanım koşulları</h:outputLink> ve <h:outputLink value="/staticpages/faq.xhtml" style="text-decoration: underline" styleClass="boldText" target="_blank" title="bifincan hakkında bazen sorulan ama hiç okunmayan sorular ve yanıtları">soru cevap</h:outputLink> sayfalarında tekrar okuyabileceğin kuralları ve işleyişi kabul etmelisin.
+                </p>
+                <p style="font-size: 140%">
+                    <div style="font-size: 80%; height: 240px; padding: 8px; border: 1px solid gray; overflow: auto;">
+                        <ui:include src="/resources/includes/faqinclude.xhtml"/>
+                        <ui:include src="/resources/includes/termsinclude.xhtml"/>
+                    </div>
+                </p>
+                <p style="font-size: 140%">
+                    Üye olmadan önce "bilinçli tüketici" olmanın ne kadar da zor bir şey olduğunu bir düşünmeni tavsiye ederim. Bifincan'ın amacı öyle bol keseden sağa sola hediye yağdırmak değil, bilinçli tüketicilerin samimi fikir ve görüşlerini ödüllendirmek.
+                </p>
+                <p style="font-size: 140%">
+                    Önemli bir not: bifincan üyesi olabilmek için 14 yaşından büyük olmalı, 18 yaşından küçüksen de yasal velinin iznini almış olmalısın.
+                </p>
+            </div>
+            
+            <div id="signupNow" style="display: none">
+            
+                <p style="margin-top: 12px; font-weight: bold">Aman bu bilgileri tam ve hatasız girmeyi unutma, bu çooook çok çok önemli :)</p>
+
+                <h:panelGrid columns="3" cellspacing="0" cellpadding="0" columnClasses="formColumn1,formColumn2,formColumn3">
+
+                    <h:panelGroup>
+                        #{messages['signup.user.username']}<br />			
+                        <h:inputText id="username" value="#{signupAction.signup.username}" required="true" maxlength="20" styleClass="#{!component.valid ? 'signupInputError' : ''}">
+                            <f:validateLength minimum="6" maximum="20"></f:validateLength>
+                            <f:validateRegex pattern="#{utilsBean.usernameRegexp}"></f:validateRegex>
+                        </h:inputText>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        #{messages['signup.user.password']}<br />
+                        <h:inputSecret id="password" value="#{signupAction.signup.password}" required="true" maxlength="20" styleClass="#{!component.valid ? 'signupInputError' : ''}">
+                            <f:validateLength minimum="6" maximum="20"></f:validateLength>
+                            <f:validateRegex pattern="#{utilsBean.passwordRegexp}"></f:validateRegex>
+                        </h:inputSecret>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        #{messages['signup.user.confirmPassword']}<br />
+                        <h:inputSecret id="confirmPassword" value="#{signupAction.signup.confirmedPassword}" required="true" maxlength="20"  styleClass="#{!component.valid ? 'signupInputError' : ''}">
+                            <f:validateLength minimum="6" maximum="20"></f:validateLength>
+                            <f:validateRegex pattern="#{utilsBean.passwordRegexp}"></f:validateRegex>
+                        </h:inputSecret>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        #{messages['signup.user.firstname']}<br />	
+                        <h:inputText id="firstname" value="#{signupAction.signup.firstname}" required="true" maxlength="32"  styleClass="#{!component.valid ? 'signupInputError' : ''}" onblur="if(this.value){this.value=this.value.toProperCase(); return false;}"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        #{messages['signup.user.lastname']}<br />			
+                        <h:inputText id="lastname" value="#{signupAction.signup.lastname}" required="true" maxlength="32"  styleClass="#{!component.valid ? 'signupInputError' : ''}" onblur="if(this.value){this.value=this.value.toProperCase(); return false;}"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        #{messages['signup.user.birthDate']}<br />
+                        <h:inputText id="birthDate" required="true" value="#{signupAction.signup.dateOfBirth}"  styleClass="#{!component.valid ? 'signupInputError' : ''}"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        #{messages['signup.user.gender']}<br />	
+                        <h:selectOneMenu id="gender" value="#{signupAction.signup.gender}" required="true"  styleClass="#{!component.valid ? 'signupInputError' : ''}">
+                            <f:validateLength minimum="1" />
+                            <f:selectItem itemValue="" itemLabel="#{messages['selectItems.noSelection']}"/>
+                            <f:selectItem itemValue="FEMALE" itemLabel="#{messages['signup.gender.female']}"/>
+                            <f:selectItem itemValue="MALE" itemLabel="#{messages['signup.gender.male']}"/>
+                        </h:selectOneMenu>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        #{messages['signup.user.maritalStatus']}<br />
+                        <h:selectOneMenu id="maritalStatus" value="#{signupAction.signup.maritalStatus}" required="true"  styleClass="#{!component.valid ? 'signupInputError' : ''}">
+                            <f:validateLength minimum="1" />
+                            <f:selectItem itemValue="" itemLabel="#{messages['selectItems.noSelection']}"/>
+                            <f:selectItem itemValue="MARRIED" itemLabel="#{messages['signup.marital.married']}"/>
+                            <f:selectItem itemValue="SINGLE" itemLabel="#{messages['signup.marital.single']}"/>
+                        </h:selectOneMenu>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        #{messages['signup.user.hasChildren']}<br />
+                        <h:selectOneMenu id="hasChildren" value="#{signupAction.signup.hasChildren}" required="true"  styleClass="#{!component.valid ? 'signupInputError' : ''}">
+                            <f:validateLength minimum="1" />
+                            <f:selectItem itemValue="" itemLabel="#{messages['selectItems.noSelection']}"/>
+                            <f:selectItem itemValue="NO" itemLabel="#{messages['signup.children.no']}"/>
+                            <f:selectItem itemValue="YES" itemLabel="#{messages['signup.children.yes']}"/>
+                        </h:selectOneMenu>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        #{messages['signup.user.education']}<br />
+                        <h:selectOneMenu id="education" value="#{signupAction.signup.education}" required="true"  styleClass="#{!component.valid ? 'signupInputError' : ''}">
+                            <f:validateLength minimum="1" />
+                            <f:selectItem itemValue="" itemLabel="#{messages['selectItems.noSelection']}"/>
+                            <f:selectItem itemValue="NONE" itemLabel="#{messages['signup.education.none']}"/>
+                            <f:selectItem itemValue="PRIMARY_SCHOOL" itemLabel="#{messages['signup.education.school']}"/>	
+                            <f:selectItem itemValue="HIGH_SCHOOL" itemLabel="#{messages['signup.education.highSchool']}"/>	
+                            <f:selectItem itemValue="HIGHER_EDUCATION" itemLabel="#{messages['signup.education.higherEducation']}"/>	
+                            <f:selectItem itemValue="UNIVERSITY" itemLabel="#{messages['signup.education.university']}"/>	
+                            <f:selectItem itemValue="GRADUATE" itemLabel="#{messages['signup.education.graduate']}"/>	
+                            <f:selectItem itemValue="DOCTORATE" itemLabel="#{messages['signup.education.doctorate']}"/>																																																
+                        </h:selectOneMenu>			
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        #{messages['signup.user.employmentStatus']}<br />
+                        <h:selectOneMenu id="employment" value="#{signupAction.signup.employmentStatus}" required="true"  styleClass="#{!component.valid ? 'signupInputError' : ''}">
+                            <f:validateLength minimum="1" />
+                            <f:selectItem itemValue="" itemLabel="#{messages['selectItems.noSelection']}"/>
+                            <f:selectItem itemValue="UNEMPLOYED" itemLabel="#{messages['signup.employment.unemployed']}"/>
+                            <f:selectItem itemValue="PART_TIME" itemLabel="#{messages['signup.employment.parttime']}"/>	
+                            <f:selectItem itemValue="FULLTIME" itemLabel="#{messages['signup.employment.fulltime']}"/>	
+                            <f:selectItem itemValue="SELF_EMPLOYED" itemLabel="#{messages['signup.employment.selfEmployed']}"/>								
+                        </h:selectOneMenu>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        #{messages['signup.user.monthlyTLIncome']}<br />
+                        <h:selectOneMenu id="income" value="#{signupAction.signup.montlyNetIncome}" required="true"  styleClass="#{!component.valid ? 'signupInputError' : ''}">
+                            <f:validateLength minimum="1" />
+                            <f:selectItem itemValue="" itemLabel="#{messages['selectItems.noSelection']}"/>
+                            <f:selectItem itemValue="NONE" itemLabel="#{messages['signup.income.none']}"/>
+                            <f:selectItem itemValue="TL_0_1000" itemLabel="#{messages['signup.income.0_1000']}"/>	
+                            <f:selectItem itemValue="TL_1001_2000" itemLabel="#{messages['signup.income.1001_2000']}"/>	
+                            <f:selectItem itemValue="TL_2001_3000" itemLabel="#{messages['signup.income.2001_3000']}"/>	
+                            <f:selectItem itemValue="TL_3001_5000" itemLabel="#{messages['signup.income.3001_5000']}"/>	
+                            <f:selectItem itemValue="TL_Above_5000" itemLabel="#{messages['signup.income.above_5000']}"/>									
+                        </h:selectOneMenu>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        #{messages['signup.user.gsmOperator']}<br />
+                        <h:selectOneMenu id="gsmOperator" value="#{signupAction.signup.gsmOperator}" converter="#{entityConverter}"  styleClass="#{!component.valid ? 'signupInputError' : ''}">
+                            <f:validator validatorId="notNullValidator" />
+                            <f:selectItem itemValue="" itemLabel="#{messages['selectItems.noSelection']}"/>
+                            <f:selectItems value="#{signupAction.gsmOperators}"  var="v" itemLabel="#{v.name}"></f:selectItems>
+                        </h:selectOneMenu>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        #{messages['signup.user.gsmPrefix']}<br />
+                        <h:selectOneMenu id="gsmPrefix" value="#{signupAction.signup.gsmPrefix}" converter="#{entityConverter}"  styleClass="#{!component.valid ? 'signupInputError' : ''}">
+                            <f:validator validatorId="notNullValidator" />
+                            <f:selectItem itemValue="" itemLabel="#{messages['selectItems.noSelection']}"/>
+                            <f:selectItems value="#{signupAction.gsmPrefixs}" var="v" itemLabel="#{v.code}"></f:selectItems>
+                        </h:selectOneMenu>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        #{messages['signup.user.gsmNumber']}<br />
+                        <h:inputText id="gsmNumber" value="#{signupAction.signup.gsmNumber}" maxlength="7" required="true" styleClass="#{!component.valid ? 'signupInputError' : ''}" >
+                            <f:validateLength minimum="7" maximum="7"/>
+                            <f:validateRegex pattern="(^[0-9]{7}$)" />
+                        </h:inputText>
+                    </h:panelGroup>
+
+                    <h:panelGroup />
+
+                </h:panelGrid>
+
+                <p style="margin-top: 12px">Son olarak, adres bilgilerine ihtiyacım var, adresini doğru yazmalısın ki hediyelerini sana sorunsuzca ulaştırabileyim. Sen bu formu doldurarak <span style="font-weight: bold">üyeliğini başlatır başlatmaz senin bu adresine sürpriz bir hoşgeldin hediyesi</span> ileteceğim :)</p>
+
+                <h:panelGrid columns="3" cellspacing="0" cellpadding="0" columnClasses="formColumn1,formColumn2,formColumn3">
+
+
+                    <h:panelGroup>
+                        #{messages['signup.addressType']}<br />
+                        <h:selectOneMenu id="addressType" value="#{signupAction.signup.address.addressType}" converter="#{entityConverter}" styleClass="#{!component.valid ? 'signupInputError' : ''}" >
+                            <f:validator validatorId="notNullValidator" />
+                            <f:selectItem itemValue="" itemLabel="#{messages['selectItems.noSelection']}"/>
+                            <f:selectItems value="#{signupAction.addressTypes}"  var="v" itemLabel="#{v.name}"></f:selectItems>
+                        </h:selectOneMenu>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        #{messages['signup.city']}<br />
+                        <h:selectOneMenu id="addressCity" value="#{signupAction.signup.city}" converter="#{entityConverter}" required="true" styleClass="#{!component.valid ? 'signupInputError' : ''}" >
+                            <f:selectItem itemValue=""  itemLabel="#{messages['selectItems.noSelection']}"/>
+                            <f:selectItems value="#{signupAction.cities}"  var="v" itemLabel="#{v.name}"></f:selectItems>
+                            <f:ajax render="@none" listener="#{signupAction.cityChangeEvent}" execute="@this" event="change" />
+                        </h:selectOneMenu>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        ilçe ve semtin<br />
+                        <p:autoComplete value="#{signupAction.signup.address.area}" converter="#{entityConverter}" id="addressArea"
+                                        var="r"  itemValue="#{r}" itemLabel="#{r.district.county.name} #{r.district.name} #{r.name}"
+                                        completeMethod="#{signupAction.completeArea}"
+                                        minQueryLength="2" forceSelection="true"
+                                        required="true" />
+                            <p:watermark value="ilini seçip adres ara..."  for="addressArea"/>
+                    </h:panelGroup> 
+                    	
+                    <h:panelGroup>
+                        #{messages['signup.addressStreetName']}<br />
+                        <h:inputText id="addressStreetName" value="#{signupAction.signup.address.streetName}" maxlength="250" required="true" styleClass="#{!component.valid ? 'signupInputError' : ''}" onblur="if(this.value){this.value=this.value.toProperCase(); return false;}"/>
+                    </h:panelGroup>
+
+
+                    <h:panelGroup>
+                        #{messages['signup.addressBuildingNumber']}<br />
+                        <h:inputText id="addressBuildingNumber" value="#{signupAction.signup.address.buildingNumber}" maxlength="250" required="true" styleClass="#{!component.valid ? 'signupInputError' : ''}" onblur="if(this.value){this.value=this.value.toProperCase(); return false;}"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        #{messages['signup.addressAppartmentNumber']}<br />
+                        <h:inputText id="addressAppartmentNumber" value="#{signupAction.signup.address.apartmentNumber}" maxlength="250" required="true" styleClass="#{!component.valid ? 'signupInputError' : ''}" onblur="if(this.value){this.value=this.value.toProperCase(); return false;}"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup/>
+
+                </h:panelGrid>
+                
+            </div>
+
+        </ui:fragment>
+
+        <ui:fragment rendered="#{!signupAction.signup.editable}">
+            <h:panelGroup>
+
+                <h:panelGrid columns="3" cellspacing="0" cellpadding="0" columnClasses="formColumn1,formColumn2,formColumn3">
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.user.username']}: " styleClass="boldText"/> <h:outputText value="#{signupAction.signup.username}" />		
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.user.password']}: " styleClass="boldText"/> <h:outputText value="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" />
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.user.confirmPassword']}: " styleClass="boldText"/> <h:outputText value="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" />
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.user.firstname']}: " styleClass="boldText"/> <h:outputText value="#{signupAction.signup.firstname}" />					
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.user.lastname']}: " styleClass="boldText"/> <h:outputText value="#{signupAction.signup.lastname}" />								
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.user.birthDate']}: " styleClass="boldText"/> <h:outputText value="#{signupAction.signup.dateOfBirth}" />
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.user.gender']}: " styleClass="boldText"/> 
+                        <h:outputText value="#{messages['signup.gender.female']}" rendered="#{signupAction.signup.gender=='FEMALE'}" />
+                        <h:outputText value="#{messages['signup.gender.male']}" rendered="#{signupAction.signup.gender=='MALE'}" />
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.user.maritalStatus']}: " styleClass="boldText"/> 
+
+                        <h:outputText value="#{messages['signup.marital.married']}" rendered="#{signupAction.signup.maritalStatus=='MARRIED'}" />
+                        <h:outputText value="#{messages['signup.marital.single']}" rendered="#{signupAction.signup.maritalStatus=='SINGLE'}" />                        
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.user.hasChildren']}: " styleClass="boldText"/> 
+
+                        <h:outputText value="#{messages['signup.children.no']}" rendered="#{signupAction.signup.hasChildren=='NO'}" />
+                        <h:outputText value="#{messages['signup.children.yes']}" rendered="#{signupAction.signup.hasChildren=='YES'}" />
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.user.education']}: " styleClass="boldText"/> 
+
+                        <h:outputText value="#{messages['signup.education.none']}" rendered="#{signupAction.signup.education=='NONE'}" />
+                        <h:outputText value="#{messages['signup.education.school']}" rendered="#{signupAction.signup.education=='PRIMARY_SCHOOL'}" />
+                        <h:outputText value="#{messages['signup.education.highSchool']}" rendered="#{signupAction.signup.education=='HIGH_SCHOOL'}" />
+                        <h:outputText value="#{messages['signup.education.higherEducation']}" rendered="#{signupAction.signup.education=='HIGHER_EDUCATION'}" />
+                        <h:outputText value="#{messages['signup.education.university']}" rendered="#{signupAction.signup.education=='UNIVERSITY'}" />
+                        <h:outputText value="#{messages['signup.education.graduate']}" rendered="#{signupAction.signup.education=='GRADUATE'}" />
+                        <h:outputText value="#{messages['signup.education.doctorate']}" rendered="#{signupAction.signup.education=='DOCTORATE'}" />
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.user.employmentStatus']}: " styleClass="boldText"/> 
+
+                        <h:outputText value="#{messages['signup.employment.unemployed']}" rendered="#{signupAction.signup.employmentStatus=='UNEMPLOYED'}" />
+                        <h:outputText value="#{messages['signup.employment.parttime']}" rendered="#{signupAction.signup.employmentStatus=='PART_TIME'}" />
+                        <h:outputText value="#{messages['signup.employment.fulltime']}" rendered="#{signupAction.signup.employmentStatus=='FULLTIME'}" />
+                        <h:outputText value="#{messages['signup.employment.selfEmployed']}" rendered="#{signupAction.signup.employmentStatus=='SELF_EMPLOYED'}" />
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.user.monthlyTLIncome']}: " styleClass="boldText"/> 
+
+                        <h:outputText value="#{messages['signup.income.none']}" rendered="#{signupAction.signup.montlyNetIncome=='NONE'}" />
+                        <h:outputText value="#{messages['signup.income.0_1000']}" rendered="#{signupAction.signup.montlyNetIncome=='TL_0_1000'}" />
+                        <h:outputText value="#{messages['signup.income.1001_2000']}" rendered="#{signupAction.signup.montlyNetIncome=='TL_1001_2000'}" />
+                        <h:outputText value="#{messages['signup.income.2001_3000']}" rendered="#{signupAction.signup.montlyNetIncome=='TL_2001_3000'}" />
+                        <h:outputText value="#{messages['signup.income.3001_5000']}" rendered="#{signupAction.signup.montlyNetIncome=='TL_3001_5000'}" />
+                        <h:outputText value="#{messages['signup.income.above_5000']}" rendered="#{signupAction.signup.montlyNetIncome=='TL_Above_5000'}" />
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.user.gsmOperator']}: " styleClass="boldText"/> <h:outputText value="#{signupAction.signup.gsmOperator.name}" />
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.user.gsmPrefix']}: " styleClass="boldText"/> <h:outputText value="#{signupAction.signup.gsmPrefix.code}" />
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.user.gsmNumber']}: " styleClass="boldText"/> <h:outputText value="#{signupAction.signup.gsmNumber}" />
+                    </h:panelGroup>
+
+                    <h:panelGroup />
+
+                </h:panelGrid>
+
+                <h:panelGrid columns="3" cellspacing="0" cellpadding="0" columnClasses="formColumn1,formColumn2,formColumn3">
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.addressType']}: " styleClass="boldText"/> <h:outputText value="#{signupAction.signup.address.addressType.name}" />
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.city']}: " styleClass="boldText"/> <h:outputText value="#{signupAction.signup.city.name}" />
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.county']}: " styleClass="boldText"/> <h:outputText value="#{signupAction.signup.county.name}" />
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.district']}: " styleClass="boldText"/> <h:outputText value="#{signupAction.signup.district.name}" />
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.area']}: " styleClass="boldText"/> <h:outputText value="#{signupAction.signup.address.area.name}" />
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.addressStreetName']}: " styleClass="boldText"/> <h:outputText value="#{signupAction.signup.address.streetName}" />
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.addressBuildingNumber']}: " styleClass="boldText"/> <h:outputText value="#{signupAction.signup.address.buildingNumber}" />
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="#{messages['signup.addressAppartmentNumber']}: " styleClass="boldText"/> <h:outputText value="#{signupAction.signup.address.apartmentNumber}" />
+                    </h:panelGroup>
+                </h:panelGrid>
+
+
+                <h:panelGroup layout="block" rendered="#{!signupAction.signup.editable and signupAction.signup.gsmVerified == false and signupAction.gsmConfirmationCode != null}"
+                              style="background-color: #6cc; text-align: center; padding: 18px; color: #fff; margin: 18px 0 18px 0">
+                    
+                    <h:outputLabel value="gsm onay kodun: " style="font-weight: bold; font-size: 120%; color: #fff" />
+                    
+                    <h:inputText id="gsmConfirmationCode" value="#{signupAction.signup.gsmConfirmationCode}" maxlength="6" required="true"
+                                 label="#{messages['signup.user.gsmConfirmationCode']}"
+                                 requiredMessage="#{messages['field.required']}"  
+                                 validatorMessage="#{messages['signup.invalidGsmConfirmCode.error']}"
+                                 style="min-width: 50px; width: 50px; font-family: monospace; font-weight: bold; color: #3d4c4c">
+                        <f:validateLength minimum="6" maximum="6"/>
+                    </h:inputText>
+                    
+                    &#160;
+                    
+                    <h:commandLink value="doğrula" rendered="#{signupAction.signup.gsmVerified == false}" style="text-decoration: underline; color: #000; font-size: 130%; font-weight: bold">
+                        <f:ajax render="@form" execute="gsmConfirmationCode" event="action" listener="#{signupAction.verifyGsmConfirmationCode}" />
+                    </h:commandLink>	
+
+                    <br/>
+                    
+                    <h:message for="gsmConfirmationCode" style="color: #fff; font-style: italic; font-size: 120%;"/>
+                    
+                </h:panelGroup>                
+
+            </h:panelGroup>
+        </ui:fragment>
+
+
+            <p>
+                <h:messages id="messages" globalOnly="true" styleClass="errorSignupForm"/>
+            </p>
+            
+        
+        <p style="text-align: right;" id="signupNowButtons">
+                <h:commandButton id="Signup" value="bilgileri kontrol et"  type="submit" action="#{signupAction.submit}" rendered="#{signupAction.signup.editable}">
+                    <f:ajax execute="@form" render="@all"></f:ajax>					
+                </h:commandButton>
+                &#160;
+                <h:commandButton id="correct" value="geri dön ve düzelt" type="submit" rendered="#{!signupAction.signup.editable}">
+                    <f:ajax execute="@this" render="@all" event="action" listener="#{signupAction.resetEdit}" />					
+                </h:commandButton> 
+                &#160;
+                <h:commandButton id="send_sms" value="sms onayım gelsin" rendered="#{!signupAction.signup.editable and signupAction.signup.gsmVerified == false}">
+                    <f:ajax render="@form" execute="@this" event="action" listener="#{signupAction.sendGsmConfirmationCode}" />
+                </h:commandButton>                                       
+                &#160;
+                <h:commandButton id="complete" value="üyeliğim başlasın" action="#{signupAction.signup}" rendered="#{!signupAction.signup.editable and signupAction.signup.gsmVerified == true}" />
+
+            </p>
+        <ui:fragment rendered="#{!signupAction.signup.editable and signupAction.signup.gsmVerified == true}">
+            <p style="background-color: #998A3D; text-align: justify; padding: 14px; color: #fff; margin: 14px 0 14px 0">
+                bifincan üyeliğini başlatarak <h:outputLink value="/staticpages/terms.xhtml" style="text-decoration: underline; color: #fff" target="_blank" title="bifincan kullanım koşulları">kullanım koşullarını</h:outputLink> kabul etmiş olacaksın. tabi önemli olan karşılıklı sevgi ve saygı, ancak üyeliğin başlamadan önce bu bilgileri okumak en doğal hakkın. merak etme, bu sayfayı kaybetmeyeceksin, yeni bir pencere açılacak. son olarak devam edip üyeliğini başlattığın taktirde, işlemlerinin tamamlanması için ilk 3 günde toplam yaklaşık 20 dakikanı ayırarak 100 soru yanıtlaman gerekiyor, aksi durumda üyeliğin devam edemeyecek.
+            </p>
+        </ui:fragment>
+
+        </h:form>
+
+    </ui:define>
+</ui:composition>

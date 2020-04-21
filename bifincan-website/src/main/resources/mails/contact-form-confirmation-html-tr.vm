@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body style="padding: 12px">
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Merhaba,
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Mesajını aldım ve en kısa sürede sana döneceğim.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Hani bir yanlış anlaşılma olmasın diye, bana ilettiğin mesajı aşağıda tekrarlıyorum:
+        </p>
+
+        <p style="border: 1px solid #D9DFDF; background: #F2F4F4; padding: 24px; font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            ${message}
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Sevgiler,<br/>
+            "fi"<br/>
+            <br/>
+            <a style="color: #000000;" href="${baseurl}">www.bifincan.com</a>
+        </p>
+    </body>
+</html>

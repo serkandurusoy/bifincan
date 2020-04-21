@@ -1,0 +1,15 @@
+Sevgili ${firstName},
+
+Seni uzun süredir bifincan'da görmüyorum.
+
+Bifincan'a her gün ilk girişin de dahil olmak üzere birçok aktiviten ile "fi" kazandığını ve biriken "fi"lerin ile kargo dahil hiçbir ücret ödemeden hediyeler aldığını biliyor muydun ;)
+
+Eğer kullanıcı adını ve şifreni unuttuysan unuttum neydi [1] sayfasını kullanarak tekrar öğrenebilirsin.
+
+Sevgiler,
+"fi"
+
+${baseurl}
+
+Bağlantılar:
+[1] ${baseurl}/unuttum-neydi

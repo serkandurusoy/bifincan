@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:sec="http://www.springframework.org/security/tags"
+      xmlns:p="http://primefaces.org/ui"
+      xml:lang="#{utilsBean.applicationLocale}"
+      lang="#{utilsBean.applicationLocale}">
+
+    <f:view contentType="text/html"
+            encoding="UTF-8"
+            locale="#{utilsBean.applicationLocale}">
+        <ui:insert name="metadata"></ui:insert>
+        <h:head>
+            <title><ui:insert name="browserTitle"></ui:insert>bifincan admin panel</title>
+            <!--<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" />-->
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="Resource-type" content="Document" />
+            <meta http-equiv="pragma" content="no-cache" />
+            <meta name="robots" content="noindex, nofollow" />
+            <link rel="shortcut icon" href="#{resource['images/global:favicon.ico']}" type="image/x-icon" />
+            <link rel="icon" href="#{resource['images/global:favicon.ico']}" type="image/x-icon" />
+            <link rel="apple-touch-startup-image" href="#{resource['images/global:touch-icon-iphone.png']}" />
+            <link rel="apple-touch-icon" href="#{resource['images/global:touch-icon-iphone.png']}" />
+            <link rel="apple-touch-icon" sizes="72x72" href="#{resource['images/global:touch-icon-ipad.png']}" />
+            <link rel="apple-touch-icon" sizes="114x114" href="#{resource['images/global:touch-icon-iphone4.png']}" />
+            <h:outputStylesheet library="styles" name="default.css" />
+            <ui:insert name="headIncludes"></ui:insert>
+        </h:head>
+
+        <h:body>
+            <p:layout fullPage="true">
+                <p:layoutUnit position="north">
+
+                    <p:toolbar style="height:30px; #{facesContext.externalContext.requestServerName eq 'localhost' ? 'background-color: red; background-image: none' : ''}">
+                        <p:toolbarGroup align="left">
+                            <h:outputText value="Bifincan Admin Panel" />
+                            <ui:fragment rendered="#{facesContext.externalContext.requestServerName eq 'localhost'}">
+                                <h:outputText value=" @ "/>
+                                <h:outputText value="#{facesContext.externalContext.requestScheme}://#{facesContext.externalContext.requestServerName}" style=""/>
+                            </ui:fragment>
+                        </p:toolbarGroup>
+                        <p:toolbarGroup align="right">
+                        </p:toolbarGroup>
+                    </p:toolbar>
+                    <sec:authorize access="hasRole('ROLE_ADMINISTRATOR')">
+                        <p:menubar>
+                            <p:menuitem value="Home" url="/admin/home.xhtml" />
+                            <p:submenu label="Product">
+                                <p:menuitem value="Company" url="/product/company.xhtml" />						
+                                <p:menuitem value="Brand" url="/product/brand.xhtml" />
+                                <p:menuitem value="Price Source" url="/product/productPriceSource.xhtml" />
+                                <p:menuitem value="Product Order Criteria" url="/survey/productOrderCriteria.xhtml" />
+                                <p:menuitem value="Product" url="/product/product.xhtml"  />
+                                <p:menuitem value="Blog Post" url="/blog/post.xhtml" />
+                            </p:submenu>
+                            <p:submenu label="Order Tracking">
+                                <p:menuitem value="Cargo List" url="/order/pendingcargolist.xhtml" />						
+                                <p:menuitem value="Pending" url="/order/pending.xhtml" />						
+                                <p:menuitem value="In Delivery" url="/order/delivery.xhtml" />
+                                <p:menuitem value="Received" url="/order/received.xhtml" />
+                            </p:submenu>                            
+                            <p:submenu label="Survey">
+                                <p:submenu label="Generic Surveys">
+                                    <p:menuitem value="Profile Survey" url="/survey/surveyList.xhtml?type=1" />
+                                    <p:menuitem value="Brand Survey" url="/survey/surveyList.xhtml?type=2" />
+                                    <p:menuitem value="Product Category Survey" url="/survey/surveyList.xhtml?type=3" />
+                                    <p:menuitem value="Brand &amp; Prod. Cat. Survey" url="/survey/surveyList.xhtml?type=4" />
+                                </p:submenu>
+                                <p:submenu label="Product Surveys">
+                                    <p:menuitem value="Product Survey" url="/survey/surveyList.xhtml?type=5" />
+                                    <p:menuitem value="Product Quiz" url="/quiz/quizQuestion.xhtml" />
+                                </p:submenu>
+                                <p:menuitem value="Survey Criteria" url="/survey/surveyCriteria.xhtml" />
+                            </p:submenu>
+                            <p:submenu label="Configuration">
+                                <p:menuitem value="Global Configuration" url="/miscellaneous/configuration.xhtml" />
+                                <p:submenu label="GSM Operators">
+                                    <p:menuitem value="Operator" url="/miscellaneous/gsmOperator.xhtml" />
+                                    <p:menuitem value="Prefix" url="/miscellaneous/gsmPrefix.xhtml" />
+                                </p:submenu>
+                                <p:submenu label="Product Categories">
+                                    <p:menuitem value="Level 1" url="/product/productCategory1.xhtml" />
+                                    <p:menuitem value="Level 2" url="/product/productCategory2.xhtml" />
+                                    <p:menuitem value="Level 3" url="/product/productCategory3.xhtml" />
+                                </p:submenu>
+                                <p:submenu label="Address">
+                                    <p:menuitem value="Global Region" url="/address/globalRegion.xhtml" />
+                                    <p:menuitem value="Country" url="/address/country.xhtml" />
+                                    <p:menuitem value="Local Region" url="/address/localRegion.xhtml" />
+                                    <p:menuitem value="City" url="/address/city.xhtml" />
+                                    <p:menuitem value="County" url="/address/county.xhtml" />
+                                    <p:menuitem value="District" url="/address/district.xhtml" />
+                                    <p:menuitem value="Area" url="/address/area.xhtml" />
+                                    <p:menuitem value="Address Type" url="/address/addressType.xhtml" />
+                                </p:submenu>
+                            </p:submenu>						
+                            <p:submenu label="Comments">
+                                <p:menuitem value="Product Comment" url="/product/comment.xhtml"  />
+                                <p:menuitem value="Blog Comment" url="/blog/comment.xhtml" />
+                                <p:menuitem value="Ratings" url="/rating/rating.xhtml" />
+                            </p:submenu>	
+                            <p:submenu label="Admin">
+                                <p:menuitem value="Admin User" url="/admin/adminUser.xhtml" />
+                            </p:submenu>
+                            <p:menuitem value="Logout" url="/logout" />
+                            <p:menuitem value="Change Password" url="/admin/password.xhtml" />
+                        </p:menubar>
+                    </sec:authorize>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center">
+                    <div class="mainContent">
+                        <div class="row">
+                            <ui:insert name="content"></ui:insert>
+                        </div>
+                    </div>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="south" size="30">
+                    (c) #{utilsBean.thisYear} bifincan.com
+                </p:layoutUnit>
+            </p:layout>
+            <ui:insert name="afterlayout"></ui:insert>
+
+        </h:body>
+    </f:view>
+</html>

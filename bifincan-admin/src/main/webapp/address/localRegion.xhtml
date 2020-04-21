@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/resources/layouts/standard.xhtml">
+    <ui:define name="metadata">
+    </ui:define>
+
+    <ui:define name="browserTitle">local regions - </ui:define>
+    <ui:define name="content">
+        <h:form id="mainForm">
+        
+	<p:tabView dynamic="true" id="t1"
+			style="border-style:none; padding-left:0px; padding-right: 0px;">
+			<p:tab title="local regions" id="t11">
+		<p:panel>
+		<p:commandButton value="New" style="right:0px;"
+					action="#{localRegionAction.initAdd()}"
+					update=":editForm:regionGrid" onclick="dlg2.show();">
+				<f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />	
+		</p:commandButton>			
+		</p:panel>		
+		<p:messages id="messages" autoUpdate="true"/>	
+
+		<p:dataTable id="mainTable" var="region" value="#{localRegionAction.dataModel}" binding="#{localRegionAction.dataTable}"
+			style="height:85%" emptyMessage="No records found" paginator="true" paginatorPosition="bottom" 
+			paginatorAlwaysVisible="true" rows="12" pageLinks="10">  
+                 <p:column style="width:45%">
+                    <f:facet name="header">
+                       Local Region  Name
+                    </f:facet>
+                    <h:outputText value="#{region.name}"/>
+                </p:column>			          
+                <p:column style="width:45%">
+                    <f:facet name="header">
+                        Country
+                    </f:facet>
+                    <h:outputText value="#{region.country.name}, #{region.country.globalRegion.name}"/>
+                </p:column>
+                <p:column style="width:10%;text-align:center">
+                    <f:facet name="header">
+                        Action
+                    </f:facet>
+                    <p:commandButton value="Edit"
+						action="#{localRegionAction.initEdit(region)}"
+						update=":editForm:regionGrid" onclick="dlg2.show();">
+						<f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />
+					</p:commandButton>	
+					<p:commandButton value="Delete"
+						action="#{localRegionAction.initEdit(region)}"
+					 	onclick="dlg3.show();"/>						
+                </p:column>
+            </p:dataTable> 
+
+	  </p:tab>
+	  </p:tabView>       
+        </h:form>
+    </ui:define>
+
+    <ui:define name="afterlayout">
+    
+	<p:dialog header="Local Region" widgetVar="dlg2" modal="true"
+			height="130" width="450">
+		<h:form id="editForm">
+			<h:panelGrid id="regionGrid" columns="2" width="100%">
+                    <h:outputText value="Country:"/>
+                    <h:selectOneMenu value="#{localRegionAction.currentLocalRegion.country}" converter="#{entityConverter}"
+                    	required="true" requiredMessage="The country field is required">
+                        <f:selectItems value="#{addressService.countries}" var="r" itemLabel="#{r.name}, #{r.globalRegion.name}"/>
+                    </h:selectOneMenu>
+                    <h:outputText value="Name:"/>
+                    <h:inputText value="#{localRegionAction.currentLocalRegion.name}" maxlength="250" style="width:98%" 
+                    	required="true" requiredMessage="The local region's name is required"/>
+				<p:spacer width="100%" height="15"/> 
+				<f:facet name="footer">
+					<p:commandButton value="Save" action="#{localRegionAction.save}"
+						update=":mainForm:t1:mainTable" 
+						oncomplete="dlg2.hide();" />					
+					<p:commandButton value="Cancel" 
+						onclick="dlg2.hide();" type="button" />	
+				</f:facet>
+			</h:panelGrid>
+		</h:form>
+	</p:dialog>
+
+	<p:confirmDialog message="Are you sure to delete the local region?"
+		header="Initiating deletion process" severity="alert"
+		widgetVar="dlg3">
+		<h:form id="confirmForm">
+			<p:commandButton value="Yes" actionListener="#{localRegionAction.delete}"
+				update=":mainForm:t1:mainTable" oncomplete="dlg3.hide()"/>
+			<p:commandButton value="No" onclick="dlg3.hide();" type="button" />
+		</h:form>
+	</p:confirmDialog>	
+    </ui:define>
+    
+</ui:composition>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:sec="http://www.springframework.org/security/tags"
+      xml:lang="#{utilsBean.applicationLocale}"
+      lang="#{utilsBean.applicationLocale}"
+      xmlns:og="http://ogp.me/ns#"
+      class="aside">
+    <f:view contentType="text/html"
+            encoding="UTF-8"
+            locale="#{utilsBean.applicationLocale}">
+
+        <ui:insert name="metadata"/>
+
+        <h:head>
+            <ui:include src="/resources/includes/head.xhtml"/>
+        </h:head>
+        
+        <h:body>
+		<div id="root">
+			<ui:include src="/resources/includes/menu.xhtml"/>  
+			<div id="content">
+                            <h2><ui:insert name="pageTitle"/></h2>
+                            <ui:insert name="tabMenu"/>
+                            <ui:insert name="tabContent"/>
+			</div>
+			<div id="tools">
+                                <c:choose>
+                                    <c:when test="#{sec:areAnyGranted('ROLE_USER')}">
+                                        <div>
+                                        <ui:include src="/resources/includes/user-info-sub.xhtml"/>
+                                        <ul class="list-a">
+                                            <ui:include src="/resources/includes/menu-toolbox.xhtml"/>
+                                        </ul>
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div>
+                                        <ui:include src="/resources/includes/login-form.xhtml"/>
+                                        <ul class="list-a">
+                                            <ui:include src="/resources/includes/menu-toolbox.xhtml"/>
+                                        </ul>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+                                <ui:fragment rendered="#{sec:areAnyGranted('ROLE_USER')}">
+                                    <ui:insert name="userAlerts" />
+                                </ui:fragment>
+                                <ui:insert name="sidebar"/>
+			</div>
+			<ui:include src="/resources/includes/footer.xhtml"/>
+		</div>
+                
+                <noscript>
+                    <div style="position:fixed; top:0; left:0; margin: 0; padding: 0; z-index:9999; height:100%; width:100%; background: url('/fi/resources/images/global/style/background.png') center 0 no-repeat #fff;">
+                        <p class="centerText" style="margin-top: 100px"><h:graphicImage value="/resources/images/global/500-server-error.png"/></p>	
+                        <p class="centerText" style="font-size: 140%;">bifincan'dan en iyi deneyimi elde edebilmek için</p>
+                        <p class="centerText" style="font-size: 140%;">tarayıcının javascript özelliğini devre dışı bırakmamış olman gerekiyor</p>
+                        <p class="centerText" style="font-size: 140%;">javascript özelliğini tekrar devreye aldığında</p>
+                        <p class="centerText" style="font-size: 140%;">bifincan'ı sorunsuz ve en iyi haliyle gezebilirsin</p>
+                    </div>
+                </noscript>
+
+        </h:body>
+    </f:view>
+</html>

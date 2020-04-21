@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:fi="http://java.sun.com/jsf/composite/components"
+                xmlns:sec="http://www.springframework.org/security/tags"
+                template="/resources/layouts/secondary-content-with-submenu.xhtml">
+
+    <ui:define name="metadata"></ui:define>
+
+    <ui:define name="headIncludes"></ui:define>
+
+    <ui:define name="title">bifincan hakkında - bifincan</ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="bifincan hakkında - bifincan" />
+    </ui:define>
+
+    <ui:define name="pageTitle">bifincan hakkında</ui:define>
+
+    <ui:define name="pageSubMenu">
+        <ul>
+            <li class="active"><h:link outcome="/staticpages/about.xhtml" value="&#187; hakkında" /></li>
+            <li><h:link outcome="/staticpages/team.xhtml" value="ekip" /></li>
+            <li><h:link outcome="/staticpages/contact.xhtml" value="iletişim" /></li>
+            <li><h:link outcome="/staticpages/terms.xhtml" value="kullanım koşulları" /></li>
+        </ul>
+    </ui:define>
+
+    <ui:define name="pageContent">
+        
+        <div style="font-size: 110%">
+        
+            <p style="font-size: 130%; margin-bottom: 24px">
+                Aslında benim için herşey yıllardan henüz 2000 dahi olmamışken başladı... 
+            </p>
+            
+            <p style="font-size: 130%; margin-bottom: 24px">
+                Markalar sıklıkla sokakta, ofislerine davet ederek, market ve mağazalarda, bazen kapı kapı dolaşarak, hatta telefon açarak ürün ve hizmetleri hakkında sorular soruyor, bir kısmı da bu ürün ve hizmetlerini hediye ederek denenmesini bekliyor ve görüşleri biriktirip yorumlamaya çalışıyorlardı uzun yıllardır. Tabi bu yorumlar da ürün ve hizmetlerin daha da geliştirilmesi için kullanılıyordu.
+            </p>
+            
+            <p style="font-size: 130%; margin-bottom: 24px">
+                Fikir anne ve babalarım, o yıllarda artık yavaş yavaş gündelik hayatımızın parçası haline gelen internet'in, aslında bu araştırmaları yürütmek için hiç de fena bir mecra olmadığını düşünüyorlardı. Ne de olsa internet sayesinde daha geniş bir kitleye ulaşılabilecek, hatta maliyeti de daha az olacağı için buradan tasarruf edilenler, denemek üzere daha fazla ürün ve hizmet hediye edilmesine de imkan verecekti.
+            </p>
+            
+            <p style="font-size: 130%; margin-bottom: 24px">
+                Dahası, böyle bir imkanı sunan bir platformda toplanan bilgiler, bu bilgileri paylaşan üyelerine de açılarak, üyelerin alışveriş kararlarını alırken daha da bilinçli olabilmelerine imkan tanıyacaktı.
+            </p>
+            
+            <p style="font-size: 130%; margin-bottom: 24px">
+                Ama fikir anne ve babalarım, o dönemin Türkiye'sinde internet bağlantı imkan ve hızlarının dünya standartlarının çooook çok altında olmasından çekinerek biraz beklemeye karar verdiler.
+            </p>
+            
+            <p style="font-size: 130%; margin-bottom: 24px">
+                Biraz... ;)
+            </p>
+            
+            <p style="font-size: 130%; margin-bottom: 24px">
+                Teknolojinin gelişmesine paralel olarak bugün artık neredeyse domatesin bile internete bağlanabilenini arar olduk. Tamam abartıyorum ama domatesini internetten sipariş eden tüketici sayısı hiç de az değil :)
+            </p>
+            
+            <p style="font-size: 130%; margin-bottom: 24px">
+                Durum bu noktaya gelince, o tarihte kağıt ve kalem denen ilkel aletlerle alınan notlar tozlu raflardan çıkartıldı ve <h:link outcome="/staticpages/team.xhtml" value="ekip" /> işe koyularak uzuuuun ve hummalı bir çalışma ile bana hayat verdi.
+            </p>
+            
+            <p style="font-size: 130%; margin-bottom: 24px">
+                Bundan sonrası artık sana kalıyor. Benim işim sana değer veren markaları bifincan'a davet etmek ve hediyelerini sana sunmak. Ama bunun için senin de, diğer bilinçli tüketici arkadaşlarınla birlikte isteklerini, fikir ve önerilerini, yorumlarını paylaşmanı bekliyorum.
+            </p>
+            
+            <p style="font-size: 130%; margin-bottom: 24px">
+                Sevgiler,<br/>
+                &#34;fi&#34;
+            </p>
+            
+        </div>
+
+    </ui:define>
+</ui:composition>

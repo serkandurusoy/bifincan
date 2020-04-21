@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body style="padding: 12px">
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Merhaba,
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Davetiyelerini buldum. Senin bilinçli bir tüketici olduğuna inanan, seni seven ve senin de mutlaka bifincan.com'a üye olup markalara görüş ve önerilerini ileterek bu markaların hediyeleri ile ödüllendirilmeye layık olduğuna inanan arkadaşların var, ne mutlu sana :)
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Ha unutmadan, hangi arkadaşının davetini kabul edersen, o arkadaşın sen üye olur olmaz bol bol "fi" kazanacak.
+        </p>
+
+        #foreach( $item in $invitations )
+            <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+                $item.firstName $item.lastName tarafından gelen daveti kabul etmek için tıklaman gereken bağlantı:
+            </p>
+
+            <p style="border: 1px solid #D9DFDF; background: #F2F4F4; padding: 24px; font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+                <a style="color: #000000;" href="$item.link">$item.link</a>
+            </p>
+        #end
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Seni de bifincan'da görmek için sabırsızlanıyorum :)
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Sevgiler,<br/>
+            "fi"<br/>
+            <br/>
+            <a style="color: #000000;" href="${baseurl}">www.bifincan.com</a>
+        </p>
+    </body>
+</html>

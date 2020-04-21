@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="/resources/layouts/secondary-content.xhtml">
+    <ui:define name="metadata"></ui:define>
+
+    <ui:define name="headIncludes"></ui:define>
+
+    <ui:define name="robots">
+        <meta name="robots" content="NOINDEX, NOFOLLOW" />
+        <meta http-equiv="pragma" content="no-cache" />
+    </ui:define>
+    <ui:define name="title">bilinmeyen bir hata oluştu - bifincan</ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="bilinmeyen bir hata oluştu - bifincan" />
+    </ui:define>
+    
+    <ui:define name="pageTitle">bilinmeyen bir hata oluştu</ui:define>
+
+    <ui:define name="pageContent">
+        <p class="centerText"><h:graphicImage value="/resources/images/global/500-server-error.png"/></p>	
+        <p class="centerText">çok üzgünüm, benim de henüz anlamadığım bir hata oldu. mühendis arkadaşlar ve isviçre'li bilimadamları konuyla hemen ilgilenecekler.</p>
+        <p class="centerText">muhtemelen hemen şu anda istediğin şeyin yerini tutmaz ama yine de belki aşağıdaki sayfalardan biri ilgini çekebilir...</p>
+        <p class="centerText"><h:link outcome="/product/all.xhtml" value="hediyeler"/></p>
+        <p class="centerText"><h:link outcome="/fincanlog/home.xhtml" value="bilog"/></p>
+        <p class="centerText"><h:link outcome="/index.xhtml" value="ana sayfa"/></p>
+    </ui:define>
+</ui:composition>

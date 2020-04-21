@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xml:lang="#{utilsBean.applicationLocale}"
+      lang="#{utilsBean.applicationLocale}"
+      xmlns:og="http://ogp.me/ns#"
+      class="home">
+    <f:view contentType="text/html"
+            encoding="UTF-8"
+            locale="#{utilsBean.applicationLocale}">
+
+        <ui:insert name="metadata"/>
+
+        <h:head>
+            <ui:include src="/resources/includes/head.xhtml"/>
+
+            <link type="text/css" rel="stylesheet" href="/fi/resources/scripts/videojs/video-js.css" />
+            <script type="text/javascript" src="/fi/resources/scripts/videojs/video.js"></script>
+        </h:head>
+        
+        <h:body>
+		<div id="root">
+			<ui:include src="/resources/includes/menu.xhtml"/>  
+			<div id="featured">
+                            <p class="video-a">
+                                <video id="bifincan-video" class="video-js vjs-default-skin"
+                                       width="640" height="360" controls="controls" preload="auto"
+                                       poster="/fi/resources/videos/bifincan-video.jpg" >
+                                    <source type="video/mp4" src="/fi/resources/videos/bifincan-video.mp4" />
+                                    <source type="video/webm" src="/fi/resources/videos/bifincan-video.webm" />
+                                    <source type="video/ogg" src="/fi/resources/videos/bifincan-video.ogv" />
+                                    <track kind="subtitles" src="/fi/resources/videos/bifincan-video-tr.vtt" srclang="tr" label="Türkçe" />
+                                </video>
+                                <script type="text/javascript">
+                                    _V_.options.flash.swf = "/fi/resources/scripts/videojs/video-js.swf";
+                                    _V_("bifincan-video").ready(function(){
+                                        var bifincanPlayer = this;
+                                        var trackVideoPlay = function(){
+                                            _gaq.push(['_trackEvent', 'Videos', 'Play', 'Bifincan Video']);
+                                            bifincanPlayer.removeEvent("play", trackVideoPlay);
+                                        };
+                                        bifincanPlayer.addEvent("play", trackVideoPlay);
+                                    });
+                                </script>
+                            </p>
+			</div>                  
+			<div id="content">
+				<div class="cols-a">
+					<div class="primary">
+						<h2>bi ürün</h2>
+                                                <p class="image-a"><ui:insert name="biurunImage"/></p>
+						<h3><ui:insert name="biurunProductName"/></h3>
+						<p><ui:insert name="biurunProductDescription"/></p>
+					</div>
+					<div class="secondary">
+						<h2>bi görüş</h2>
+						<p class="image-a"><ui:insert name="bigorusChart"/></p>
+						<p><ui:insert name="bigorusQuestion"/></p>
+						<p><span class="scheme-a">%<ui:insert name="bigorusPercentage"/></span> <ui:insert name="bigorusAnswer"/></p>
+					</div>
+				</div>
+				<!-- BEGIN SECTION: Four columns -->
+				<div class="quadruple-a">
+					<div>
+						<h3><ui:insert name="noOfUsers"/></h3>
+						<p>daha kaliteli ürün ve hizmetler almak için bifincan'da biraraya gelerek markalara ve ürünlere sesini duyuran bilinçli tüketici sayısı</p>
+					</div>
+					<div>
+						<h3><ui:insert name="noOfAnswers"/></h3>
+						<p>markalar ve ürünleri hakkında sorulan sorulara bifincan üyelerinin kıvrak bilek hareketleri ile tıklayarak verdiği cevap ve yorum sayısı</p>
+					</div>
+					<div>
+						<h3><ui:insert name="totalProductMoneyValue"/></h3>
+						<p>tüketici dostu markalar tarafından bifincan aracılığı ile hediye edilmek üzere verilen ürün ve hizmetlerin toplam türk lirası piyasa değeri</p>
+					</div>
+					<div>
+						<h3>42</h3>
+						<p>otostopçunun galaksi rehberinde anlatıldığına göre; hayat, evren ve herşeye dair sorulabilecek en nihai sorunun kesin cevabı... hmm...</p>
+					</div>
+				</div>
+				<!-- END SECTION: Four columns -->
+				<!-- BEGIN SECTION: Left panel -->
+				<div id="tools">
+					<div>
+						<!-- BEGIN SECTION: Login box -->
+						<ui:include src="/resources/includes/login-form.xhtml"/>
+						<!-- BEGIN SECTION: Login box -->
+						<ul class="list-a">
+                                                        <li><h:link outcome="/staticpages/wanttobemember.xhtml" value="üye olayım" /></li>
+                                                        <li><h:link outcome="/contact.xhtml" value="mesajım var" /></li>
+							<li><h:outputLink rel="external" value="https://twitter.com/bifincancom" title="bifincan'ın twitter profiline bak">tivitleyeyim</h:outputLink></li>
+							<li><h:outputLink rel="external" value="https://facebook.com/bifincancom" title="bifincan'ın facebook sayfasına bak">feysten bakayım</h:outputLink></li>
+                                                        <li><h:outputLink rel="external" value="https://www.google.com/search?q=bifincan" title="bifincan'ı google'da ara, doğru adres kesin orada vardır">yanlış gelmişim, gideyim</h:outputLink></li>
+						</ul>
+					</div>
+				</div>
+				<!-- END SECTION: Left panel -->
+			</div>
+			<ui:include src="/resources/includes/footer.xhtml"/>
+		</div>            
+                
+                <noscript>
+                    <div style="position:fixed; top:0; left:0; margin: 0; padding: 0; z-index:9999; height:100%; width:100%; background: url('/fi/resources/images/global/style/background.png') center 0 no-repeat #fff;">
+                        <p class="centerText" style="margin-top: 100px"><h:graphicImage value="/resources/images/global/500-server-error.png"/></p>	
+                        <p class="centerText" style="font-size: 140%;">bifincan'dan en iyi deneyimi elde edebilmek için</p>
+                        <p class="centerText" style="font-size: 140%;">tarayıcının javascript özelliğini devre dışı bırakmamış olman gerekiyor</p>
+                        <p class="centerText" style="font-size: 140%;">javascript özelliğini tekrar devreye aldığında</p>
+                        <p class="centerText" style="font-size: 140%;">bifincan'ı sorunsuz ve en iyi haliyle gezebilirsin</p>
+                    </div>
+                </noscript>
+
+        </h:body>
+    </f:view>
+</html>

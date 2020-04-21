@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+     <channel>
+         <title>$rsstitle</title>
+         <link>$base/</link>
+         <atom:link href="$base/rss-feed" rel="self" type="application/rss+xml" />
+         <description>$rssdescription</description>
+         <language>tr</language>
+         <copyright>(C)  $dateTool.get('yyyy'), bifincan.com</copyright>
+         <pubDate>$dateTool.format('EEE, dd MMM yyyy HH:mm:ss z',$feed.lastBuildDate, $locale, $timezone)</pubDate>
+         <lastBuildDate>$dateTool.format('EEE, dd MMM yyyy HH:mm:ss z',$feed.lastBuildDate, $locale, $timezone)</lastBuildDate>
+         <image>
+             <title>$rsstitle</title>
+             <url>$base/resources/images/global/bifincan-logo.png</url>
+             <link>$base/</link>
+             <width>144</width>
+             <height>56</height>
+         </image>
+         #foreach( $item in $feed.items)
+         <item>
+             <title>$item.title</title>
+             <link>$base/$item.url</link>
+             <description>$item.content</description>
+             <guid isPermaLink="true">$base/$item.url</guid>
+             <pubDate>#if($item.pubDate)$dateTool.format('EEE, dd MMM yyyy HH:mm:ss z',$item.pubDate, $locale, $timezone)#end</pubDate>
+             <enclosure url="$base/$item.imageUrl" length="$item.imageSize" type="image/jpeg" />
+         </item>
+         #end
+     </channel>
+ </rss>

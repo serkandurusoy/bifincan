@@ -1,0 +1,424 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/resources/layouts/standard.xhtml">
+    <ui:define name="metadata">
+    </ui:define>
+
+    <ui:define name="browserTitle">Edit #{messages[surveyInfoAction.currentSurvey.type.label]} - </ui:define>
+    <ui:define name="content">
+      <p:tabView dynamic="true" id="t1" style="border-style:none; padding-left:0px; padding-right: 0px;">
+		<p:tab title="Edit #{messages[surveyInfoAction.currentSurvey.type.label]}" id="t11">
+		  
+		  <!-- survey box -->
+		  <h:form id="surveyForm" prependId="false">
+		    <p:messages id="messages" autoUpdate="true"/>
+		    	
+			<h:panelGrid columns="2" columnClasses="tdVertTop, tdVertTop" cellpadding="5">
+			
+			  <h:panelGroup>  
+			    <h:panelGrid columns="2" >
+					<h:outputText value="Type: "/>
+					<h:panelGroup> 
+					<h:outputText value="#{messages[surveyInfoAction.currentSurvey.type.label]}"/>&#160;&#160;&#160;
+					<p:commandButton value="Update" 
+								action="#{surveyInfoAction.update}" />
+					</h:panelGroup>
+								
+					<h:outputText value="Title: "/>
+					<h:inputText value="#{surveyInfoAction.currentSurvey.title}" required="true" maxlength="250" style="width:600px" requiredMessage="The district's name is required"/>
+		
+					<h:outputText value="Active: "/>       
+	                <h:selectOneMenu value="#{surveyInfoAction.currentSurvey.active}" required="true">
+	                  <f:selectItem itemValue="true" itemLabel="#{messages['option.true']}" />      
+	                  <f:selectItem itemValue="false" itemLabel="#{messages['option.false']}" />                    
+	                </h:selectOneMenu> 
+	                
+	                <h:outputText value="Create date: "/>
+		            <h:outputText value="#{surveyInfoAction.currentSurvey.createDate}" >
+		               <f:convertDateTime dateStyle="full" type="date" />
+		            </h:outputText>
+		             
+					<h:outputText value="Prioritized: " rendered="#{surveyInfoAction.currentSurvey.type=='PROFILE'}"/>       
+	                <h:selectOneMenu value="#{surveyInfoAction.currentSurvey.prioritized}" required="true" rendered="#{surveyInfoAction.currentSurvey.type=='PROFILE'}">
+	                  <f:selectItem itemValue="true" itemLabel="#{messages['option.true']}" />      
+	                  <f:selectItem itemValue="false" itemLabel="#{messages['option.false']}" />                    
+	                </h:selectOneMenu>		            
+		            
+                </h:panelGrid>   
+             </h:panelGroup>
+             
+             <h:panelGroup>
+             	<h:panelGrid columns="1" rendered="#{surveyInfoAction.products != null}">
+             		<h:panelGroup>
+           			<h:outputText value="Associated Products"/>
+           			&#160;
+					<p:commandButton value="Add" style="right:0px;"
+							action="#{surveyInfoAction.initProduct(null)}"
+							update=":prodForm:prodGrid"	onclick="dlg10.show();">  	
+						<f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />		
+					</p:commandButton>	
+					</h:panelGroup>
+				    <p:dataTable var="product" value="#{surveyInfoAction.products}" scrollRows="10"  
+				                    scrollable="true" liveScroll="true" scrollHeight="120" id="prods" >  
+				        <p:column headerText="Name" style="width:320px">  
+				            <h:outputText value="#{product.productName}" />  
+				        </p:column>  
+				        <p:column headerText="Brand" style="width:200px">  
+				            <h:outputText value="#{product.brandName}" />  
+				        </p:column>  				  
+				        <p:column headerText="Price" style="width:100px">  
+				            <h:outputText value="#{product.productMoneyValue}" />  
+				        </p:column> 
+				        <p:column headerText="Action" style="width:80px; text-align:center">  
+				            <p:commandButton value="Delete" 
+								action="#{surveyInfoAction.initProduct(product)}"
+							 	onclick="dlg11.show();"/>
+				        </p:column> 				        
+				    </p:dataTable>
+				    
+             	</h:panelGrid>
+             	
+             	<h:panelGrid columns="1" rendered="#{surveyInfoAction.categories != null}">
+             	    <h:panelGroup>
+           			<h:outputText value="Associated Product Categories"/>
+           			&#160;
+					<p:commandButton value="Add" style="right:0px;"
+							action="#{surveyInfoAction.initCategory(null)}"
+							update=":catForm:catGrid" onclick="dlg12.show();">  
+						<f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />			
+					</p:commandButton>
+					</h:panelGroup>
+					
+				    <p:dataTable var="category" value="#{surveyInfoAction.categories}" scrollRows="10"  
+				                    scrollable="true" liveScroll="true" scrollHeight="120" id="cats" >  
+				        <p:column headerText="Name" style="width:320px">  
+				            <h:outputText value="#{category.name}" />  
+				        </p:column>  
+				        <p:column headerText="Parent" style="width:200px">  
+				            <h:outputText value="#{category.parent.name}" />  
+				        </p:column>  				  
+				        <p:column headerText="Action" style="width:80px; text-align:center">  
+				        	<p:commandButton value="Delete" 
+								action="#{surveyInfoAction.initCategory(category)}"
+							 	onclick="dlg13.show();"/>	
+				        </p:column> 				        
+				    </p:dataTable>
+             	</h:panelGrid>
+             	             	
+             </h:panelGroup>    
+                 
+		   </h:panelGrid>	
+					
+		  </h:form>	
+		 
+		 <!-- grid of survey items -->
+		  <h:form id="queForm" prependId="false">  
+			<p:separator id="separator" style="height:1px"/>
+			<h:outputText value="Survey Questions" style="font-weight:bold"/>
+			&#160;
+			
+			<p:commandButton value="New" style="right:0px;"
+						action="#{surveyInfoAction.initAddNode(null)}"
+						update=":editQueForm:surveyQueGrid  :editQueForm:cri_add_pane :editQueForm:criteria" onclick="dlg1.show();">  
+				<f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />				
+			</p:commandButton>			
+				          
+			<p:treeTable id="mainTable" value="#{surveyInfoAction.root}" var="node" style="height:85%;padding-top:5px"
+			  	emptyMessage="No records found" paginator="false">  
+  
+		        <p:column style="width:70%">  
+		            <f:facet name="header">  
+		                Title  
+		            </f:facet>  
+		            <h:outputText value="#{node.title}" />  
+		        </p:column>  
+	  
+		        <p:column style="width:15%">  
+		            <f:facet name="header">  
+		                Active  
+		            </f:facet>  
+		            <h:outputText value="#{node.active ? messages['option.true'] : messages['option.false'] }" />  
+		        </p:column>  
+	  
+	  
+		        <p:column style="width:15%;text-align:center">  
+					<f:facet name="header">
+		                Action
+		            </f:facet>
+		            <p:commandButton value="Add Option" style="right:0px;"
+								action="#{surveyInfoAction.initAddNode(node)}"
+								update=":editOptForm:surveyOptGrid" onclick="dlg2.show();" rendered="#{node.nodeType=='QUESTION'}">
+						<f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />		
+					</p:commandButton>			
+								      
+		            <p:commandButton value="Edit" style="right:0px;"
+								action="#{surveyInfoAction.initEditNode(node)}" update=":editQueForm:surveyQueGrid  :editQueForm:criteria  :editQueForm:cri_add_pane :editQueForm:criteria"
+								onclick="dlg1.show();" rendered="#{node.nodeType=='QUESTION'}">
+						<f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />		
+					</p:commandButton>			  
+		            <p:commandButton value="Edit" style="right:0px;"
+								action="#{surveyInfoAction.initEditNode(node)}" update=":editOptForm:surveyOptGrid"
+								onclick="dlg2.show();" rendered="#{node.nodeType!='QUESTION'}">
+						<f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />		
+					</p:commandButton>			  	
+															
+					<p:commandButton value="Delete" 
+								action="#{surveyInfoAction.initDeleteNode(node)}"
+							 	onclick="dlg3.show();" rendered="#{node.nodeType!='QUESTION'}"/>	
+					<p:commandButton value="Delete" 
+								action="#{surveyInfoAction.initDeleteNode(node)}"
+							 	onclick="dlg4.show();" rendered="#{node.nodeType=='QUESTION'}"/>							 					 	
+		        </p:column>  
+    		</p:treeTable>
+		</h:form>	
+	   </p:tab>	
+	  </p:tabView>   
+    </ui:define>
+
+    <ui:define name="afterlayout">
+    	<p:dialog header="Survey Question" widgetVar="dlg1" modal="true"
+				height="465" width="750">
+			<h:form id="editQueForm">
+				<h:panelGrid id="surveyQueGrid" columns="2" width="100%">
+                     <h:outputText value="Title: "/>
+                     <h:inputTextarea value="#{surveyInfoAction.currentItem.title}" required="true" style="width:100%" requiredMessage="The question's title is required"/>
+                    
+                     <h:outputText value="Active:"/>       
+                     <h:selectOneMenu value="#{surveyInfoAction.currentItem.active}" required="true" style="height:27px">
+                       <f:selectItem itemValue="true" itemLabel="#{messages['option.true']}" />      
+                       <f:selectItem itemValue="false" itemLabel="#{messages['option.false']}" />                    
+                     </h:selectOneMenu> 
+                     
+                     <h:outputText value="Position: "/>
+                     <h:outputText value="#{surveyInfoAction.currentItem.position}"/>
+
+                     <h:outputText value="Select multiple:"/>       
+                     <h:selectOneRadio id="multiple_opt" value="#{surveyInfoAction.currentItem.selectMultiple}" required="true" requiredMessage="The 'Select multiple' field is required">
+  						<f:selectItem id="item1" itemLabel="Yes" itemValue="true" />
+  						<f:selectItem id="item2" itemLabel="No" itemValue="false" />
+					 </h:selectOneRadio>
+
+					<h:outputText value="Randomize options:"
+						rendered="#{surveyInfoAction.currentSurvey.type != 'PROD'}" />
+					<h:selectOneRadio id="random_opt"
+						value="#{surveyInfoAction.currentItem.optionRandom}"
+						required="true"
+						requiredMessage="The 'Randomize options' field is required"
+						rendered="#{surveyInfoAction.currentSurvey.type != 'PROD'}">
+						<f:selectItem id="item3" itemLabel="Yes" itemValue="true" />
+						<f:selectItem id="item4" itemLabel="No" itemValue="false" />
+					</h:selectOneRadio>
+
+
+					<p:spacer width="100%" height="15"/> 
+					<f:facet name="footer">
+						<p:commandButton value="Save" action="#{surveyInfoAction.saveNode}"
+							update=":t1:queForm:mainTable" 
+							oncomplete="dlg1.hide();" />					
+						<p:commandButton value="Cancel" 
+							onclick="dlg1.hide();" type="button" />	
+					</f:facet>
+				</h:panelGrid>
+				
+				<p:separator id="separator" style="height:1px"/>
+				<p:messages  autoUpdate="true"/>
+				
+				<h:panelGroup id="cri_add_pane" style="width:100%">
+				<h:outputText value="Survey Question Criteria" style="font-weight:bold"/>&#160;
+				<p:commandButton value="New" style="right:0px;" id="newBtn"
+							action="#{surveyInfoAction.initAddCriterion}"
+							update=":editCriForm:surveyCriGrid" onclick="dlg5.show();"
+							rendered="#{surveyInfoAction.currentItem.position gt 0}">  		
+				</p:commandButton>
+				</h:panelGroup>
+				
+				<p:dataTable id="criteria" value="#{surveyInfoAction.surveyQuestionCriteria}"  
+					var="criterion"  emptyMessage="No records found" style="width:100%;padding-top:5px">
+				  <p:column style="width:50%">  
+		            <f:facet name="header">  
+		                Option  
+		            </f:facet>  
+		            <h:outputText value="#{criterion.option.title}, #{criterion.option.question.title}" />  
+		          </p:column>
+		          	  
+		          <p:column style="width:30%; text-align:center">  
+		            <f:facet name="header">  
+		                Rule  
+		            </f:facet>  
+		            <h:outputText value="#{messages[criterion.rule.label]}" />  
+		          </p:column>
+		          
+				  <p:column style="width:20%;text-align:center">  
+					<f:facet name="header">
+		                Action
+		            </f:facet>
+		            <p:commandButton value="Edit" style="right:0px;"
+								action="#{surveyInfoAction.initEditCriterion(criterion)}" update=":editCriForm:surveyCriGrid"
+								onclick="dlg5.show();">
+						<f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />		
+					</p:commandButton>			  
+					<p:commandButton value="Delete" 
+								action="#{surveyInfoAction.initDeleteCriterion(criterion)}"
+							 	onclick="dlg6.show();" />						 	
+		          </p:column>	
+				</p:dataTable>				
+			</h:form>
+		</p:dialog>
+		
+		
+    	<p:dialog header="Survey Question Option" widgetVar="dlg2" modal="true"
+				height="170" width="450">
+			<h:form id="editOptForm">
+				<h:panelGrid id="surveyOptGrid" columns="2" width="100%">
+                    <h:outputText value="Title: "/>
+                    <h:inputTextarea value="#{surveyInfoAction.currentItem.title}" required="true" style="width:100%" requiredMessage="The option's title is required"/>
+                     <h:outputText value="Active"/>       
+                     <h:selectOneMenu value="#{surveyInfoAction.currentItem.active}" required="true" style="height:27px">
+                       <f:selectItem itemValue="true" itemLabel="#{messages['option.true']}" />      
+                       <f:selectItem itemValue="false" itemLabel="#{messages['option.false']}" />                    
+                     </h:selectOneMenu> 
+					<p:spacer width="100%" height="15"/> 
+					<f:facet name="footer">
+						<p:commandButton value="Save" action="#{surveyInfoAction.saveNode}"
+							update=":t1:queForm:mainTable" 
+							oncomplete="dlg2.hide();" />					
+						<p:commandButton value="Cancel" 
+							onclick="dlg2.hide();" type="button" />	
+					</f:facet>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+				
+		
+    	<p:dialog header="Survey Question Criterion" widgetVar="dlg5" modal="true"
+				height="170" width="450">
+			<h:form id="editCriForm">
+				<h:panelGrid id="surveyCriGrid" columns="2" width="100%">
+                    <h:outputText value="Question: "/>
+                    <h:selectOneMenu value="#{surveyInfoAction.currentQuestionInLowerPosition}" converter="#{entityConverter}"
+                    	required="true" requiredMessage="The question field is required">
+                    	<f:ajax render="@form" event="change" />
+                        <f:selectItems value="#{surveyInfoAction.listOfQuestionsInLowerPosition}" var="r" itemLabel="#{r.title}"/>
+                    </h:selectOneMenu>
+                    
+                    <h:outputText value="Option:"/>       
+                    <h:selectOneMenu value="#{surveyInfoAction.currentCriterion.option}" converter="#{entityConverter}"
+                    	required="true" requiredMessage="The option field is required">
+                        <f:selectItems value="#{surveyInfoAction.currentQuestionInLowerPosition.options}" var="r" itemLabel="#{r.title}"/>
+                    </h:selectOneMenu>
+         
+                    <h:outputText value="Rule:"/>       
+                    <h:selectOneMenu value="#{surveyInfoAction.currentCriterion.rule}" required="true" requiredMessage="The rule field is required">
+                        <f:selectItems value="#{utilsBean.questionCriteriaTypes}" var="r" itemLabel="#{messages[r.label]}"/>
+                    </h:selectOneMenu>
+                             
+					<p:spacer width="100%" height="15"/> 
+					<f:facet name="footer">
+						<p:commandButton value="Save" action="#{surveyInfoAction.saveOrUpdateCriterion}"
+							update=":editQueForm:criteria" 
+							oncomplete="dlg5.hide();" />					
+						<p:commandButton value="Cancel" 
+							onclick="dlg5.hide();" type="button" />	
+					</f:facet>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+						
+		<p:confirmDialog message="Are you sure to delete the survey question option?" dynamic="true"
+			header="Initiating deletion process" severity="alert"
+			widgetVar="dlg3">
+			<h:form id="confirmForm1">
+				<p:commandButton value="Yes" actionListener="#{surveyInfoAction.deleteNode}"
+					update=":t1:queForm:mainTable" oncomplete="dlg3.hide()"/>
+				<p:commandButton value="No" onclick="dlg3.hide();" type="button" />
+			</h:form>
+		</p:confirmDialog>	
+		
+		<p:confirmDialog message="Are you sure to delete the survey question?" dynamic="true"
+			header="Initiating deletion process" severity="alert"
+			widgetVar="dlg4">
+			<h:form id="confirmForm2">
+				<p:commandButton value="Yes" actionListener="#{surveyInfoAction.deleteNode}"
+					update=":t1:queForm:mainTable" oncomplete="dlg4.hide()"/>
+				<p:commandButton value="No" onclick="dlg4.hide();" type="button" />
+			</h:form>
+		</p:confirmDialog>	
+		
+		<p:confirmDialog message="Are you sure to delete the survey question criterion?" dynamic="true"
+			header="Initiating deletion process" severity="alert"
+			widgetVar="dlg6">
+			<h:form id="confirmForm3">
+				<p:commandButton value="Yes" actionListener="#{surveyInfoAction.deleteCriterion}"
+					update=":editQueForm:criteria"  oncomplete="dlg6.hide()"/>
+				<p:commandButton value="No" onclick="dlg6.hide();" type="button" />
+			</h:form>
+		</p:confirmDialog>		
+		
+		<p:confirmDialog message="Are you sure to remove the product from the list?" dynamic="true"
+			header="Initiating deletion process" severity="alert"
+			widgetVar="dlg11">
+			<h:form id="confirmForm4">
+				<p:commandButton value="Yes" actionListener="#{surveyInfoAction.deleteProductFromSurvey}"
+					update=":t1:surveyForm:prods"  oncomplete="dlg11.hide()"/>
+				<p:commandButton value="No" onclick="dlg11.hide();" type="button" />
+			</h:form>
+		</p:confirmDialog>	
+				
+		<p:dialog header="Add Product" widgetVar="dlg10" modal="true"
+				height="120" width="400">
+			<h:form id="prodForm">
+				<h:panelGrid id="prodGrid" columns="2" width="100%">
+                    <h:outputText value="Product:"/>
+                    <p:autoComplete value="#{surveyInfoAction.currentProduct}" converter="#{entityConverter}" 
+                    		var="r"  itemValue="#{r}" itemLabel="#{r.name}, #{r.brand.name}"
+                    		completeMethod="#{surveyInfoAction.completeProduct}" minQueryLength="3" forceSelection="true"
+                    		required="true" requiredMessage="The product field is required"/>  
+					<p:spacer width="100%" height="15"/> 
+					<f:facet name="footer">
+						<p:commandButton value="Save" action="#{surveyInfoAction.addProductInSurvey}"
+						update=":t1:surveyForm:prods" 
+							oncomplete="dlg10.hide();" />					
+						<p:commandButton value="Cancel" 
+							onclick="dlg10.hide();" type="button" />	
+					</f:facet>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>	
+		
+		<p:confirmDialog message="Are you sure to remove the category from the list?" dynamic="true"
+			header="Initiating deletion process" severity="alert"
+			widgetVar="dlg13">
+			<h:form id="confirmForm5">
+				<p:commandButton value="Yes" actionListener="#{surveyInfoAction.deleteCategoryFromSurvey}"
+					update=":t1:surveyForm:cats"  oncomplete="dlg13.hide()"/>
+				<p:commandButton value="No" onclick="dlg13.hide();" type="button" />
+			</h:form>
+		</p:confirmDialog>	
+				
+		<p:dialog header="Add Product Category" widgetVar="dlg12" modal="true"
+				height="120" width="500">
+			<h:form id="catForm">
+				<h:panelGrid id="catGrid" columns="2" width="100%">
+                    <h:outputText value="Product Category:"/>
+                    <h:selectOneMenu value="#{surveyInfoAction.currentCategory}" converter="#{entityConverter}" required="true" requiredMessage="The product category field is required">
+                        <f:selectItems value="#{productCategoryService.findProductCategoriesLevelThree()}" var="r" itemLabel="#{r.name}, #{r.parent.name}"/>
+                    </h:selectOneMenu>
+					<p:spacer width="100%" height="15"/> 
+					<f:facet name="footer">
+						<p:commandButton value="Save" action="#{surveyInfoAction.addCategoryInSurvey}"
+						update=":t1:surveyForm:cats" 
+							oncomplete="dlg12.hide();" />					
+						<p:commandButton value="Cancel" 
+							onclick="dlg12.hide();" type="button" />	
+					</f:facet>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>				
+    </ui:define>
+    
+</ui:composition>

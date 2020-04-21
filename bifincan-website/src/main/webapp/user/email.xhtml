@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/resources/layouts/primary-content.xhtml">
+    <ui:define name="metadata"></ui:define>
+
+    <ui:define name="headIncludes"></ui:define>
+
+    <ui:define name="title">e-posta adresi değiştir - bifincan</ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="e-posta adresi değiştir - bifincan" />
+    </ui:define>
+
+    <ui:define name="pageTitle">e-posta adresi değiştir</ui:define>
+
+    <ui:define name="pageContent">
+
+
+        <div>
+
+            <h:messages id="messages" globalOnly="true" />
+
+            <h:form id="emailForm" prependId="false">
+                <fieldset>
+                    <p>
+                        <h:outputLabel for="email" value="#{messages['user.email']}" />
+                        <h:inputText id="email" value="#{changeEmailAction.email}">
+                            <f:validateBean for="email" />
+                        </h:inputText>
+                        <h:message for="email" styleClass="error" />
+                    </p>
+
+                    <p>
+                        <h:commandButton id="change" value="değiştir" action="#{changeEmailAction.changeEmail}" />
+                    </p>
+                </fieldset>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

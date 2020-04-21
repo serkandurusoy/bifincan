@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xml:lang="#{utilsBean.applicationLocale}"
+      lang="#{utilsBean.applicationLocale}" >
+    <f:view contentType="text/html"
+            encoding="UTF-8"
+            locale="#{utilsBean.applicationLocale}">
+
+        <h:head>
+            <title>sayfa kuralları</title>
+
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+            <meta name="robots" content="NOINDEX, NOFOLLOW" />
+            <meta http-equiv="pragma" content="no-cache" />
+
+            <link rel="shortcut icon" href="/fi/resources/images/global/favicons/favicon.ico" type="image/x-icon" />
+            <link rel="icon" href="/fi/resources/images/global/favicons/favicon.ico" type="image/x-icon" />
+            <link rel="apple-touch-startup-image" href="/fi/resources/images/global/favicons/touch-icon-iphone.png" />
+            <link rel="apple-touch-icon" href="/fi/resources/images/global/favicons/touch-icon-iphone.png" />
+            <link rel="apple-touch-icon" sizes="72x72" href="/fi/resources/images/global/favicons/touch-icon-ipad.png" />
+            <link rel="apple-touch-icon" sizes="114x114" href="/fi/resources/images/global/favicons/touch-icon-iphone4.png" />
+
+            <link type="text/css" rel="stylesheet" href="/fi/resources/scripts/facebooktabs/facebooktab.css" />
+
+            <script type="text/javascript" src="/fi/resources/scripts/jquery-1.7.2.min.js"></script>
+            <script type="text/javascript" src="/fi/resources/scripts/facebooktabs/facebooktab.js"></script>
+
+            <script type="text/javascript">
+                window.fbAsyncInit = function() {
+                    FB.Canvas.setSize({height: 1000});
+                }
+                // Do things that will sometimes call sizeChangeCallback()
+                function sizeChangeCallback() {
+                    FB.Canvas.setSize({height: 1000});
+                }
+            </script>
+        </h:head>
+
+        <h:body>
+            <div id="root" class="fbbody">
+
+                <p class="fbgreybox">Facebook sayfa kuralları</p>
+                <div class="fbincludebox faqbox">
+                    <p>Bifincan facebook sayfası, bifincan ve üyelerinin paylaşımlarını sosyal medyaya taşımak için kullandıkları bir araçtır ve yalnızca bu amaçla kullanılır.</p>
+                    <p>Bifincan bir kampanya veya yarışma platformu değildir, bu sayfada da kampanyalar veya yarışmalar düzenlenmez.</p>
+                    <p>Bifincan nedir, ne değildir, nasıl üye olunur gibi konular bifincan.com'da anlatıldığından, burada sorulması bilinçli tüketiciye yakışmaz.</p>
+                    <p>Tüm bilinçli tüketicileri ve özellikle de bifincan üyelerini ilgilendirmeyen kişiye özel durumlarla ilgili soruların sorulacağı yer burası değildir, çok ayıp. Bilinçli tüketici zaten bilinçli davranır, her şeyi yoluna ve yordamına uygun yapar.</p>
+                    <p>Bu sayfada yapılan paylaşımlara amacı dışında yapılan yorumlar bu paylaşımın sahibine karşı saygılı bir davranış olmadığından hoş karşılanmaz.</p>
+                    <p>Bifincan üyeliği yalnızca davetle gerçekleşir ve üyeler yalnızca tanıdığı ve güvendiği kişileri davet etmekle sorumludur. Bu sebeple, facebook sayfası üzerinden alenen davetiye istekleri kabul edilmez.</p>
+                    <p>Bu sayfanın amacına uygun olmayan paylaşımlar uyarı yapılmaksızın sayfadan silinir, tekrarlanan durumlarda ise paylaşım sahibinin sayfaya erişimi engellenebilir.</p>
+                </div>
+
+                <p class="fbgreybox">Bifincan kullanım koşulları</p>
+                <div  class="fbincludebox termsbox">
+                    <ui:include src="/resources/includes/termsinclude.xhtml"/>
+                </div>
+
+                <p class="fbgreybox">Soru cevap</p>
+                <div class="fbincludebox faqbox">
+                    <ui:include src="/resources/includes/faqinclude.xhtml"/>
+                </div>
+
+            </div>
+
+            <div id="fb-root"></div>
+            <script src="https://connect.facebook.net/en_US/all.js"></script>
+            <script>
+                FB.init({
+                    appId: '380542895302133',
+                    status: true, // check login status
+                    cookie: true, // enable cookies to allow the server to access the session
+                    xfbml: true // parse XFBML
+                });
+            </script>
+        </h:body>
+    </f:view>
+</html>

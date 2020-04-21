@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="/resources/layouts/secondary-content.xhtml">
+
+
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewParam name="type" value="#{optEmailAction.action}"/>
+            <f:viewParam name="email" value="#{optEmailAction.email}"/>
+            <f:viewParam name="campaign" value="#{optEmailAction.campaign}"/>            
+            <f:viewParam name="confirmationkey" value="#{optEmailAction.confirmationKey}"/>
+            <f:event listener="#{optEmailAction.init}" type="preRenderView" />
+        </f:metadata>
+    </ui:define>
+
+    <ui:define name="robots">
+        <meta name="robots" content="NOINDEX, NOFOLLOW" />
+        <meta http-equiv="pragma" content="no-cache" />
+    </ui:define>
+    <ui:define name="headIncludes"></ui:define>
+
+    <ui:define name="title">e-posta istemiyorum - bifincan</ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="davet hatırlatması istemiyorum - bifincan" />
+    </ui:define>
+
+    <ui:define name="pageTitle">e-posta istemiyorum</ui:define>
+
+    <ui:define name="pageContent">
+
+        <h:messages id="messages" globalOnly="false" />
+
+        <ui:fragment rendered="#{not empty optEmailAction.invitations}">
+
+            <ui:fragment rendered="#{optEmailAction.invitations.size() eq 1}">
+                <ui:repeat value="#{optEmailAction.invitations}" var="_invitation">
+                    <p>
+                        <h:outputText value="Aşağıdaki butona bastıktan sonra artık sana #{_invitation.inviter.firstName} #{_invitation.inviter.lastName} tarafından iletilen bu davetle ilgili tekrar hatırlatma almayacaksın." />
+                    </p>
+                    <p>
+                        <h:outputText value="Ancak yine de ben senin yerinde olsam kendisiyle " />
+                        <h:outputLink title="#{_invitation.inviter.email} adresine e-posta gönder" value="mailto:#{_invitation.inviter.email}?subject=bu bifincan da neyin nesi #{_invitation.inviter.firstName}?">#{_invitation.inviter.email}</h:outputLink>
+                        <h:outputText value=" adresinden iletişime geçip bifincan hakkında biraz bilgi alırdım." />
+                    </p>
+                    <p>
+                        <h:outputText value="Zira #{_invitation.inviter.firstName} " />
+                        <h:outputText value="#{_invitation.inviter.createDate}" >
+                            <f:converter converterId="org.ocpsoft.PrettyTimeConverter" />
+                        </h:outputText>
+
+                        <h:outputText value=" üye olduğundan bu yana bifincan'dan tam " />
+                        <h:outputText value="#{orderService.sumOfOdersByUser(_invitation.inviter)}">
+                            <f:convertNumber pattern="###,##0.00"/>
+                        </h:outputText>
+                        <h:outputText value=" TL değerinde ürün ve hizmeti deneme amaçlı olarak ücretsiz aldı." />
+                    </p>
+                    <p>
+                        Biraz düşün istersen ;)
+                    </p>
+                    <p>
+                        Bu bifincan da ne menem birşeymiş diyorsan biraz dolaşıp incelemeni öneririm. Yok aman illa ki istemiyorum dersen sağlık olsun, seninle tanışmak benim için zevkti. Bu yazdıklarımı okuma nezaketini gösterdiğin için de ayrıca teşekkür ederim.
+                    </p>
+                    <p>
+                        Sevgiler,
+                        <br/>
+                        &#34;fi&#34;
+                    </p>
+                </ui:repeat>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{optEmailAction.invitations.size() gt 1}">
+                <p>
+                    Aşağıdaki butona bastıktan sonra şu ana kadar almış olduğun davetiyeler hakkında artık sana tekrar bir hatırlatma gelmeyecek.
+                </p>
+                <p>
+                    Ancak yine de ben senin yerinde olsam arkadaşlarımla önce bir iletişime geçip bifincan hakkında biraz bilgi alırdım. Ne de olsa bu #{optEmailAction.invitations.size()} arkadaşın da aynı anda yanılıyor olamaz bifincan'a üye olmakla.
+                </p>
+                <h:dataTable value="#{optEmailAction.invitations}" var="_invitation" styleClass="transactionHistory" >
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Davet Eden" />
+                        </f:facet>
+                        <h:outputText value="#{_invitation.inviter.firstName} #{_invitation.inviter.lastName}"/>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="E-posta Adresi" />
+                        </f:facet>
+                        <h:outputLink title="#{_invitation.inviter.email} adresine e-posta gönder" value="mailto:#{_invitation.inviter.email}?subject=bu bifincan da neyin nesi #{_invitation.inviter.firstName}?">#{_invitation.inviter.email}</h:outputLink>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Üyelik Zamanı" />
+                        </f:facet>
+                        <h:outputText value="#{_invitation.inviter.createDate}" >
+                            <f:converter converterId="org.ocpsoft.PrettyTimeConverter" />
+                        </h:outputText>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Aldığı Hediyeler" />
+                        </f:facet>
+                        <h:outputText value="#{orderService.sumOfOdersByUser(_invitation.inviter)}">
+                            <f:convertNumber pattern="###,##0.00"/>
+                        </h:outputText>
+                        <h:outputText value=" TL değerinde"/>
+                    </h:column>
+
+                </h:dataTable>
+                <p>
+                        Arkadaşların bu ürün ve hizmetleri markalardan deneme amacıyla hiçbir ücret ödemeden hediye olarak aldılar. Biraz düşün istersen ;)
+                </p>
+                <p>
+                    Bu bifincan da ne menem birşeymiş diyorsan biraz dolaşıp incelemeni öneririm. Yok aman illa ki istemiyorum dersen sağlık olsun, seninle tanışmak benim için zevkti. Bu yazdıklarımı okuma nezaketini gösterdiğin için de ayrıca teşekkür ederim.
+                </p>
+                <p>
+                    Sevgiler,
+                    <br/>
+                    &#34;fi&#34;
+                </p>
+
+            </ui:fragment>
+
+            <h:panelGroup rendered="#{optEmailAction.successMessage != null}">
+                <p class="centerText"><h:graphicImage value="/resources/images/global/500-server-error.png"/></p>	
+                <p class="centerText"><h:outputText value="#{optEmailAction.successMessage}" /></p>	
+                <p class="centerText">Bu arada belki de ileride fikrini değiştirebilirim diye bu aşağıdaki sayfalara bir göz atmanı öneririm ;)</p>
+                <p class="centerText"><h:link outcome="/product/all.xhtml" value="hediyeler"/></p>
+                <p class="centerText"><h:link outcome="/fincanlog/home.xhtml" value="bilog"/></p>
+                <p class="centerText"><h:link outcome="/index.xhtml" value="ana sayfa"/></p>
+            </h:panelGroup>
+
+            <h:panelGroup rendered="#{optEmailAction.errorMessage != null}">
+                <p class="centerText"><h:graphicImage value="/resources/images/global/500-server-error.png"/></p>	
+                <p class="centerText"><h:outputText value="#{optEmailAction.errorMessage}" /></p>	
+                <p class="centerText">Muhtemelen hemen şu anda istediğin şeyin yerini tutmaz ama yine de belki aşağıdaki sayfalardan biri ilgini çekebilir...</p>
+                <p class="centerText"><h:link outcome="/product/all.xhtml" value="hediyeler"/></p>
+                <p class="centerText"><h:link outcome="/fincanlog/home.xhtml" value="bilog"/></p>
+                <p class="centerText"><h:link outcome="/index.xhtml" value="ana sayfa"/></p>
+            </h:panelGroup>
+
+            <h:form>
+                <!-- Put invitations details -->
+                <p style="text-align: right">
+                    <h:commandButton id="change"
+                                     value="#{messages['optInvitation.link.optallemail']}"
+                                     action="#{optEmailAction.opt()}"/>
+                </p>
+            </h:form>
+
+        </ui:fragment>
+
+
+        <ui:fragment rendered="#{empty optEmailAction.invitations and optEmailAction.email != null}">
+            <p class="centerText">Eğer istemiyorsan #{optEmailAction.email} adresine bundan sonra e-posta göndermeyeceğim.</p>	
+
+            <h:panelGroup rendered="#{optEmailAction.successMessage != null}">
+                <p class="centerText"><h:graphicImage value="/resources/images/global/500-server-error.png"/></p>	
+                <p class="centerText"><h:outputText value="#{optEmailAction.successMessage}" /></p>	
+                <p class="centerText">Bu arada belki de ileride fikrini değiştirebilirim diye bu aşağıdaki sayfalara bir göz atmanı öneririm ;)</p>
+                <p class="centerText"><h:link outcome="/product/all.xhtml" value="hediyeler"/></p>
+                <p class="centerText"><h:link outcome="/fincanlog/home.xhtml" value="bilog"/></p>
+                <p class="centerText"><h:link outcome="/index.xhtml" value="ana sayfa"/></p>
+            </h:panelGroup>
+
+            <h:panelGroup rendered="#{optEmailAction.errorMessage != null}">
+                <p class="centerText"><h:graphicImage value="/resources/images/global/500-server-error.png"/></p>	
+                <p class="centerText"><h:outputText value="#{optEmailAction.errorMessage}" /></p>	
+                <p class="centerText">Muhtemelen hemen şu anda istediğin şeyin yerini tutmaz ama yine de belki aşağıdaki sayfalardan biri ilgini çekebilir...</p>
+                <p class="centerText"><h:link outcome="/product/all.xhtml" value="hediyeler"/></p>
+                <p class="centerText"><h:link outcome="/fincanlog/home.xhtml" value="bilog"/></p>
+                <p class="centerText"><h:link outcome="/index.xhtml" value="ana sayfa"/></p>
+            </h:panelGroup>
+
+            <h:form>
+
+                <p style="text-align: right">
+                    <h:commandButton id="change"
+                                     value="#{messages['optInvitation.link.optallemail']}"
+                                     action="#{optEmailAction.opt()}"/>
+                </p>
+            </h:form>
+
+        </ui:fragment>        
+
+    </ui:define>
+</ui:composition>

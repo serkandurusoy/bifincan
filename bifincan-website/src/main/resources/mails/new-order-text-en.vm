@@ -1,0 +1,24 @@
+Sevgili ${userfirstname},
+
+Siparişini aldım, teşekkür ederim. En kısa sürede paketini hazırlayıp sana ileteceğim. Paketinin içeriğini aşağıda görebilirsin.
+
+Sana göndereceğim paketin üzerinde bir de onay kodu olacak ki paketi sağ salim aldığından emin olalım diye sen de bu kodu ${baseurl}/hediyelerim ekranından gireceksin. Zaten bunu daha önce yapmıştın, biliyorsun nasıl işlediğini.
+
+#foreach($item in $products)
+${item.item.brandName} - ${item.productName} (${item.productMoneyValue} TL yerine ${item.productPointValue} fi):
+${item.productShortDescription}
+
+#end
+#if( $freeproducts.size() > 0 )
+Sürpriiiz, sana bir de aşağıdakini vereyim dedim, hem de bırak ücret ödemeyi, fi dahi harcamıyorsun bunun için :)
+
+#end
+#foreach($item in $freeproducts)
+${item.item.brandName} - ${item.productName} (${item.productMoneyValue} TL yerine 0 fi):
+${item.productShortDescription}
+
+#end
+Sevgiler,
+"fi"
+
+${baseurl}

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    template="/resources/layouts/primary-content.xhtml">
+
+    <ui:define name="metadata"></ui:define>
+
+    <ui:define name="headIncludes"></ui:define>
+
+    <ui:define name="title">fi'lerim - bifincan</ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="fi'lerim - bifincan" />
+    </ui:define>
+
+    <ui:define name="pageTitle">fi'lerim</ui:define>
+
+    <ui:define name="pageContent">
+        <ui:fragment rendered="#{!currentUser.ambassador}">
+            <p>
+                Geçen hafta boyunca bifincan üyeleri ortalama <h:outputText value="#{pointTransactionAccountingService.calculateWeeklyAverage()}"><f:convertNumber pattern="#"/></h:outputText> fi kazandılar ve sen de <h:outputText value="#{pointTransactionAccountingService.calculateWeeklyUserTotal(currentUser.username)}"><f:convertNumber pattern="#"/></h:outputText> fi kazandın, bu hafta boyunca #{currentUser.activityLevel eq 1 ? 'sade' : currentUser.activityLevel eq 2 ? 'orta' : 'şekerli'} üyelik seviyesinde olacaksın.
+            </p>
+        </ui:fragment>
+        <ui:fragment rendered="#{currentUser.ambassador}">
+            <p>
+                Geçen hafta boyunca bifincan üyeleri ortalama <h:outputText value="#{pointTransactionAccountingService.calculateWeeklyAverage()}"><f:convertNumber pattern="#"/></h:outputText> fi kazandılar ve sen de <h:outputText value="#{pointTransactionAccountingService.calculateWeeklyUserTotal(currentUser.username)}"><f:convertNumber pattern="#"/></h:outputText> fi kazandın. Ama bu senin üyelik seviyeni etkilemiyor çünkü sen bir bifincan elçisi olduğun için her daim şekerli üyelik seviyesindesin. Bu büyük ayrıcalığın ağır sorumluluğunu gururla taşıyarak hakkını vereceğinden ve bilinçli tüketicinin sesi olmaya devam edeceğinden hiç şüphem yok ;)
+            </p>
+        </ui:fragment>
+        <p>
+            Diğer üyeler bugüne kadar toplam ne kadar fi kazanmışlar, ne kadar hediye almışlar görmek istersen <h:link outcome="/scoreboard.xhtml" value="fiseverler" /> ve <h:link outcome="/scoreboard-moneyvalue.xhtml" value="hediyeseverler" /> listelerine de bakabilirsin.
+        </p>
+
+        <p>
+            <h:panelGrid columns="2" columnClasses=",rightText width100" >
+                <h:outputText value="01. #{messages['points.signup']}" />
+                <h:outputText value="#{pointHistoryAction.groupedTotals.signupPoints} fi" />
+                <h:outputText value="02. #{messages['points.login']}" />
+                <h:outputText value="#{pointHistoryAction.groupedTotals.loginPoints} fi" />
+                <h:outputText value="03. #{messages['points.invitation']}" />
+                <h:outputText value="#{pointHistoryAction.groupedTotals.invitationPoints} fi" />
+                <h:outputText value="04. #{messages['points.invitationSuccess']}" />
+                <h:outputText value="#{pointHistoryAction.groupedTotals.invitationSuccessPoints} fi" />
+                <h:outputText value="05. #{messages['points.surveyGeneric']}" />
+                <h:outputText value="#{pointHistoryAction.groupedTotals.genericSurveyPoints} fi" />
+                <h:outputText value="06. #{messages['points.surveyProduct']}" />
+                <h:outputText value="#{pointHistoryAction.groupedTotals.productSurveyPoints} fi" />
+                <h:outputText value="07. #{messages['points.rating']}" />
+                <h:outputText value="#{pointHistoryAction.groupedTotals.ratingPoints} fi" />
+                <h:outputText value="08. #{messages['points.quiz']}" />
+                <h:outputText value="#{pointHistoryAction.groupedTotals.quizPoints} fi" />
+                <h:outputText value="09. #{messages['points.blog']}" />
+                <h:outputText value="#{pointHistoryAction.groupedTotals.blogCommentPoints} fi" />                
+                <h:outputText value="10. #{messages['points.product']}" />
+                <h:outputText value="#{pointHistoryAction.groupedTotals.productCommentPoints} fi" />    
+                <h:outputText value="11. #{messages['points.social']}" />
+                <h:outputText value="#{pointHistoryAction.groupedTotals.socialPoints} fi" />   
+                <h:outputText value="12. #{messages['points.voting']}" />
+                <h:outputText value="#{pointHistoryAction.groupedTotals.votingPoints} fi" />                                            
+                <h:outputText value="#{messages['points.total']}" styleClass="boldText" />
+                <h:outputText value="#{pointHistoryAction.totalPoints} fi" styleClass="boldText" />
+              
+            </h:panelGrid>
+            <h:panelGrid columns="2" columnClasses=",rightText width100">
+                <h:outputText value="00. #{messages['points.order']}" />
+                <h:outputText value="- #{pointHistoryAction.groupedTotals.productOrderPoints} fi" />
+                <h:outputText value="#{messages['points.total']}" styleClass="boldText" />
+                <h:outputText value="- #{pointHistoryAction.groupedTotals.productOrderPoints} fi" styleClass="boldText" />
+            </h:panelGrid>
+            <h:panelGrid columns="2" columnClasses=",rightText width100">
+                <h:outputText value="#{messages['points.total']}" styleClass="boldText" />
+                <h:outputText value="#{currentUser.pointsBalance} fi" styleClass="boldText" />
+            </h:panelGrid>
+        </p>
+        <div class="module-a">
+            <h:form prependId="false">
+                <p>
+                <f:ajax render="@form" event="change"  listener="#{pointHistoryAction.loadTransactions}">
+                    <h:selectOneMenu id="rangeOfDates" value="#{flash.selectionDate}">
+                        <f:selectItems value="#{pointHistoryAction.rangeOfDates}" var="entry" itemLabel="#{pointHistoryAction.formatDateToMonthAndYear(entry)}"/>
+                    </h:selectOneMenu>
+                </f:ajax>
+                </p>
+
+                <h:dataTable value="#{pointHistoryAction.transactions}" var="transaction" id="results" styleClass="transactionHistory"
+                             columnClasses=",rightText,rightText,rightText,rightText,rightText,rightText,rightText,rightText,rightText,rightText,rightText,rightText,rightText" >
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{messages['points.day']}" />
+                        </f:facet>
+                        <c:set value="#{pointHistoryAction.extractDateOfMonth(transaction.createDate)}" var="day"/>
+                        <h:outputText value="#{day}" rendered="#{day > 0}"/>
+                        <h:outputText value="#{messages['points.total']}" rendered="#{day == 0}"/>
+                    </h:column>				
+                    <h:column headerClass="rightText">
+                        <f:facet name="header">
+                            <h:outputText value="01" />
+                        </f:facet>
+                        <h:outputText value="#{transaction.signupPoints}" />
+                    </h:column>
+                    <h:column headerClass="rightText">
+                        <f:facet name="header">
+                            <h:outputText value="02" />
+                        </f:facet>
+                        <h:outputText value="#{transaction.loginPoints}" />
+                    </h:column>
+                    <h:column headerClass="rightText">
+                        <f:facet name="header">
+                            <h:outputText value="03" />
+                        </f:facet>
+                        <h:outputText value="#{transaction.invitationPoints}" />
+                    </h:column>
+                    <h:column headerClass="rightText">
+                        <f:facet name="header">
+                            <h:outputText value="04" />
+                        </f:facet>
+                        <h:outputText value="#{transaction.invitationSuccessPoints}" />
+                    </h:column>
+                    <h:column headerClass="rightText">
+                        <f:facet name="header">
+                            <h:outputText value="05" />
+                        </f:facet>
+                        <h:outputText value="#{transaction.genericSurveyPoints}" />
+                    </h:column>								
+                    <h:column headerClass="rightText">
+                        <f:facet name="header">
+                            <h:outputText value="06" />
+                        </f:facet>
+                        <h:outputText value="#{transaction.productSurveyPoints}" />
+                    </h:column>
+                    <h:column headerClass="rightText">
+                        <f:facet name="header">
+                            <h:outputText value="07" />
+                        </f:facet>
+                        <h:outputText value="#{transaction.ratingPoints}" />
+                    </h:column>
+                    <h:column headerClass="rightText">
+                        <f:facet name="header">
+                            <h:outputText value="08" />
+                        </f:facet>
+                        <h:outputText value="#{transaction.quizPoints}" />
+                    </h:column>	
+                    <h:column headerClass="rightText">
+                        <f:facet name="header">
+                            <h:outputText value="09" />
+                        </f:facet>
+                        <h:outputText value="#{transaction.blogCommentPoints}" />
+                    </h:column>                    
+                    <h:column headerClass="rightText">
+                        <f:facet name="header">
+                            <h:outputText value="10" />
+                        </f:facet>
+                        <h:outputText value="#{transaction.productCommentPoints}" />
+                    </h:column>                    
+                    <h:column headerClass="rightText">
+                        <f:facet name="header">
+                            <h:outputText value="11" />
+                        </f:facet>
+                        <h:outputText value="#{transaction.socialPoints}" />
+                    </h:column>  
+                    <h:column headerClass="rightText">
+                        <f:facet name="header">
+                            <h:outputText value="12" />
+                        </f:facet>
+                        <h:outputText value="#{transaction.votingPoints}" />
+                    </h:column>                                       
+                    <h:column headerClass="rightText">
+                        <f:facet name="header">
+                            <h:outputText value="00" />
+                        </f:facet>
+                        <h:outputText value="#{transaction.productOrderPoints}" />
+                    </h:column>
+                </h:dataTable>
+            </h:form>	
+        </div>
+    </ui:define>
+	
+</ui:composition>
+    

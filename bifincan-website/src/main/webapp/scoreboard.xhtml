@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:fi="http://java.sun.com/jsf/composite/components"
+                template="/resources/layouts/primary-content.xhtml">
+
+
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:event listener="#{scoreBoardAction.init}" type="preRenderView"/>
+        </f:metadata>
+    </ui:define>
+
+    <ui:define name="headIncludes"></ui:define>
+
+    <ui:define name="title">fiseverler - bifincan</ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="fiseverler - bifincan" />
+    </ui:define>
+
+    <ui:define name="pageTitle">fiseverler</ui:define>
+
+    <ui:define name="pageContent">
+        <p>fiseverler, bugüne kadar bifincan'da en çok fi biriktiren üyeler oluyorlar, çok çalışıp çok kazanıyor, bol bol görüş ve yorum bildirip bol bol fi kazanıyor ve bunlarla bol bol hediye alıyorlar.</p>
+        <table id="ficanavarlari">
+            <tr>
+                <th class="boldText" style="font-size: 140%">fisever</th>
+                <th class="boldText" style="font-size: 140%">üyelik tarihi</th>
+                <th class="boldText" style="text-align: right; font-size: 140%">fileri</th>
+            </tr>
+            <ui:repeat value="#{scoreBoardAction.scores}" var="_score">     
+
+                <tr class="#{currentUser ne null and currentUser.id eq _score['user'].id ?'ficanavari':''}">
+
+                    <td><fi:userNameWithDescription userBean="#{_score['user']}"/></td>
+                    <td><h:outputText value="#{_score['user'].createDate}">
+                            <f:convertDateTime pattern="dd MMMM yyyy"/>
+                        </h:outputText></td>
+                    <td style="text-align: right"><h:outputText value="#{_score['score']} fi">
+                            <f:convertNumber pattern="###,##0.00"/>
+                        </h:outputText></td>
+                </tr>  
+            </ui:repeat>
+        </table>
+        <h:messages id="messages" globalOnly="true" />
+    </ui:define>
+</ui:composition>

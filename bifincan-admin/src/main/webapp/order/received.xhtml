@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:hh="http://balusc.net/jsf/html"
+                template="/resources/layouts/standard.xhtml">
+    <ui:define name="metadata">
+    </ui:define>
+
+    <ui:define name="browserTitle">received orders - </ui:define>
+    <ui:define name="content">
+        <h:form id="mainForm">
+            <p:tabView dynamic="true" id="t1"
+                       style="border-style:none; padding-left:0px; padding-right: 0px;">
+                <p:tab title="received orders" id="t11">
+                    <p:panel>
+
+                    </p:panel>		
+                    <p:messages id="messages" autoUpdate="true"/>	
+                    <p:dataTable id="mainTable" var="order" value="#{receivedOrderAction.dataModel}" binding="#{receivedOrderAction.dataTable}"
+                                 style="height:85%" emptyMessage="No records found" paginator="true" paginatorPosition="bottom" 
+                                 paginatorAlwaysVisible="true" rows="12" pageLinks="10">                                  
+                        <p:column style="width:25%">
+                            <f:facet name="header" style="background-color:red">
+                                Order Owner
+                            </f:facet>
+                            <h:outputText value="#{order.address.user.firstName} #{order.address.user.lastName}"  style="#{order.address.user.active ? '':'color: red'}"/>
+                        </p:column>
+                        <p:column style="width:35%">
+                            <f:facet name="header" style="background-color:red">
+                                City
+                            </f:facet>
+                            <h:outputText value="#{order.address.area.district.county.city.name}" style="#{order.address.user.active ? '':'color: red'}"/>
+                        </p:column>	                        
+                        <p:column style="width:10%">
+                            <f:facet name="header" style="background-color:red">
+                                Placed Time
+                            </f:facet>
+                            <h:outputText value="#{order.placedTime}" style="#{order.address.user.active ? '':'color: red'}" />
+                        </p:column>				
+                        <p:column style="width:10%">
+                            <f:facet name="header" style="background-color:red">
+                                Sent Time
+                            </f:facet>
+                            <h:outputText value="#{order.sentTime}" style="#{order.address.user.active ? '':'color: red'}" />
+                        </p:column>	
+                        <p:column style="width:10%">
+                            <f:facet name="header" style="background-color:red">
+                                Received Time
+                            </f:facet>
+                            <h:outputText value="#{order.receivedTime}" style="#{order.address.user.active ? '':'color: red'}" />
+                        </p:column>	  			
+
+                        <p:column style="width:10%;text-align:center">
+                            <f:facet name="header">
+                                Action
+                            </f:facet>
+                            <p:commandButton value="View"
+                                             action="#{receivedOrderAction.initEdit(order)}"
+                                             update=":editForm:orderGrid :editForm:products" onclick="dlg2.show();"/>				
+                        </p:column>
+                    </p:dataTable>
+
+                </p:tab>
+            </p:tabView>
+
+        </h:form>
+    </ui:define>
+
+    <ui:define name="afterlayout">
+        <p:dialog header="Order" widgetVar="dlg2" modal="true"
+                  height="440" width="700">
+            <h:form id="editForm">
+                <h:panelGrid id="orderGrid" columns="2" width="100%">
+
+                    <h:panelGrid id="orderInfo1Grid" columns="4" width="100%">
+                        <h:outputText value="Id: "/>
+                        <h:outputText value="#{receivedOrderAction.currentOrder.id}"/>			 					 
+                        <h:outputText value="Confirmation code: "/>
+                        <h:outputText value="#{utilsBean.extractCode(receivedOrderAction.currentOrder)}"/>                     
+
+                        <h:outputText value="Placed time: "/>
+                        <h:outputText value="#{receivedOrderAction.currentOrder.placedTime}"/>
+                        <h:outputText value="Sent time: "/>
+                        <h:outputText value="#{receivedOrderAction.currentOrder.sentTime}"/>
+
+                        <h:outputText value="Received time: "/>
+                        <h:outputText value="#{receivedOrderAction.currentOrder.receivedTime}"/>					 					 
+                        <h:outputText value="Email: "/>
+                        <h:outputText value="#{receivedOrderAction.currentOrder.address.user.email}"/> 
+
+                        <h:outputText value="Name: "/>
+                        <h:outputText value="#{receivedOrderAction.currentOrder.address.user.firstName}"/>                     
+                        <h:outputText value="Lastname: "/>
+                        <h:outputText value="#{receivedOrderAction.currentOrder.address.user.lastName}"/>
+
+                        <h:outputText value="Phone: "/>
+                        <h:outputText value="0 #{receivedOrderAction.currentOrder.address.area.district.county.phonePrefix} #{receivedOrderAction.currentOrder.address.phoneNumber} #{receivedOrderAction.currentOrder.address.phoneExtension}"/>		                    
+                        <h:outputText value="Gsm: "/>
+                        <h:outputText value="#{receivedOrderAction.currentOrder.address.user.gsmVerification.gsmPrefix.code} #{receivedOrderAction.currentOrder.address.user.gsmVerification.gsmNumber}"/>
+
+                        <f:facet name="footer">
+                            <h:outputText value="Address: "/>
+                            <h:outputText value="#{receivedOrderAction.currentOrder.address.streetName} #{receivedOrderAction.currentOrder.address.buildingNumber} #{receivedOrderAction.currentOrder.address.apartmentNumber}, 
+                                          #{receivedOrderAction.currentOrder.address.area.district.county.city.name}, #{receivedOrderAction.currentOrder.address.area.district.county.name}, 
+                                          #{receivedOrderAction.currentOrder.address.area.district.name}, #{receivedOrderAction.currentOrder.address.area.name}"/>	
+                        </f:facet> 
+                    </h:panelGrid>
+
+                    <p:spacer width="100%" height="15"/> 
+                    <f:facet name="footer">
+                        <p:commandButton value="Close" onclick="dlg2.hide();" type="button" />	
+                    </f:facet> 
+                </h:panelGrid> 
+
+                <p:separator id="separator" style="height:1px"/>
+                <h:outputText value="Order Details" style="font-weight:bold"/>
+                <br/>
+                <p:dataTable id="products" value="#{receivedOrderAction.items}"  
+                             var="item"  emptyMessage="No records found" style="width:100%;padding-top:5px">
+                    <p:column style="width:20%">  
+                        <f:facet name="header">  
+                            Type  
+                        </f:facet>  
+                        <h:outputText value="#{messages[item.type.label]}" />  
+                    </p:column>
+
+                    <p:column style="width:25%; text-align:center">  
+                        <f:facet name="header">  
+                            Brand  
+                        </f:facet>  
+                        <h:outputText value="#{item.product.brand.name}" />  
+                    </p:column>
+
+                    <p:column style="width:40%; text-align:center">  
+                        <f:facet name="header">  
+                            Product   
+                        </f:facet>  
+                        <h:outputText value="#{item.product.name}" />  
+                    </p:column>
+
+                    <p:column style="width:15%; text-align:center">  
+                        <f:facet name="header">  
+                            Survey Completed   
+                        </f:facet>  
+                        <h:outputText value="#{item.surveyCompleted == true ? 'Yes' : 'No'}" />  
+                    </p:column>
+                </p:dataTable>
+
+            </h:form>
+        </p:dialog>
+
+
+    </ui:define>
+
+</ui:composition>
+
+
+
+
+

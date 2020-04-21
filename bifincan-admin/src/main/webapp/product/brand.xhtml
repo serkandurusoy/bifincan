@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:hh="http://balusc.net/jsf/html"
+                template="/resources/layouts/standard.xhtml">
+    <ui:define name="metadata">
+    </ui:define>
+
+    <ui:define name="browserTitle">brands - </ui:define>
+    <ui:define name="content">
+        <h:form id="mainForm">
+            <p:tabView dynamic="true" id="t1"
+                       style="border-style:none; padding-left:0px; padding-right: 0px;">
+                <p:tab title="brands" id="t11">
+                    <p:panel>
+                        <p:commandButton value="New" style="right:0px;"
+                                         action="#{brandAction.initAdd()}"
+                                         update=":editForm:brandGrid" onclick="dlg2.show();">
+                           <f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />              
+                        </p:commandButton>                 
+                    </p:panel>		
+                    <p:messages id="messages" autoUpdate="true"/>	
+                    <p:dataTable id="mainTable" var="brand" value="#{brandAction.brands}"
+                                 style="height:85%" emptyMessage="No records found" paginator="true" paginatorPosition="bottom" 
+                                 paginatorAlwaysVisible="true" rows="12" pageLinks="10">
+                        <p:column style="width:18%">
+                            <f:facet name="header" style="background-color:red">
+                                Name
+                            </f:facet>
+                            <h:outputText value="#{brand.name}" />
+                        </p:column>
+                        <p:column style="width:30%">
+                            <f:facet name="header" style="background-color:red">
+                                Website
+                            </f:facet>
+                            <h:outputText value="#{brand.urlWebsite}" />
+                        </p:column>				
+                        <p:column style="width:17%">
+                            <f:facet name="header" style="background-color:red">
+                                Company
+                            </f:facet>
+                            <h:outputText value="#{brand.company.name}" />
+                        </p:column>	
+                        <p:column style="width:13%">
+                            <f:facet name="header" style="background-color:red">
+                                Country
+                            </f:facet>
+                            <h:outputText value="#{brand.country.name}" />
+                        </p:column>
+                        <p:column style="width:12%">
+                            <f:facet name="header" style="background-color:red">
+                                Slug
+                            </f:facet>
+                            <h:outputText value="#{brand.slug}" />
+                        </p:column>																	
+                        <p:column style="width:10%;text-align:center">
+                            <f:facet name="header">
+                                Action
+                            </f:facet>
+                            <p:commandButton value="Edit"
+                                             action="#{brandAction.initEdit(brand)}"
+                                             update=":editForm:brandGrid" onclick="dlg2.show();">
+                                <f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />             
+                            </p:commandButton>                 
+
+                            <p:commandButton value="Delete"
+                                             action="#{brandAction.initEdit(brand)}"
+                                             onclick="dlg3.show();"/>					
+                        </p:column>
+                    </p:dataTable>
+
+                </p:tab>
+            </p:tabView>
+
+        </h:form>
+    </ui:define>
+
+    <ui:define name="afterlayout">
+        <p:dialog header="Brand" widgetVar="dlg2" modal="true"
+                  height="600" width="900">
+            <h:form id="editForm" enctype="multipart/form-data" acceptcharset="UTF-8">
+                <h:panelGrid id="brandGrid" columns="2" width="100%">
+
+                    <h:outputText value="Name:" />
+                    <h:inputText value="#{brandAction.currentBrand.name}" style="width:98%" maxlength="250" required="true" requiredMessage="The brand's name is required"/>
+                    <h:outputText value="Company:" />				
+                    <h:selectOneMenu value="#{brandAction.currentBrand.company}" converter="#{entityConverter}" style="width:60%;height:27px" 
+                    		required="true" requiredMessage="The company field is required">
+                        <f:selectItems value="#{companyService.findCompanies()}" var="r" itemLabel="#{r.name}"/>
+                    </h:selectOneMenu>	              						
+                    <h:outputText value="Country:" />				
+                    <h:selectOneMenu value="#{brandAction.currentBrand.country}" converter="#{entityConverter}" style="width:60%;height:27px"
+                    		required="true" requiredMessage="The country field is required">
+                        <f:selectItems value="#{addressService.findCountries()}" var="r" itemLabel="#{r.name}"/>
+                    </h:selectOneMenu>  					
+                    <h:outputText value="Slug:" />
+                    <h:inputText value="#{brandAction.currentBrand.slug}" style="width:98%" maxlength="250" required="true" requiredMessage="The slug field is required"/>                    
+                    <h:outputText value="URL Website:" />				
+                    <h:inputText value="#{brandAction.currentBrand.urlWebsite}" style="width:98%" maxlength="512" validatorMessage="The webiste's URL is not valid"/>					
+                    <h:outputText value="URL Blog:" />
+                    <h:inputText value="#{brandAction.currentBrand.urlBlog}" style="width:98%" maxlength="512" validatorMessage="The blog's URL is not valid"/>	
+                    <h:outputText value="URL Facebook:" />
+                    <h:inputText value="#{brandAction.currentBrand.urlFacebook}" style="width:98%" maxlength="512" validatorMessage="The facebook's URL is not valid"/>	
+                    <h:outputText value="URL Twitter:" />
+                    <h:inputText value="#{brandAction.currentBrand.urlTwitter}" style="width:98%" maxlength="512" validatorMessage="The twitter's URL is not valid"/>
+                    <h:outputText value="Logo:" />
+					<hh:inputFile id="file" value="#{brandAction.file}" />
+                    <h:outputText value="Prioritized:" />
+					<h:selectBooleanCheckbox value="#{brandAction.currentBrand.prioritized}" />
+										
+					<h:outputText value="Product Categories:" />
+					<p:pickList id="pojoPickList" 
+                                                    value="#{brandAction.productCategories}"  
+					            var="productCategory"
+                                                    iconOnly="true" 
+                                                    itemValue="#{productCategory}"
+                                                    itemLabel="#{productCategory.name}, #{productCategory.parent.name},  #{productCategory.parent.parent.name}"
+                                                    converter="#{dualListModelConverter}"
+                                                    showSourceControls="false"
+                                                    showTargetControls="false">  
+                                                <f:facet name="sourceCaption">Available</f:facet>  
+					        <f:facet name="targetCaption">Assigned</f:facet>  
+					  
+                                                <p:column>  
+					            #{productCategory.name}, #{productCategory.parent.name},  #{productCategory.parent.parent.name} 
+					        </p:column>  
+					</p:pickList>
+	
+                    <p:spacer width="100%" height="15"/> 
+                    <f:facet name="footer">
+                        <p:commandButton value="Save" action="#{brandAction.save}"
+                                         update=":mainForm:t1:mainTable" 
+                                         oncomplete="dlg2.hide();" ajax="false" />
+                        <p:commandButton value="Cancel" 
+                                         onclick="dlg2.hide();" type="button" />	
+                    </f:facet> 
+ 
+                
+             </h:panelGrid>   
+            </h:form>
+        </p:dialog>
+
+        <p:confirmDialog message="Are you sure to delete the brand?"
+                         header="Initiating deletion process" severity="alert"
+                         widgetVar="dlg3">
+            <h:form id="confirmForm">
+                <p:commandButton value="Yes" actionListener="#{brandAction.delete}"
+                                 update=":mainForm:t1:mainTable" oncomplete="dlg3.hide()"/>
+                <p:commandButton value="No" onclick="dlg3.hide();" type="button" />
+            </h:form>
+        </p:confirmDialog>	
+    </ui:define>
+
+</ui:composition>
+
+
+
+
+

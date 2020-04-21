@@ -1,0 +1,13 @@
+Sevgili ${firstName},
+
+Uzun süredir hiçbir arkadaşını bifincan'a davet etmedin.
+
+Arkadaşlarını davetlerim [1] sayfandan bifincan'a davet edebilir ve bu sayede bool bol "fi" kazanabilirsin :)
+
+Sevgiler,
+"fi"
+
+${baseurl}
+
+Bağlantılar:
+[1] ${baseurl}/davetlerim

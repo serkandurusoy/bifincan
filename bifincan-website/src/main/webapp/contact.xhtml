@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:sec="http://www.springframework.org/security/tags"
+                xmlns:fi="http://java.sun.com/jsf/composite/components"   
+                template="/resources/layouts/primary-content.xhtml">
+
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:event listener="#{contactAction.init()}" type="preRenderView"/>
+        </f:metadata>
+    </ui:define>
+
+    <ui:define name="headIncludes"></ui:define>
+
+    <ui:define name="title">mesajım var - bifincan</ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="mesajım var - bifincan" />
+    </ui:define>
+
+    <ui:define name="pageTitle">mesajım var</ui:define>
+
+    <ui:define name="pageContent">
+        <p>
+            Bana sormak veya benden destek almak istediğin herhangi bir konuda bana bir mesaj bırakabilirsin. Bunun için bu formu doldurman yeterli. Ama önce <h:link outcome="/staticpages/faq.xhtml" value="bazen sorulan sorular ve hiç okunmayan yanıtlarına" styleClass="boldText" style="text-decoration: underline" /> bak lütfen, çünkü çok ama çooooook büyük ihtimalle sorunun yanıtını bulacaksın.
+        </p>
+        <ui:fragment rendered="#{sec:areNotGranted('ROLE_USER')}">
+            <p class="boldText">
+                Bifincan üyeliği yalnızca bir başka üyenin daveti ile olabiliyor. Eğer bifincan üyesi olmak istiyor ve davetiye almamışsan, arkadaşlarına bir sor istersen, belki de bir arkadaşın zaten bifincan üyesidir ve seni davet etmek isteyebilir ;)
+            </p>
+            <p>
+                Ama eğer daha önce davetiye aldıysan ve <h:link outcome="/retrieveinvitations.xhtml" value="davetiyelerimi kaybettim" style="font-weight: bold"/> diyorsan sorun değil, <h:link outcome="/retrieveinvitations.xhtml" value="buraya tıklayarak" title="davetiyelerimi kaybettim" style="font-weight: bold"/> davetiyelerinin sana tekrar iletilmesini sağlayabilirsin.
+            </p>
+            <p>
+                Ben bir marka yöneticisiyim, bifincan üyelerine ürün ve hizmetlerimi tanıtmak, hediye etmek ve onların görüşlerini öğrenmek istiyorum diyorsan, zaten tam yerindesin. Ama unutma, sen de bir tüketicisin, büyük ihtimalle de çok bilinçli bir tüketicisin, üye olmak istemez misin?
+            </p>
+        </ui:fragment>
+        <ui:fragment rendered="#{sec:areAnyGranted('ROLE_USER')}">
+            <p>
+                Çok yorulma, hiç vakit kaybetmeden sadece mesajını yazabil diye formalite sahaları ben senin yerine doldurdum hemen.
+            </p>
+        </ui:fragment>
+        <h:form id="contactForm">
+            <p>
+                <h:outputLabel for="name" value="#{messages['contact.name']}" styleClass="contactForm"/>
+                <h:inputText id="name" value="#{contactAction.name}"  readonly="#{sec:areAnyGranted('ROLE_USER')}" />
+            </p>
+
+            <p>
+                <h:outputLabel for="email" value="#{messages['contact.email']} *" styleClass="contactForm"/>
+                <h:inputText id="email" value="#{contactAction.email}" rendered="true" requiredMessage="e-posta adresini girmelisin" readonly="#{sec:areAnyGranted('ROLE_USER')}"/>
+                <h:message for="email" showSummary="true" showDetail="false" styleClass="error"/>
+            </p>
+
+
+            <p>
+                <h:outputLabel for="phone" value="#{messages['contact.phone']}" styleClass="contactForm"/>
+                <h:inputText id="phone" value="#{contactAction.phone}" readonly="#{sec:areAnyGranted('ROLE_USER')}"/>
+
+            </p>
+
+            <ui:fragment rendered="#{sec:areNotGranted('ROLE_USER')}">
+                <p>
+                    <h:outputLabel value="kod *" styleClass="contactForm"/>
+                    <fi:kaptcha/>
+                </p>
+            </ui:fragment>
+
+            <p>
+                <h:outputLabel for="message" value="#{messages['contact.message']} *" styleClass="contactForm"/>
+                <h:inputTextarea id="message" value="#{contactAction.message}" rendered="true" required="true"
+                                 requiredMessage="gerçekten boş bir mesaj mı iletmek istiyorsun?"
+                                 validatorMessage="bu çok kısa bir mesaj olmadı mı?"
+                                 rows="10" style="width: 480px; height: 120px;"/>
+                <br/>
+                <h:message for="message" showSummary="true" showDetail="false" styleClass="error" style="padding-left: 120px"/>
+                
+            </p>
+
+            <p><h:messages id="messages" globalOnly="true" styleClass="errorForm" style="padding-left: 120px; "/></p>
+
+            <p class="rightText">
+                <h:commandButton value="mesajımı ilet" action="#{contactAction.send}">
+<!--                    <f:ajax execute="@form" render="@all"/>-->
+                </h:commandButton>
+            </p>     
+        </h:form>
+    </ui:define>
+</ui:composition>

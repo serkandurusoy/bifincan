@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:fi="http://java.sun.com/jsf/composite/components"
+                template="/resources/layouts/primary-content.xhtml">
+    <ui:define name="metadata">    
+        <f:metadata>
+            <f:event listener="#{blogHomeAction.loadPosts()}" type="preRenderView"/>
+        </f:metadata>     
+    </ui:define>
+
+    <ui:define name="headIncludes"></ui:define>
+
+    <ui:define name="title">bilog - bifincan</ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="bilog - bifincan" />
+    </ui:define>
+    <ui:define name="metatags">
+        <meta name="description" content="Daha kaliteli ürün ve hizmetler almak için biraraya gelerek markalara ve ürünlerine sesini duyuran bilinçli tüketicilerin, tüketici dostu markalar ile buluşma noktası." />
+        <meta name="abstract" content="Daha kaliteli ürün ve hizmetler almak için biraraya gelerek markalara ve ürünlerine sesini duyuran bilinçli tüketicilerin, tüketici dostu markalar ile buluşma noktası." />
+        <meta property="og:description" content="Daha kaliteli ürün ve hizmetler almak için biraraya gelerek markalara ve ürünlerine sesini duyuran bilinçli tüketicilerin, tüketici dostu markalar ile buluşma noktası." />
+
+        <meta property="og:type" content="blog" />
+
+        <meta property="og:image" content="#{utilsBean.applicationCanonicalURL}/fi/resources/images/global/bifincan-cover-image.jpg" />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="640" />
+        <meta property="og:image:height" content="360" />
+    </ui:define>
+
+    <ui:define name="pageTitle">bilog</ui:define>  
+    <ui:define name="pageContent">
+        <ui:fragment rendered="#{blogHomeAction.mainPost eq null}">
+            Henüz bilog yok, yeni yazılar çok yakında.
+        </ui:fragment>
+        <ui:fragment rendered="#{blogHomeAction.mainPost ne null}">
+            <h3 class="postTitleFirst">
+                <h:link outcome="/fincanlog/post.xhtml" value="#{blogHomeAction.mainPost.title}">
+                    <f:param name="slug" value="#{blogHomeAction.mainPost.slug}"/>
+                </h:link>
+            </h3>
+            <!--
+            <em>
+                <h:outputText value="#{blogHomeAction.mainPost.postedAt}">
+                    <f:convertDateTime dateStyle="full" locale="#{utilsBean.applicationLocale}" />
+                </h:outputText>
+                (#{blogHomeAction.mainPost.comments.size()} yorum)
+            </em>
+            -->
+            <h:panelGroup layout="block" styleClass="module-a postBodyFirst" >
+                <h:graphicImage alt="#{blogHomeAction.mainPost.title}" value="/blogimage?blogslug=#{blogHomeAction.mainPost.slug}&amp;size=buyuk" width="614" height="307" class="blogImage" />
+                <h:outputText value="#{blogHomeAction.mainPost.teaser}"/>
+                <div class="rightText" style="margin-top: 12px">
+                    <h:link outcome="/fincanlog/post.xhtml" value="devamını oku">
+                        <f:param name="slug" value="#{blogHomeAction.mainPost.slug}"/>
+                    </h:link>
+                </div>
+            </h:panelGroup>
+        </ui:fragment>
+        <ui:fragment rendered="#{blogHomeAction.nextSix ne null}">
+            <ui:repeat value="#{blogHomeAction.nextSix}" var="post" varStatus="status">
+                <div style="float: left; width: 296px; #{status.even ? 'padding-right: 22px;':''}">
+                    <h5 class="postTitleSecond" style="margin-bottom: 4px">
+                        <h:link value="#{post.title}" outcome="/fincanlog/post.xhtml">
+                            <f:param name="slug" value="#{post.slug}"/>
+                        </h:link>
+                    </h5>
+                    <!--
+                    <em>
+                        <h:outputText value="#{post.postedAt}">
+                            <f:converter converterId="org.ocpsoft.PrettyTimeConverter" />
+                        </h:outputText>
+                        (#{post.comments.size()} yorum)
+                    </em>
+                    -->
+                    <h:graphicImage alt="#{post.title}" value="/blogimage?blogslug=#{post.slug}&amp;size=kucuk" width="296" height="148" class="blogImage" />
+                    <h:outputText value="#{post.teaser}"/>
+                    <h:link value=" &#187;&#187;&#187;" outcome="/fincanlog/post.xhtml">
+                        <f:param name="slug" value="#{post.slug}"/>
+                    </h:link>
+                </div>
+                <h:panelGroup layout="block" style="clear: both; padding-bottom: 22px;" rendered="#{status.odd}"/>
+            </ui:repeat>
+        </ui:fragment>    
+        <ui:fragment rendered="#{blogHomeAction.nextMore ne null}">
+            <ui:repeat value="#{blogHomeAction.nextMore}" var="post" varStatus="status">
+                <div class="#{status.even ? 'module-a':''}" style="#{status.even ? 'padding-bottom: 28px':''}">
+                    <h5 class="postTitleSecond">
+                    <h:link value="#{post.title}" outcome="/fincanlog/post.xhtml">
+                        <f:param name="slug" value="#{post.slug}"/>
+                    </h:link>
+                    </h5>
+                    <!--
+                    <em>
+                        <h:outputText value="#{post.postedAt}">
+                            <f:converter converterId="org.ocpsoft.PrettyTimeConverter" />
+                        </h:outputText>
+                        (#{post.comments.size()} yorum)
+                    </em>
+                    -->
+                    <div style="margin-top: 12px">
+                        <h:outputText value="#{post.teaser}"/>
+                        <h:link value=" &#187;&#187;&#187;" outcome="/fincanlog/post.xhtml">
+                            <f:param name="slug" value="#{post.slug}"/>
+                        </h:link>
+                    </div>
+                </div>
+            </ui:repeat>
+        </ui:fragment>  
+    </ui:define>
+    <ui:define name="sidebar">
+        <div class="sidebar">
+            <fi:mostRecentComments/>
+            <!--<fi:mostPopPosts/>-->
+        </div>
+    </ui:define>
+</ui:composition>

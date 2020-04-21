@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="/resources/layouts/secondary-content.xhtml">
+    <ui:define name="metadata"></ui:define>
+
+    <ui:define name="headIncludes"></ui:define>
+
+    <ui:define name="browserMode"></ui:define>
+
+    <ui:define name="robots">
+        <meta name="robots" content="NOINDEX, NOFOLLOW" />
+        <meta http-equiv="pragma" content="no-cache" />
+    </ui:define>
+    <ui:define name="title">bu tarayıcı biraz eski sanki - bifincan</ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="bu tarayıcı biraz eski sanki - bifincan" />
+    </ui:define>
+
+    <ui:define name="pageTitle">bu tarayıcı biraz eski sanki</ui:define>
+
+    <ui:define name="pageContent">
+        <p class="centerText"><h:graphicImage value="/resources/images/global/500-server-error.png"/></p>	
+        <p class="centerText">bak şimdi bu hiç olmadı! sen bir bilinçli tüketicisin ve bilgisayarını da, interneti de bilinçli kullanıyor olmalısın.</p>
+        <p class="centerText">hele ki günümüzde bütün internet tarayıcı programlar ücretsiz ve bu kadar gelişmişken, bu tarayıcı ile devam etmene izin veremem ;)</p>
+        <p class="centerText">tarayıcını güncel sürüme yükseltirsen, sadece bifincan'ı değil, tüm siteleri daha hızlı, daha güvenli gezeceksin.</p>
+        <p class="centerText">hatta ziyaret ettiğin sitelerde sadece güncel tarayıcılarda çalışabilen, belki de farkında bile olmadığın yeni özellikler keşfedeceksin.</p>
+        <p class="centerText">aşağıdaki tarayıcı logolarından istediğine tıklayarak yükleme sayfalarına ulaşabilir, birkaç dakika içinde bilgisayarına kurabilirsin :)</p>
+        <p class="centerText">
+            <h:outputLink value="http://www.mozilla.org/" title="Mozilla Firefox 15" rel="external" style="border-style: none; margin: 0 2px 0 2px"><h:graphicImage style="border-style: none; margin: 0 2px 0 2px" value="/resources/images/global/browser-logo/mozilla-firefox.png"/></h:outputLink>
+            <h:outputLink value="http://www.google.com/chrome" title="Google Chrome 21" rel="external" style="border-style: none; margin: 0 2px 0 2px"><h:graphicImage style="border-style: none; margin: 0 2px 0 2px" value="/resources/images/global/browser-logo/google-chrome.png"/></h:outputLink>
+            <h:outputLink value="http://windows.microsoft.com/en-US/internet-explorer/downloads/ie" title="Internet Explorer 9" rel="external" style="border-style: none; margin: 0 2px 0 2px"><h:graphicImage style="border-style: none; margin: 0 2px 0 2px" value="/resources/images/global/browser-logo/microsoft-internet-explorer.png"/></h:outputLink>
+            <h:outputLink value="http://www.apple.com/safari/" title="Apple Safari 5" rel="external" style="border-style: none; margin: 0 2px 0 2px"><h:graphicImage style="border-style: none; margin: 0 2px 0 2px" value="/resources/images/global/browser-logo/apple-safari.png"/></h:outputLink>
+            <h:outputLink value="http://www.opera.com/" title="Opera 12" rel="external" style="border-style: none; margin: 0 2px 0 2px"><h:graphicImage style="border-style: none; margin: 0 2px 0 2px" value="/resources/images/global/browser-logo/opera.png"/></h:outputLink>
+        </p>
+    </ui:define>
+</ui:composition>

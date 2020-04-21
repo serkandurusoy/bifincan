@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:fi="http://java.sun.com/jsf/composite/components/product"
+                template="/resources/layouts/product-list.xhtml">
+
+    <ui:define name="metadata"></ui:define>
+
+    <ui:define name="headIncludes">
+        <script type="text/javascript" src="/fi/resources/scripts/blockui/jquery.blockui.js"></script>
+        <ui:fragment rendered="#{currentUser.age lt 18 and currentUser.acceptedInvitation ne null}">
+            <script type="text/javascript" src="/fi/resources/scripts/blockui/blocker18.js"></script>
+        </ui:fragment>
+        <ui:fragment rendered="#{currentUser.age ge 18 or currentUser.acceptedInvitation eq null}">
+            <script type="text/javascript" src="/fi/resources/scripts/blockui/blocker.js"></script>
+        </ui:fragment>
+    </ui:define>
+
+    <ui:define name="title">#{messages['product.outofstockproducts']} - bifincan</ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="#{messages['product.outofstockproducts']} - bifincan" />
+    </ui:define>
+
+    <ui:define name="pageTitle">#{messages['product.outofstockproducts']}</ui:define>
+
+    <ui:define name="tabMenu">
+        <ul class="tabs-a">
+            <li><h:outputLink value="/product/available.xhtml">#{messages['product.availableproducts']}</h:outputLink></li>
+            <li><h:outputLink value="/product/other.xhtml">#{messages['product.otherproducts']}</h:outputLink></li>
+            <li class="active"><h:outputLink value="/product/outofstock.xhtml">#{messages['product.outofstockproducts']}</h:outputLink></li>
+            <li><h:outputLink value="/order/shoppingcart.xhtml">#{messages['infobox.cart']}</h:outputLink></li>
+        </ul>
+    </ui:define>
+
+    <ui:define name="tabContent">
+
+        <h:panelGroup rendered="#{not empty productNoStockListAction.products}">
+            <h:form prependId="false">
+                <!-- we just pass the values into the UI component's attributes -->		
+                <ui:repeat value="#{productNoStockListAction.products}" var="product"> 
+                    <fi:product-display productName="#{product.productName}"
+                                        productBrand="#{product.brandName}"
+                                        productPointValue="#{product.productPointValue}" 
+                                        productMoneyValue="#{product.productMoneyValue}"
+                                        productShortDescription="#{product.productShortDescription}" 
+                                        productSlug="#{product.productSlug}"
+                                        classifier="#{product.classifier}"/>	
+                </ui:repeat>
+            </h:form>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{empty productNoStockListAction.products}">
+            <p class="centerText"><h:graphicImage value="/resources/images/global/noimage/no-products-found.png"/></p>
+            <p class="centerText"><h:outputText value="#{messages['product.notfound']}"/></p>
+        </h:panelGroup>
+    </ui:define>
+
+</ui:composition>

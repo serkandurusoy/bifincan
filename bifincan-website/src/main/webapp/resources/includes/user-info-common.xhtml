@@ -1,0 +1,40 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:h="http://java.sun.com/jsf/html">
+    
+    <!-- BEGIN SECTION: Points gathered -->
+    <h:outputLink value="/transaction/history.xhtml" styleClass="infoLink">
+        <f:event type="preRenderComponent" listener="#{pointBalanceAction.updateBalance}"/>
+
+        <p class="points-a">
+            #{messages['infobox.balance']}<span><ui:fragment rendered="#{currentUser.shoppingCart.size gt 0}">#{currentUser.shoppingCart.totalPointsOfProducts} / </ui:fragment>#{currentUser.pointsBalance}</span>
+        </p>
+    </h:outputLink>
+    <h:outputLink value="/order/shoppingcart.xhtml" styleClass="infoLink">
+        <p class="total-a">
+            <span>#{messages['infobox.cart']}<span>#{currentUser.shoppingCart.size} / #{currentUser.noOfOrderableProducts} #{messages['infobox.items']}</span></span>
+        </p>
+    </h:outputLink>
+    <p class="activity-a">
+        <ui:fragment rendered="#{currentUser.activityLevel eq 1}">
+            <span>sade<img style="float: right; padding-top: 14px" src="/fi/resources/images/global/useractivitylevel/sade.png"/></span>
+        </ui:fragment>
+        <ui:fragment rendered="#{currentUser.activityLevel eq 2}">
+            <span>orta<img style="float: right; padding-top: 14px" src="/fi/resources/images/global/useractivitylevel/orta.png"/></span>
+        </ui:fragment>
+        <ui:fragment rendered="#{currentUser.activityLevel eq 3}">
+            <span>şekerli<img style="float: right; padding-top: 14px" src="/fi/resources/images/global/useractivitylevel/sekerli.png"/></span>
+        </ui:fragment>
+    </p>
+    <!-- END SECTION: Points gathered -->
+    <ul class="list-b">
+        <li><h:link outcome="/transaction/history.xhtml" value="#{messages['infobox.points']}" /></li>
+        <li><h:link outcome="/user/invitation.xhtml" value="#{messages['user.home.link.invitation']}"/></li>
+        <li><h:link outcome="/order/history.xhtml" value="#{messages['infobox.orders']}" /></li>
+        <li><h:link outcome="/staticpages/faq.xhtml" value="#{messages['infobox.help']}" /></li>
+        <li><h:link outcome="/user/information.xhtml" value="#{messages['infobox.myinfo']}" /></li>
+        <li><h:outputLink value="#{request.contextPath}/cikis">#{messages['link.logout']}</h:outputLink></li>
+    </ul>
+
+</ui:composition>

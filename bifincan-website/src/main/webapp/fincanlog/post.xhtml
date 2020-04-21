@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:pretty="http://ocpsoft.com/prettyfaces"
+                xmlns:sec="http://www.springframework.org/security/tags"
+                xmlns:fi="http://java.sun.com/jsf/composite/components"
+                template="/resources/layouts/primary-content.xhtml">
+    <ui:define name="metadata"> 
+        <f:metadata>
+            <f:viewParam name="slug" value="#{blogPostViewAction.slug}" required="true"/>
+            <f:event listener="#{blogPostViewAction.initPost()}" type="preRenderView"/>
+        </f:metadata>     
+    </ui:define>
+
+    <ui:define name="headIncludes">
+        <!-- SOCIAL POINT: JAVASCRIPT CODE; PUT THIS IN YOUR PAGE WITH THE JSF UI COMPONENT 
+             [ and in your callback just write for example: triggerSocialPointAction('facebook');. ]-->
+        <script type="text/javascript">
+            function triggerSocialPointAction(actionType) {
+                var socialLink = $('#social');
+                socialLink.unbind('click');
+                socialLink.bind('click', function(e) {
+                    sendSocialPointActionRequest(this, e, actionType);
+                    return false;
+                });
+                socialLink.trigger('click');   	   				
+            }
+            function sendSocialPointActionRequest(link, event, actionType) {
+                //jsf.ajax.request(link, event, {render: '@all', action: actionType, prettyurl:'#{prettyContext.requestURL.toURL()}' });
+                jsf.ajax.request(link, event, {render: '@form', action: actionType, prettyurl:'#{prettyContext.requestURL.toURL()}' });
+            }           
+        </script>
+        <!-- SOCIAL POINT -->
+        <!-- Fix for rerendering facebook and twitter buttons when page is updated by ajax but it is not working-->
+        <!--
+        <script type="text/javascript">
+        function socialrefresh(data) {
+            var buttonElement = data.source; // The HTML DOM element which invoked the ajax event.
+            var ajaxStatus = data.status; // Can be "begin", "complete" and "success".
+
+            switch (ajaxStatus) {
+                case "begin": // This is called right before ajax request is been sent.
+                    buttonElement.disabled = true;
+                    break;
+
+                case "complete": // This is called right after ajax response is received.
+                    // We don't want to enable it yet here, right?
+                    break;
+
+                case "success": // This is called when ajax response is successfully processed.
+                    buttonElement.disabled = false;
+                    socialrefreshaction();
+                    
+                    break;
+            }
+        }        
+        
+        function socialrefreshaction() {
+            FB.XFBML.parse(document.getElementById('socialcontainer'));
+            /*$('#socialcontainer').find('a.twitter-share-button').each(function(){
+                var tweet_button = new twttr.TweetButton( $( this ).get( 0 ) );
+                tweet_button.render();
+            });*/
+        }
+        /*$('#yorumeklebutton').ajaxComplete(function(){
+            //re-render the facebook icons (in a div with id of 'content')
+            FB.XFBML.parse(document.getElementById('socialcontainer'));
+
+            //re-render twitter icons by calling the render() method on each
+            $('#socialcontainer').find('a.twitter-share-button').each(function(){
+                var tweet_button = new twttr.TweetButton( $( this ).get( 0 ) );
+                tweet_button.render();
+            });
+        });*/
+        </script>
+        -->
+
+        <ui:fragment rendered="#{sec:areAnyGranted('ROLE_USER')}">
+            <link type="text/css" rel="stylesheet" href="/fi/resources/scripts/grumblejs/css/grumble.css" />
+            <script type="text/javascript" src="/fi/resources/scripts/grumblejs/js/bubble.js"></script>
+            <script type="text/javascript" src="/fi/resources/scripts/grumblejs/js/jquery.grumble.js"></script>
+            <script type="text/javascript" src="/fi/resources/scripts/grumblejs/bifincan-comment-grumble.js"></script>
+            <script type="text/javascript" src="/fi/resources/scripts/filike/fisevdisevmedi.js"></script>
+        </ui:fragment>
+    </ui:define>
+
+    <ui:define name="title">
+        <ui:fragment rendered="#{blogPostViewAction.currentPost eq null}">
+            bilog - bifincan
+        </ui:fragment>
+        <ui:fragment rendered="#{blogPostViewAction.currentPost ne null}">
+            #{blogPostViewAction.currentPost.title} - bifincan
+        </ui:fragment>
+    </ui:define>
+
+    <ui:define name="metakeywords">
+        <ui:fragment rendered="#{blogPostViewAction.currentPost eq null}">
+            <meta name="keywords" content="bilinçli tüketici, tüketici dostu marka, pazar araştırma, doğrudan pazarlama, izinli pazarlama, izinli reklam, hedefli pazarlama, hedefli reklam, ödül, fırsat, hediye, ücretsiz, görüş, fikir, anket, puan" />
+        </ui:fragment>
+        <ui:fragment rendered="#{blogPostViewAction.currentPost ne null}">
+            <meta name="keywords" content="#{blogPostViewAction.currentPost.keywords}, bifincan, yazı, makale, faydalı, enteresan, ilginç, bilgi, hediye, tüketici dostu, marka, bilinçli tüketici" />
+        </ui:fragment>
+    </ui:define>
+    <ui:define name="titleog">
+        <ui:fragment rendered="#{blogPostViewAction.currentPost eq null}">
+            <meta property="og:title" content="bilog - bifincan" />
+        </ui:fragment>
+        <ui:fragment rendered="#{blogPostViewAction.currentPost ne null}">
+            <meta property="og:title" content="#{blogPostViewAction.currentPost.title} - bifincan" />
+        </ui:fragment>
+    </ui:define>
+
+    <ui:define name="metatags">
+        <ui:fragment rendered="#{blogPostViewAction.currentPost eq null}">
+            <meta name="description" content="Daha kaliteli ürün ve hizmetler almak için biraraya gelerek markalara ve ürünlerine sesini duyuran bilinçli tüketicilerin, tüketici dostu markalar ile buluşma noktası." />
+            <meta name="abstract" content="Daha kaliteli ürün ve hizmetler almak için biraraya gelerek markalara ve ürünlerine sesini duyuran bilinçli tüketicilerin, tüketici dostu markalar ile buluşma noktası." />
+            <meta property="og:description" content="Daha kaliteli ürün ve hizmetler almak için biraraya gelerek markalara ve ürünlerine sesini duyuran bilinçli tüketicilerin, tüketici dostu markalar ile buluşma noktası." />
+
+            <meta property="og:type" content="article" />
+
+            <meta property="og:image" content="#{utilsBean.applicationCanonicalURL}/fi/resources/images/global/bifincan-cover-image.jpg" />
+            <meta property="og:image:type" content="image/jpeg" />
+            <meta property="og:image:width" content="640" />
+            <meta property="og:image:height" content="360" />
+        </ui:fragment>
+        <ui:fragment rendered="#{blogPostViewAction.currentPost ne null}">
+            <meta name="description" content="#{blogPostViewAction.currentPost.teaser}" />
+            <meta name="abstract" content="#{blogPostViewAction.currentPost.teaser}" />
+            <meta property="og:description" content="#{blogPostViewAction.currentPost.teaser}" />
+
+            <meta property="og:type" content="article" />
+
+            <meta property="og:image" content="#{utilsBean.applicationCanonicalURL}/fi/gorseller/bilog-yazilari/#{blogPostViewAction.currentPost.slug}-buyuk-resim.jpg" />
+            <meta property="og:image:type" content="image/jpeg" />
+            <meta property="og:image:width" content="614" />
+            <meta property="og:image:height" content="307" />
+        </ui:fragment>
+    </ui:define>
+
+    <ui:define name="pageTitle">
+        <ui:fragment rendered="#{blogPostViewAction.currentPost eq null}">
+            henüz bilog yok, yeni yazılar çok yakında.
+        </ui:fragment>
+        <ui:fragment rendered="#{blogPostViewAction.currentPost ne null}">
+            #{blogPostViewAction.currentPost.title}
+        </ui:fragment>
+    </ui:define>
+    <ui:define name="fblike">
+        <div id="fb-root"></div>
+        <script type="text/javascript">
+            window.fbAsyncInit = function() {
+                FB.init({
+                    appId      : '380542895302133', // App ID
+                    channelUrl : '//www.bifincan.com/fi/channel.html', // Channel File
+                    status     : true, // check login status
+                    cookie     : true, // enable cookies to allow the server to access the session
+                    xfbml      : true  // parse XFBML
+                });
+
+                FB.Event.subscribe('edge.create',
+                function(response) {
+                    triggerSocialPointAction('facebook');
+                }
+            );
+            };
+
+            // Load the SDK Asynchronously
+            (function(d){
+                var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+                if (d.getElementById(id)) {return;}
+                js = d.createElement('script'); js.id = id; js.async = true;
+                js.src = '//connect.facebook.net/en_US/all.js';
+                ref.parentNode.insertBefore(js, ref);
+            }(document));
+        </script>
+    </ui:define>  
+    <ui:define name="pageContent">
+        <h:graphicImage alt="#{blogPostViewAction.currentPost.title}" value="/blogimage?blogslug=#{blogPostViewAction.currentPost.slug}&amp;size=buyuk" width="614" height="307" class="blogImage" />
+
+        <div class="module-a postBodyFirst" style="padding-bottom: 22px; margin-bottom: 0;">
+            <!--
+            <em>
+                <h:outputText value="#{blogPostViewAction.currentPost.postedAt}">
+                    <f:convertDateTime dateStyle="full" locale="#{utilsBean.applicationLocale}" />
+                </h:outputText>
+                (#{blogPostViewAction.currentPost.comments.size()} yorum)
+            </em>
+            -->
+            <h5>#{blogPostViewAction.currentPost.teaser}</h5>
+            <div>
+                <div style="float: left; width: 40%; text-align: left; ">
+                    <ui:fragment rendered="#{blogPostViewAction.prePost ne null}">
+                        <h:link value="&#171; önceki" title="#{blogPostViewAction.prePost.title}" outcome="/fincanlog/post">
+                            <f:param name="slug" value="#{blogPostViewAction.prePost.slug}" />
+                        </h:link>
+                    </ui:fragment>
+                </div>
+                <div style="float: left; width: 20%; text-align: center; #{blogPostViewAction.prePost eq null ? 'margin-left: 40%':''}">
+                    <h:link value="bilog" title="bilog ana sayfa" outcome="/fincanlog/home"/>
+                </div>
+                <div style="float: right; width: 40%; text-align: right; ">
+                    <ui:fragment rendered="#{blogPostViewAction.nextPost ne null}">
+                        <h:link value="sonraki &#187;" title="#{blogPostViewAction.nextPost.title}" outcome="/fincanlog/post">
+                            <f:param name="slug" value="#{blogPostViewAction.nextPost.slug}" />
+                        </h:link>
+                    </ui:fragment>
+                </div>
+            </div>
+        </div>
+        <div class="module-a" style="padding-top: 10px; padding-bottom: 0; margin-top: 0; border-top-style: none">
+            <!-- SOCIAL POINT: JSF UI COMPONENT (NO CONTENT SO IT IS INVISIBLE TO THE USER)-->	                        
+            <div id="socialcontainer">
+                <h:form id="socialForm" prependId="false" >
+                    <h:commandLink id="social" actionListener="#{socialPointAction.savePoints}" onclick="return false"/>
+                </h:form>
+                <div class="socialcounters">
+                    <div class="fb-like" data-send="false" data-layout="button_count" data-width="90" data-show-faces="false"></div>
+                </div>
+                <div class="socialcounters">
+                    <a href="https://twitter.com/share" class="twitter-share-button" data-via="bifincancom" data-hashtags="bifincan" data-lang="en" data-count="horizontal" data-url="#{utilsBean.applicationCanonicalURL}/fi#{prettyContext.requestURL.toURL()}">Tweet</a>
+                    <script type="text/javascript" charset="utf-8">
+                        window.twttr = (function (d,s,id) {
+                            var t, js, fjs = d.getElementsByTagName(s)[0];
+                            if (d.getElementById(id)) return; js=d.createElement(s); js.id=id;
+                            js.src="//platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs);
+                            return window.twttr || (t = { _e: [], ready: function(f){ t._e.push(f) } });
+                        }(document, "script", "twitter-wjs"));
+                        twttr.ready(function(twttr){
+                            twttr.events.bind('tweet', function(event) { triggerSocialPointAction('twitter'); });
+                        });
+                    </script>
+                </div>
+                <div class="socialcounters">
+                    <div class="g-plusone" data-size="medium" data-callback="plusclick"></div>
+                    <script type="text/javascript">
+                        function plusclick(data) {
+                            if(data.state=="on"){triggerSocialPointAction('googleplus');}
+                        }
+                    </script>
+                    <script type="text/javascript">
+                        (function() {
+                            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                            po.src = 'https://apis.google.com/js/plusone.js';
+                            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+                        })();
+                    </script>
+                </div>
+                <div class="socialcounters" id="pincounter">
+                    <h:outputLink value="http://pinterest.com/pin/create/button/" styleClass="pin-it-button" count-layout="horizontal">
+                        <f:param name="url" value="#{utilsBean.applicationCanonicalURL}/fi#{prettyContext.requestURL.toURL()}"/>
+                        <f:param name="media" value="#{utilsBean.applicationCanonicalURL}/fi/gorseller/bilog-yazilari/#{blogPostViewAction.currentPost.slug}-buyuk-resim.jpg"/>
+                        <f:param name="description" value="#{blogPostViewAction.currentPost.teaser}"/>
+                        <img border="0" src="//assets.pinterest.com/images/PinExt.png" title="Pin It" />
+                    </h:outputLink>
+                </div>
+            </div>
+            <!-- END: SOCIAL POINT -->
+        </div>
+        <h:outputText value="#{blogPostViewAction.currentPost.content}" escape="false"/>
+        <h4 class="module-a" style="padding-top: 10px; margin-bottom: 0;">
+            yorumlar
+            <!--
+            <h:outputText value="şu ana kadar #{blogPostViewAction.currentPost.comments.size()} yorum yapıldı" style="font-weight: normal; font-style: italic; font-size: 80%" />
+            -->
+            <h:outputText rendered="#{sec:areNotGranted('ROLE_USER')}" value="bifincan üyelerinin beğendiği yorumlar" style="font-weight: normal; font-style: italic; font-size: 80%" />
+            <h:panelGroup rendered="#{sec:areAnyGranted('ROLE_USER')}" style="font-weight: normal; font-style: italic; font-size: 80%">
+                &#187; <a href="#yorum-ekle">#{blogPostViewAction.currentPost.comments.size() > 0 ? 'sen de yorum ekle' : 'ilk yorumu sen ekle'}</a>
+            </h:panelGroup>
+        </h4>
+        <h:form prependId="false">
+            <h:panelGroup id="comments" layout="block">
+                <ui:fragment rendered="#{not empty blogPostViewAction.currentPost.comments }">
+                    <div style="display: none; position: absolute;" id="filikecontainer"><h:graphicImage value="/resources/images/global/filikedislike/filike.png"/></div>
+                    <div style="display: none; position: absolute;" id="fidislikecontainer"><h:graphicImage value="/resources/images/global/filikedislike/fidislike.png"/></div>
+                    <ui:repeat value="#{blogPostViewAction.currentPost.comments}" var="comment" varStatus="status">
+
+                        <ui:fragment rendered="#{!((comment.numberOfDisLikes-comment.numberOfLikes) ge 3)}">
+
+                            <ui:param name="filikeid" value="filike#{comment.id}"/>
+                            <ui:param name="fidislikeid" value="fidislike#{comment.id}"/>
+                            <span style="display: block" id="#{!((sec:areAnyGranted('ROLE_USER') and (comment.fiLike or comment.fiDisLike))) ? '' : comment.fiLike ? filikeid : fidislikeid}" class="#{(sec:areAnyGranted('ROLE_USER') and (comment.numberOfLikes-comment.numberOfDisLikes) lt 0 and comment.user.acceptedInvitation ne null) ? 'renkli':''}">
+
+                                <ui:fragment rendered="#{!(sec:areNotGranted('ROLE_USER') and ((comment.numberOfLikes-comment.numberOfDisLikes) lt 1))}" >
+
+                                    <ui:fragment rendered="#{!(sec:areNotGranted('ROLE_USER') and (comment.user.acceptedInvitation eq null))}" >
+
+                                        <h6 class="comment" style="#{status.first ? '':'border-top: 1px dashed #D9DFDF'}" >
+                                            <ui:fragment rendered="#{comment.user.acceptedInvitation eq null}">
+                                                <div class="filogo">#{'fi - '}</div>#{'fi'}
+                                            </ui:fragment>
+                                            <ui:fragment rendered="#{comment.user.acceptedInvitation ne null}">
+                                                <fi:userNameWithDescription userBean="#{comment.user}"/>
+                                            </ui:fragment>
+                                        </h6>
+                                        <!--<h:outputText title="pek bialaka" value="&#9733; " styleClass="commentstar" rendered="#{(comment.numberOfLikes-comment.numberOfDisLikes) gt 9 and comment.user.acceptedInvitation ne null}"/>-->
+                                        <h:outputText value="#{blogPostViewAction.getCleanHTML(comment.content)}" escape="false"/>
+
+                                        <ui:fragment rendered="#{currentUser != null and comment.user.acceptedInvitation ne null}">
+                                            <p class="alaka">
+                                                <ui:fragment rendered="#{currentUser != null and comment.getVotingEligibility(currentUser) and !(blogService.countDisLikesReceivedForUserAtPost(blogPostViewAction.currentPost, currentUser)-blogService.countLikesReceivedForUserAtPost(blogPostViewAction.currentPost, currentUser) gt 2*blogService.countCommentsByPostAndUser(blogPostViewAction.currentPost, currentUser))}" >
+                                                    <h:commandLink styleClass="bialaka" value="bialaka" action="#{blogPostViewAction.vote(comment.id, true)}" >
+                                                        <f:ajax execute="@this" render="@form"></f:ajax> 
+                                                    </h:commandLink>
+                                                </ui:fragment>
+                                                <ui:fragment rendered="#{currentUser == null or !comment.getVotingEligibility(currentUser) or (blogService.countDisLikesReceivedForUserAtPost(blogPostViewAction.currentPost, currentUser)-blogService.countLikesReceivedForUserAtPost(blogPostViewAction.currentPost, currentUser) gt 2*blogService.countCommentsByPostAndUser(blogPostViewAction.currentPost, currentUser))}" >bialaka</ui:fragment>
+                                                <span class="boldText"><h:outputText value="#{comment.numberOfLikes}" /> : <h:outputText value="#{comment.numberOfDisLikes}" /> </span>
+                                                <ui:fragment rendered="#{currentUser != null and comment.getVotingEligibility(currentUser) and !(blogService.countDisLikesReceivedForUserAtPost(blogPostViewAction.currentPost, currentUser)-blogService.countLikesReceivedForUserAtPost(blogPostViewAction.currentPost, currentUser) gt 2*blogService.countCommentsByPostAndUser(blogPostViewAction.currentPost, currentUser))}" >
+                                                    <h:commandLink styleClass="kelalaka" value="kelalaka" action="#{blogPostViewAction.vote(comment.id, false)}" >
+                                                        <f:ajax execute="@this" render="@form"></f:ajax> 
+                                                    </h:commandLink>
+                                                </ui:fragment>
+                                                <ui:fragment rendered="#{currentUser == null or !comment.getVotingEligibility(currentUser) or (blogService.countDisLikesReceivedForUserAtPost(blogPostViewAction.currentPost, currentUser)-blogService.countLikesReceivedForUserAtPost(blogPostViewAction.currentPost, currentUser) gt 2*blogService.countCommentsByPostAndUser(blogPostViewAction.currentPost, currentUser))}" >kelalaka</ui:fragment>
+                                            </p>
+                                        </ui:fragment>
+                                    </ui:fragment>
+                                </ui:fragment>
+                            </span>
+                        </ui:fragment>
+                    </ui:repeat>
+                </ui:fragment>
+                <ui:fragment rendered="#{empty blogPostViewAction.currentPost.comments }" >
+                    <p style="text-align: center; margin-top: 28px">
+                        Bu yazıya henüz yorum yapılmadı.
+                    </p>
+                </ui:fragment>
+            </h:panelGroup>
+            <h:panelGroup rendered="#{sec:areAnyGranted('ROLE_USER')}" layout="block" class="module-a">
+                <a name="yorum-ekle"></a>
+
+                <ui:fragment rendered="#{blogPostViewAction.currentPost.lastComment.user eq currentUser}">
+                    <span style="font-style: italic">bu bilog yazısına en son yorumu sen yaptın, tekrar yorum yapabilmen için önce bir başkasının yorum yapmasını beklemelisin. bu arada diğer hediye ve bilog yazılarına yorum yapabilir veya sorular yanıtlayarak fi kazanmaya ve görüşlerini paylaşmaya devam edebilirsin.<br/><br/></span>
+                </ui:fragment>
+
+                <ui:fragment rendered="#{blogPostViewAction.currentPost.lastComment.user ne currentUser}">
+                    <!--
+                        number of comments: #{blogService.countCommentsByPostAndUser(blogPostViewAction.currentPost, currentUser)}<br/>
+                        my likes: #{blogService.countCommentsLikesByPostAndUser(blogPostViewAction.currentPost, currentUser)}<br/>
+                        my dislikes: #{blogService.countCommentsDislikesByPostAndUser(blogPostViewAction.currentPost, currentUser)}<br/>
+                        my received likes: #{blogService.countLikesReceivedForUserAtPost(blogPostViewAction.currentPost, currentUser)}<br/>
+                        my received dislikes: #{blogService.countDisLikesReceivedForUserAtPost(blogPostViewAction.currentPost, currentUser)}
+                    -->
+                    <ui:fragment rendered="#{blogService.countCommentsByPostAndUser(blogPostViewAction.currentPost, currentUser) ge 3 and currentUser.acceptedInvitation ne null}">
+                        <p>Bu bilog yazısına üç yorum yapma hakkının tamamını kullandın, artık diğer üyelere de biraz söz hakkı vermelisin :) Sen de bu arada diğer bilog yazılarına ve hediyelere yorum yapabilir veya sorular yanıtlayarak görüşlerini markalara iletmeye devam edebilirsin.</p>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{blogService.countCommentsByPostAndUser(blogPostViewAction.currentPost, currentUser) lt 3 or currentUser.acceptedInvitation eq null}">
+                        <ui:fragment rendered="#{((blogService.countCommentsLikesByPostAndUser(blogPostViewAction.currentPost, currentUser)+blogService.countCommentsDislikesByPostAndUser(blogPostViewAction.currentPost, currentUser)) lt 5) and (blogPostViewAction.votableCommentCount gt 10)}">
+                            <ui:fragment rendered="#{blogService.countDisLikesReceivedForUserAtPost(blogPostViewAction.currentPost, currentUser)-blogService.countLikesReceivedForUserAtPost(blogPostViewAction.currentPost, currentUser) gt 2*blogService.countCommentsByPostAndUser(blogPostViewAction.currentPost, currentUser)}">
+                                <p>Bu bilog yazısına yaptığın yorumlar diğer üyeler tarafından çoğunlukla kelalaka bulunmuş, dolayısıyla bu bilog yazısına daha fazla yorum yapamıyor ve yorumları da değerlendiremiyorsun :(</p>
+                                <p>Diğer hediye ve bilog yazılarına yorum yapabilir veya sorular yanıtlayarak fi kazanmaya devam edebilirsin.</p>
+                                <p>Yorumların ne kadar konu ile alakalı ve faydalı olursa diğer üyeler o kadar bialaka olarak işaretleyecekler, bu sayede sen de hem bu bialakalardan fi kazanmaya devam edecek hem de yeni yorumlar yapabileceksin :)</p>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{!(blogService.countDisLikesReceivedForUserAtPost(blogPostViewAction.currentPost, currentUser)-blogService.countLikesReceivedForUserAtPost(blogPostViewAction.currentPost, currentUser) gt 2*blogService.countCommentsByPostAndUser(blogPostViewAction.currentPost, currentUser))}">
+                                <span style="font-style: italic">Bu bilog yazısına yorum yapmadan önce, diğer yorumları gözden geçirip en azından birkaç tanesini bialaka veya kelalaka olarak işaretlemelisin. Bu sayede hem farklı görüşleri okuma fırsatın olacak hem de bifincan'da gerçekten en faydalı içeriğin öne çıkmasına katkıda bulunmuş olacaksın :)<br/><br/></span>
+                            </ui:fragment>
+                        </ui:fragment>
+
+                        <ui:fragment rendered="#{!(((blogService.countCommentsLikesByPostAndUser(blogPostViewAction.currentPost, currentUser)+blogService.countCommentsDislikesByPostAndUser(blogPostViewAction.currentPost, currentUser)) lt 5) and (blogPostViewAction.votableCommentCount gt 10))}">
+
+                            <ui:fragment rendered="#{blogService.countDisLikesReceivedForUserAtPost(blogPostViewAction.currentPost, currentUser)-blogService.countLikesReceivedForUserAtPost(blogPostViewAction.currentPost, currentUser) gt 2*blogService.countCommentsByPostAndUser(blogPostViewAction.currentPost, currentUser)}">
+                                <p>Bu bilog yazısına yaptığın yorumlar diğer üyeler tarafından çoğunlukla kelalaka bulunmuş, dolayısıyla bu bilog yazısına daha fazla yorum yapamıyor ve yorumları da değerlendiremiyorsun :(</p>
+                                <p>Diğer hediye ve bilog yazılarına yorum yapabilir veya sorular yanıtlayarak fi kazanmaya devam edebilirsin.</p>
+                                <p>Yorumların ne kadar konu ile alakalı ve faydalı olursa diğer üyeler o kadar bialaka olarak işaretleyecekler, bu sayede sen de hem bu bialakalardan fi kazanmaya devam edecek hem de yeni yorumlar yapabileceksin :)</p>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{!(blogService.countDisLikesReceivedForUserAtPost(blogPostViewAction.currentPost, currentUser)-blogService.countLikesReceivedForUserAtPost(blogPostViewAction.currentPost, currentUser) gt 2*blogService.countCommentsByPostAndUser(blogPostViewAction.currentPost, currentUser))}">
+                                <ui:fragment rendered="#{!blogPostViewAction.author}" >
+                                    <p>Bu bilog yazısına henüz hiç yorum yapmadın. Önemli olan yorumunun olumlu veya olumsuz olması değil, gerçekten de bu yazı ile ilgili düşüncelerini yansıtması ve okuyan herkese bir fayda sağlaması, farklı bir bakış açısı getirmesi.</p>
+                                    <p>Yapacağın yorumlar diğer bifincan üyeleri ve markalar için <strong>ne kadar faydalı ve alakalı olursa, o kadar fazla fi</strong> kazanacaksın.</p>
+                                    <p>Bir bilog yazısına en fazla üç defa yorum yapabilirsin, dolayısıyla bu haklarını gerçekten de en bialaka yorumlarını yazmak için kullanmalısın.</p>
+                                </ui:fragment>
+
+                                <p>Bu bilog yazısı için kalan yorum yazma hakkın #{3 - blogService.countCommentsByPostAndUser(blogPostViewAction.currentPost, currentUser)}.</p>
+                                <h:inputTextarea required="true" requiredMessage="ama birşey yazmadın ki?" validatorMessage="bu yorum çok kısa olmadı mı?" id="comment" value="#{blogPostViewAction.newComment.content}" style="width:100%; height: 160px; margin-bottom: 12px" />
+                                <h:messages  globalOnly="true" showDetail="false" showSummary="true" styleClass="commentError" />
+                                <p class="rightText">
+                                    <h:message for="comment" showDetail="false" showSummary="true" />
+                                    <h:commandButton value="yorum ekle" action="#{blogPostViewAction.saveComment()}" id="yorumeklebutton">
+                                        <f:ajax execute="comment" render="@form" />
+                                    </h:commandButton>
+                                </p>    
+                            </ui:fragment>
+
+                        </ui:fragment>
+                    </ui:fragment>
+
+                </ui:fragment>
+            </h:panelGroup>
+        </h:form>
+    </ui:define>
+    <ui:define name="sidebar">
+        <div class="sidebar">
+            <fi:mostRecentComments/>
+            <!--<fi:mostPopPosts/>-->
+            <!--<fi:mostRecentPosts/>-->
+        </div>
+    </ui:define>
+    <ui:define name="pinjs">
+        <!--<script type="text/javascript" src="//assets.pinterest.com/js/pinit.js"></script>-->
+        <script type="text/javascript" src="/fi/resources/scripts/social/pin.js"></script>
+    </ui:define>    
+</ui:composition>

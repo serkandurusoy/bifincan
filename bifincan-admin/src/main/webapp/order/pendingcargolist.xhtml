@@ -1,0 +1,297 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:hh="http://balusc.net/jsf/html"
+                template="/resources/layouts/standard.xhtml"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <ui:define name="metadata">
+    </ui:define>
+
+    <ui:define name="browserTitle">cargo list - </ui:define>
+    <ui:define name="content">
+        <h:form id="mainForm">
+            <p:tabView dynamic="true" id="t1"
+                       style="border-style:none; padding-left:0px; padding-right: 0px;">
+                <p:tab title="cargo list" id="t11">
+                    <p:panel>
+                        <p:commandButton value="Download as cargo-list-#{cargoListAction.dateStamp}.xls" ajax="false">
+                            <p:dataExporter type="xls" target="mainTable" fileName="cargo-list-#{cargoListAction.dateStamp}" />
+                        </p:commandButton>
+                        <span style="font-style: italic; padding-top: 7px; float: right">
+                            <h:outputText value="hoşgeldin gönderileri" style="color: darkgray; padding-right: 16px"/><h:outputText value="normal siparişler"/>
+                        </span>
+                    </p:panel>		
+                    <p:messages id="messages" autoUpdate="true"/>	
+                    <p:dataTable id="mainTable" var="order" value="#{cargoListAction.dataModel}" binding="#{cargoListAction.dataTable}"
+                                 emptyMessage="No records found" rows="1000" >
+                        <p:column style="display:none">
+                            <f:facet name="header" >
+                                Waybill
+                            </f:facet>
+                            <h:outputText value="#{' '}" />
+                        </p:column>
+                        <p:column style="display:none">
+                            <f:facet name="header" >
+                                Ana Paket No
+                            </f:facet>
+                            <h:outputText value="#{' '}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Alıcı Ad
+                            </f:facet>
+                            <h:outputText value="#{order.address.user.firstName} #{order.address.user.lastName}" style="#{cargoListAction.isWelcomeOrder(order) ? 'color: darkgray':''}"/>
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Alıcı Adres
+                            </f:facet>
+                            <h:outputText value="#{order.address.streetName} #{order.address.buildingNumber} #{order.address.apartmentNumber} #{order.address.area.name} #{order.address.area.district.name}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Alıcı Semt / İlçe
+                            </f:facet>
+                            <h:outputText value="#{order.address.area.district.county.name}" style="#{cargoListAction.isWelcomeOrder(order) ? 'color: darkgray':''}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                Alıcı Şehir
+                            </f:facet>
+                            <h:outputText value="#{order.address.area.district.county.city.name}" style="#{cargoListAction.isWelcomeOrder(order) ? 'color: darkgray':''}"/>
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Alıcı Telefon
+                            </f:facet>
+                            <h:outputText value="0#{order.address.user.gsmVerification.gsmPrefix.code}#{order.address.user.gsmVerification.gsmNumber}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Alıcı Dahili
+                            </f:facet>
+                            <h:outputText value="#{' '}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Alıcı Posta Kodu
+                            </f:facet>
+                            <h:outputText value="#{order.address.area.district.postalCode}"/>
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Alıcı Yetkili
+                            </f:facet>
+                            <h:outputText value="#{' '}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Alıcı Email
+                            </f:facet>
+                            <h:outputText value="#{order.address.user.email}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Alıcı GSM No
+                            </f:facet>
+                            <h:outputText value="0#{order.address.user.gsmVerification.gsmPrefix.code}#{order.address.user.gsmVerification.gsmNumber}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Tahsil Ed. Mal Bedeli
+                            </f:facet>
+                            <h:outputText value="#{' '}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Mal Bedeli Birim
+                            </f:facet>
+                            <h:outputText value="#{' '}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Mal Bedeli Tahsilat Tipi
+                            </f:facet>
+                            <h:outputText value="#{' '}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Müşterinin Kendi Referansı
+                            </f:facet>
+                            <h:outputText value="#{' '}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Müşterinin Fatura/İrsaliye Numarası
+                            </f:facet>
+                            <h:outputText value="#{' '}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Ürün Adı
+                            </f:facet>
+                            <h:outputText value="#{order.id}" ><f:convertNumber pattern="PROMOSYON - SN#000000 - " /></h:outputText><h:outputText value="#{utilsBean.extractCode(order)}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Navlun Ödeme Şekli
+                            </f:facet>
+                            <h:outputText value="#{'PP'}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Servis Tipi 
+                            </f:facet>
+                            <h:outputText value="#{'3'}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Paket Tipi
+                            </f:facet>
+                            <h:outputText value="#{'D'}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Döküman
+                            </f:facet>
+                            <h:outputText value="#{'H'}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Cumartesi Teslimatı
+                            </f:facet>
+                            <h:outputText value="#{' '}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Tel. İhbarlı Teslimat
+                            </f:facet>
+                            <h:outputText value="#{' '}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Sigortaya Esas Mal Kıymeti TL
+                            </f:facet>
+                            <h:outputText value="#{' '}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Teslimat Email
+                            </f:facet>
+                            <h:outputText value="#{'fi@bifincan.com'}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Geri Dönüş Waybill
+                            </f:facet>
+                            <h:outputText value="#{' '}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Gönderen Masraf Kodu
+                            </f:facet>
+                            <h:outputText value="#{' '}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Alıcı Masraf Kodu
+                            </f:facet>
+                            <h:outputText value="#{' '}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Üçüncü Firma Masraf Kodu
+                            </f:facet>
+                            <h:outputText value="#{' '}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Gönderen Yetkili
+                            </f:facet>
+                            <h:outputText value="#{' '}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                Paket Adedi
+                            </f:facet>
+                            <h:outputText value="#{'1'}" />
+                        </p:column>
+                        <p:column style="display:none">
+                            <f:facet name="header" >
+                                BF-Kullanıcı ID
+                            </f:facet>
+                            <h:outputText value="#{order.address.user.id}" />
+                        </p:column>
+                        <p:column style="display:none">
+                            <f:facet name="header">
+                                BF-Onay Kodu
+                            </f:facet>
+                            <h:outputText value="#{utilsBean.extractCode(order)}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                BF-Ad
+                            </f:facet>
+                            <h:outputText value="#{order.address.user.firstName}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                BF-Sipariş Zamanı
+                            </f:facet>
+                            <h:outputText value="#{order.placedTime}" style="#{cargoListAction.isWelcomeOrder(order) ? 'color: darkgray':''}">
+                                <f:convertDateTime locale="tr" type="both" dateStyle="short" timeStyle="short"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                BF-Üyelik Zamanı
+                            </f:facet>
+                            <h:outputText value="#{order.address.user.createDate}">
+                                <f:convertDateTime locale="tr" type="both" dateStyle="short" timeStyle="short"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                BF-Üyelik Süresi
+                            </f:facet>
+                            <h:outputText value="#{cargoListAction.daysSinceSignup(order)}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                BF-Soru Sayısı
+                            </f:facet>
+                            <h:outputText value="#{surveyService.countSurveyAnswersByUserSinceDate(order.address.user, cargoListAction.daysSinceSignup(order)+1)}" />
+                        </p:column>
+                        <p:column style="display: none">
+                            <f:facet name="header">
+                                BF-Hoşgeldin
+                            </f:facet>
+                            <h:outputText value="#{cargoListAction.isWelcomeOrder(order)}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                BF-IDverified
+                            </f:facet>
+                            <h:outputText value="#{order.address.user.idVerified}" style="#{cargoListAction.isWelcomeOrder(order) ? 'color: darkgray':''}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                BF-Ürünler
+                            </f:facet>
+                            <h:outputText value="#{cargoListAction.getOrderItemSummary(order)}" style="#{cargoListAction.isWelcomeOrder(order) ? 'color: darkgray':''}"/>
+                        </p:column>
+
+                    </p:dataTable>
+
+                </p:tab>
+            </p:tabView>
+
+        </h:form>
+    </ui:define>
+
+
+</ui:composition>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:fi="http://java.sun.com/jsf/composite/components/product"
+                xmlns:ficomments="http://java.sun.com/jsf/composite/components"
+                template="/resources/layouts/product-list.xhtml">
+
+    <ui:define name="metadata"></ui:define>
+
+    <ui:define name="headIncludes">
+        <script type="text/javascript" src="/fi/resources/scripts/blockui/jquery.blockui.js"></script>
+        <script type="text/javascript" src="/fi/resources/scripts/blockui/blocker.js"></script>
+    </ui:define>
+
+    <ui:define name="title">#{messages['product.availableproducts']} - bifincan</ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="#{messages['product.availableproducts']} - bifincan" />
+    </ui:define>
+
+    <ui:define name="pageTitle">#{messages['product.availableproducts']}</ui:define>
+
+    <ui:define name="tabMenu">
+        <ul class="tabs-a">
+            <li class="active"><h:outputLink value="/product/available.xhtml">#{messages['product.availableproducts']}</h:outputLink></li>
+            <li><h:outputLink value="/product/other.xhtml">#{messages['product.otherproducts']}</h:outputLink></li>
+            <li><h:outputLink value="/product/outofstock.xhtml">#{messages['product.outofstockproducts']}</h:outputLink></li>
+            <li><h:outputLink value="/order/shoppingcart.xhtml">#{messages['infobox.cart']}</h:outputLink></li>
+        </ul>
+    </ui:define>
+
+    <ui:define name="tabContent">
+
+        <h:panelGroup rendered="#{not empty productAvailListAction.products}">
+            <h:form prependId="false">
+                <!-- we just pass the values into the UI component's attributes -->		
+                <ui:repeat value="#{productAvailListAction.products}" var="product"> 
+                    <fi:product-display productName="#{product.productName}"
+                                        productBrand="#{product.brandName}"
+                                        productPointValue="#{product.productPointValue}" 
+                                        productMoneyValue="#{product.productMoneyValue}"
+                                        productShortDescription="#{product.productShortDescription}" 
+                                        productSlug="#{product.productSlug}"
+                                        available="#{product.available}"
+                                        removable="#{product.removable}"
+                                        classifier="#{product.classifier}"/>
+                </ui:repeat>
+            </h:form>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{empty productAvailListAction.products}">
+            <p class="centerText"><h:graphicImage value="/resources/images/global/noimage/no-products-found.png"/></p>
+            <p class="centerText"><h:outputText value="#{messages['product.notfound']}"/></p>
+        </h:panelGroup>
+        
+    </ui:define>
+
+    <ui:define name="userAlerts" >
+        <h:panelGroup layout="block" styleClass="alert-a" rendered="#{orderStatusAction.message != null}">
+            <p><h:outputText value="#{orderStatusAction.message}"/></p>
+        </h:panelGroup>
+        <h:panelGroup layout="block" styleClass="alert-a" rendered="#{orderStatusAction.message == null and currentUser.activityLevel eq 1}">
+            <p><h:outputText value="sade üyelik seviyesinde sipariş veremiyorsun maalesef. bu hafta bitmeden daha çok soru yanıtlar ve yorumlar yaparak fi kazanırsan pazartesiye orta olarak girebilirsin."/></p>
+        </h:panelGroup>
+        <h:panelGroup layout="block" styleClass="alert-a" rendered="#{orderStatusAction.message == null and currentUser.activityLevel gt 1 and surveyService.countSurveyAnswersByUserSinceDate(currentUser, 1) lt 50}">
+            <p><h:outputText value="hediye siparişi verebilmek için son 24 saat içinde 50 soru yanıtlamış olman gerekiyor. sen son 24 saat içerisinde #{surveyService.countSurveyAnswersByUserSinceDate(currentUser, 1)} soru yanıtladın, kaldı #{50-surveyService.countSurveyAnswersByUserSinceDate(currentUser, 1)} ;)"/></p>
+        </h:panelGroup>
+    </ui:define>
+
+    <ui:define name="sidebar">
+        <div class="sidebar">
+            <ficomments:mostRecentProductComments/>
+        </div>
+    </ui:define>
+
+</ui:composition>

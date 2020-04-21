@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/resources/layouts/standard.xhtml">
+    <ui:define name="metadata">
+    </ui:define>
+
+    <ui:define name="browserTitle">product price sources - </ui:define>
+    <ui:define name="content">
+	<h:form id="mainForm">
+      <p:tabView dynamic="true" id="t1"
+			style="border-style:none; padding-left:0px; padding-right: 0px;">
+			<p:tab title="product price sources" id="t11">
+		<p:panel>
+		<p:commandButton value="New" style="right:0px;"
+					action="#{priceSourceAction.initAdd()}"
+					update=":editForm:sourceGrid" oncomplete="dlg2.show();">
+			<f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />		
+		</p:commandButton>					
+		</p:panel>		
+		<p:messages id="messages" autoUpdate="true"/>	
+		<p:dataTable id="mainTable" var="source" value="#{priceSourceAction.sources}"
+			style="height:85%" emptyMessage="No records found" paginator="true" paginatorPosition="bottom" 
+			paginatorAlwaysVisible="true" rows="12" pageLinks="10">
+			<p:column style="width:40%">
+				<f:facet name="header" style="background-color:red">
+	                        Name
+	                    </f:facet>
+				<h:outputText value="#{source.name}" />
+			</p:column>
+			<p:column style="width:50%">
+				<f:facet name="header" style="background-color:red">
+	                        Url
+	                    </f:facet>
+				<h:outputText value="#{source.url}" />
+			</p:column>			
+			<p:column style="width:10%;text-align:center">
+				<f:facet name="header">
+	                        Action
+	                    </f:facet>
+				<p:commandButton value="Edit"
+					action="#{priceSourceAction.initEdit(source)}"
+					update=":editForm:sourceGrid" onclick="dlg2.show();">
+					<f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />
+				</p:commandButton>	
+					
+				<p:commandButton value="Delete"
+					action="#{priceSourceAction.initEdit(source)}"
+					 onclick="dlg3.show();"/>					
+			</p:column>
+		</p:dataTable>
+
+	  </p:tab>
+	  </p:tabView>
+	
+	 </h:form>
+    </ui:define>
+
+    <ui:define name="afterlayout">
+	<p:dialog header="Product price source" widgetVar="dlg2" modal="true"
+		height="133" width="400">
+		<h:form id="editForm">
+			<h:panelGrid id="sourceGrid" columns="2" width="100%">
+				<h:outputText value="Name:" />
+				<h:inputText id="name" value="#{priceSourceAction.currentPriceSource.name}" style="width:98%" maxlength="250" required="true" requiredMessage="The price source's name is required"/>	
+				<h:outputText value="Url:" />
+				<h:inputText value="#{priceSourceAction.currentPriceSource.url}" style="width:98%" maxlength="250" required="true" requiredMessage="The Url field is required" validatorMessage="The source's URL is not valid"/>						
+				<p:spacer width="100%" height="15"/> 
+				<f:facet name="footer">
+					<p:commandButton value="Save" action="#{priceSourceAction.save}"
+						update=":mainForm:t1:mainTable" 
+						oncomplete="dlg2.hide();" />
+					<p:commandButton value="Cancel" 
+						onclick="dlg2.hide();" type="button" />	
+				</f:facet>
+			</h:panelGrid>
+		</h:form>
+	</p:dialog>
+	
+	<p:confirmDialog message="Are you sure to delete the product price source?"
+		header="Initiating deletion process" severity="alert"
+		widgetVar="dlg3">
+		<h:form id="confirmForm">
+			<p:commandButton value="Yes" actionListener="#{priceSourceAction.delete}"
+				update=":mainForm:t1:mainTable" oncomplete="dlg3.hide()"/>
+			<p:commandButton value="No" onclick="dlg3.hide();" type="button" />
+		</h:form>
+	</p:confirmDialog>	
+    </ui:define>
+    
+</ui:composition>
+
+
+
+
+

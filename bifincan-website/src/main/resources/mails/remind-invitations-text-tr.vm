@@ -1,0 +1,16 @@
+Merhaba,
+
+${firstName} ${lastName}, bir süre önce seni bifincan.com'a davet etmişti. Bifincan'da bilinçli tüketiciler ile tüketici dostu markalar biraraya geliyorlar. Markalar sana görüşlerin karşılığında hediyeler veriyor ve bu hediyeler için kargo bedeli dahi ödemiyorsun.
+
+Daveti kabul etmek için aşağıdaki bağlantıya tıklaman veya tamamını kopyalayıp tarayıcının adres satırına yapıştırman yeterli :)
+
+${linkAccept}
+
+Eğer bu davet ile ilgili tekrar hatırlatma almak istemiyorsan ${linkOptOutThis} bağlantısına tıklayabilirsin.
+
+Seni de bifincan'da görmek için sabırsızlanıyorum :)
+
+Sevgiler,
+"fi"
+
+www.bifincan.com

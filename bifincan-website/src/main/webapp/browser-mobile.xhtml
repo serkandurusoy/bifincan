@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="/resources/layouts/secondary-content.xhtml">
+    <ui:define name="metadata"></ui:define>
+
+    <ui:define name="headIncludes"></ui:define>
+
+    <ui:define name="browserMode"></ui:define>
+
+    <ui:define name="robots">
+        <meta name="robots" content="NOINDEX, NOFOLLOW" />
+        <meta http-equiv="pragma" content="no-cache" />
+    </ui:define>
+    <ui:define name="title">bu mobil tarayıcıda maalesef çalışamıyorum - bifincan</ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="bu mobil tarayıcıda maalesef çalışamıyorum - bifincan" />
+    </ui:define>
+
+    <ui:define name="pageTitle">bu mobil tarayıcıda maalesef çalışamıyorum</ui:define>
+
+    <ui:define name="pageContent">
+        <p class="centerText"><h:graphicImage value="/resources/images/global/500-server-error.png"/></p>	
+        <p class="centerText">maalesef kullandığın bu mobil tarayıcı bifincan'a giriş yapmak için biraz yetersiz kalıyor.</p>
+        <p class="centerText">bifincan'ı mobil kullanmaya devam etmek istiyorsan ve cihazın destekliyorsa, "Chrome Mobile", "Mobile Safari", "Mobile Firefox", "Opera Mobile" tarayıcılarından birinin güncel sürümünü kullanabilirsin.</p>
+        <p class="centerText">
+            <h:graphicImage style="border-style: none; margin: 0 2px 0 2px" value="/resources/images/global/browser-logo/mozilla-firefox.png"/>
+            <h:graphicImage style="border-style: none; margin: 0 2px 0 2px" value="/resources/images/global/browser-logo/google-chrome.png"/>
+            <h:graphicImage style="border-style: none; margin: 0 2px 0 2px" value="/resources/images/global/browser-logo/apple-safari.png"/>
+            <h:graphicImage style="border-style: none; margin: 0 2px 0 2px" value="/resources/images/global/browser-logo/opera.png"/>
+        </p>
+    </ui:define>
+</ui:composition>

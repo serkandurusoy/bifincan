@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:fi="http://java.sun.com/jsf/composite/components"
+                xmlns:sec="http://www.springframework.org/security/tags"
+                template="/resources/layouts/secondary-content-with-submenu.xhtml">
+
+    <ui:define name="metadata"></ui:define>
+
+    <ui:define name="headIncludes"></ui:define>
+
+    <ui:define name="title">bifincan ekibi - bifincan</ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="bifincan ekibi - bifincan" />
+    </ui:define>
+
+    <ui:define name="pageTitle">bifincan ekibi</ui:define>
+
+    <ui:define name="pageSubMenu">
+        <ul>
+            <li><h:link outcome="/staticpages/about.xhtml" value="hakkında" /></li>
+            <li class="active"><h:link outcome="/staticpages/team.xhtml" value="&#187; ekip" /></li>
+            <li><h:link outcome="/staticpages/contact.xhtml" value="iletişim" /></li>
+            <li><h:link outcome="/staticpages/terms.xhtml" value="kullanım koşulları" /></li>
+        </ul>
+    </ui:define>
+
+    <ui:define name="pageContent">
+        
+        <div style="font-size: 110%">
+        
+            <p style="font-size: 130%; margin-bottom: 24px">Sen markaların ürün ve hizmetleri ile ilgili görüşlerini ve yorumlarını paylaşır, markalar da sana iletmemi istedikleri hediyelere karar verip senin görüşlerini yine senin için en iyi şekilde değerlendirmeye çalışırken, bifincan için koşuşturan da bir ekip var tabii ki.</p>
+
+            <p>
+                <h:graphicImage value="/resources/images/global/team/fi.jpg" style="float: left; margin-right: 12px"/>
+                <h3 style="margin-bottom: 0">fi <span style="font-weight: normal">organize işler</span></h3>
+                <p style="font-size: 110%">Merhaba, ben fi. Bifincan'ın fi'si. Çok gülüyorum böyle söyleyince. Bond... James Bond! gibi:) Zamanla zaten birbirimizi çok iyi tanıyor olacağız ama ben bir girizgah yapayım. Çok iyi bir dinleyiciyimdir. Zaten burada bana düşen görev de dinlemek. Hayatının tam ortasında yer alan, her gün kullandığın, gördüğün, dinlediğin ürün ve hizmetlerle ilgili fikir ve görüşlerini dinliyor olacağım, sen anlatmak istediğin sürece... Ayrıca geniş gönüllü de birisiyim, markalarla görüşüp sana vermek istedikleri hediyeleri iletmek gibi bir alışkanlığım var. Mutlu oluyorum, elimde değil… Elbette bana bu konuda destek olan çok tatlı dostlarım var, biraz da onlardan bahsedeyim.</p>
+                <div class="floatclear">&#160;</div>
+            </p>
+
+            <p>
+                <h:graphicImage value="/resources/images/global/team/serkan.jpg" style="float: left; margin-right: 12px"/>
+                <h3 style="margin-bottom: 0">serkan <span style="font-weight: normal">teknik işler</span></h3>
+                <p style="font-size: 110%">Serkan abim, hmm, zihnisinir mi desem, cin mi desem... Ya da şöyle diyeyim; benim fikir babam olur kendisi. Taaa on küsür sene önce düşünmüş beni yaratmayı, sağolsun hiç de unutmamış, inat etmiş. Ve işte sonucu:) Kendisi okumuş, bilgili dediğimiz türden... On yaşında başlamış bilgisayar programcılığına, liseyi Robert Kolej'de üniversiteyi Boğaziçi Üniversitesi'nde okumuş, bitirmiş. Sonra gelsin iş hayatı... İki şirket kurmuş, geliştirmiş, üretmiş, gelmiş 35 yaşına, hani nerede evlilik çoluk çocuk, orasını hiiiç sorma... Öyle çalışan, okuyan dediysem de bakma, iyi çalışır ama çok kafa adamdır, müzisyen ruhlu, ritmi seven, sahnelerin on numara gitaristi olur kendisi!</p>
+                <div class="floatclear">&#160;</div>
+            </p>
+
+            <p>
+                <h:graphicImage value="/resources/images/global/team/gokce.jpg" style="float: left; margin-right: 12px"/>
+                <h3 style="margin-bottom: 0">gökçe <span style="font-weight: normal">yaratıcı işler</span></h3>
+                <p style="font-size: 110%">Gökçe'ciğim yaaa... bizim delimiz, tatlı mı tatlı, içi içine sığmaz bir karakterdir... Avusturya Lisesi üstüne Koç Üniversitesi'ni bitirmiş. Ekonomi falan okumuş, uluslararası danışmanlık şirketlerinde çalışmış ama aslında kendisi yaratıcı kişiliktir, çizdi mi güzel çizer, boyar, oynatır, eli her işe yatkın on parmağında on marifet. Maaşallah bir de enerjik, 30'larında güya ama ben inanmıyorum... Arada bir ortadan kayboldu mu ilk bakacağın yer suyun altıdır, onu orada bulacağın kesin. Hani ona dalış de kaçarın yok tutar seni de daldırır, fena da olmaz hani. Hatta suyun altına kamerasıyla iner, su üzerine çıkınca bir de orada izlettirir sana kendini.</p>
+                <div class="floatclear">&#160;</div>
+            </p>
+
+            <p>
+                <h:graphicImage value="/resources/images/global/team/aydin.jpg" style="float: left; margin-right: 12px"/>
+                <h3 style="margin-bottom: 0">aydın <span style="font-weight: normal">tanıtıcı işler</span></h3>
+                <p style="font-size: 110%">Aydın abim, keh keh bir güzel güler senin de gülesin gelir, neye gülüyoruz demezsin... 40 seneye neler sığdırmış neler... Darüşşafaka Lisesi'nde okumuş, nam-ı diğer Daçka'lı yani. Trakya Üniversitesi'nde bilgisayarları programlamaya başlamış, telekom, basın ve halkla ilişkiler, pazarlama ve satış sektörlerinde uzun süre emek vermiş, parmakla gösterilen projelere imzasını atmış, gazeteci, yazar, araştırmacı kişilik inovatif bir insandır kendisi... Leb-i derya, sor, neler oluyor bugünlerde bu işlerde diye, sana kitap yazsın... Tatlı eşi ile bir de oğulları var ki fena geliyor, babasının izinde, gümbür gümbür, tutana aşkolsun...:)</p>
+                <div class="floatclear">&#160;</div>
+            </p>
+
+            <p>
+                <h:graphicImage value="/resources/images/global/team/erkan.jpg" style="float: left; margin-right: 12px"/>
+                <h3 style="margin-bottom: 0">erkan <span style="font-weight: normal ">parasal işler</span></h3>
+                <p style="font-size: 110%">Efendim Erkan beyciğim, kendi aramızda büyük patron diye de tabir ettiğimiz, tatlı sert mükemmel bir insandır. 70'e merdiven dayamış bir delikanlıdır o. Zamanının Pertevniyal Lisesinde okumuş, İstanbul Üniversitesi'nde gazetecilik üstüne işletme yüksek lisansını tamamlamış, 50 sene boyunca yönettiği şirketi ile iş çevrelerinde de gönüllerde taht kurmuş bir insandır. Bilgili hani dolu dolu derler ya, öyle, üstüne bir de babacan bir insan... Senden iyi olmasın bir o kadar da iyi ve tatlı dilli, becerikli eşi ile 40. yıldönümlerini geride bıraktılar.</p>
+                <div class="floatclear">&#160;</div>
+            </p>
+
+            <p>
+                <h:graphicImage value="/resources/images/global/team/kerem.jpg" style="float: left; margin-right: 12px"/>
+                <h3 style="margin-bottom: 0">kerem <span style="font-weight: normal ">beşeri işler</span></h3>
+                <p style="font-size: 110%">Kerem abim, çok kıyak adamdır. Sohbeti tatlı, cazip fikirler insanı. İstanbul Erkek Lisesi üstüne Koç Üniversitesi'nde ekonomi okumuş, yetmemiş Bilgi Ünivesitesi'nde sinema yüksek lisansını bitirmiş. Ver elini yapımcılık, kısa filmler, reklamlar... Uzun metraj ise ayrı mevzu! Allah vergisi derler ya, nerede organize edilecek bir parti bir konser, orada kendisi. Sevdiğinden midir, seveni çok ondan mıdır, becerikliliğinden midir bilmem, pıtır pıtır hallettirir her işi, hafızalara kazınan günlere gecelere imzasını atar, kendisi de pek keyif alır. Bir de dalgıçlığı vardır ki, sinema bir köşede taht kuradursun, sualtının yeri ayrı.</p>
+                <div class="floatclear">&#160;</div>
+            </p>
+
+            <p>
+                <h:graphicImage value="/resources/images/global/team/mustafa.jpg" style="float: left; margin-right: 12px"/>
+                <h3 style="margin-bottom: 0">mustafa <span style="font-weight: normal ">paketli işler</span></h3>
+                <p style="font-size: 110%">Sayısız hikayelerle dolu Dilaver abim. Subay oğlu, liseyi dolaşarak okumuş, üniversite zamanı o dönemler zorlu dönemler, hoop İngiltere'ye uçmuş. Dil okuyup öğretmenlik kazanıp, oradan Kanada'ya makina mühendisliği okumaya. Alberta Üniversitesi'nden mezun olup 6 senelik yurtdışı macerasını bitirmiş. 20 sene boyunca havacılık ve uzay sanayiinde depo ve lojistik nedirin kitabını yazmış. Mütevazilikle "benden önce o, şu, bu başlamıştı" dese de ülkenin ilk dalgıçlarından. Bitmedi, ahşap oymacılık ustası, ağaçlardan türlü eşyalar yaratıyor atölyesinde. Kedisi Miki ve kendi gibi içi içine sığmayan eşi Sinem ile aşkın da kitabını yazıyorlar.</p>
+                <div class="floatclear">&#160;</div>
+            </p>
+
+        </div>
+
+    </ui:define>
+</ui:composition>

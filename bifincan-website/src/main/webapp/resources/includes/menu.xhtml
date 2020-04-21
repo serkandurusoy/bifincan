@@ -1,0 +1,22 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:sec="http://www.springframework.org/security/tags"
+                 xmlns:h="http://java.sun.com/jsf/html">
+
+    <div id="top">
+        <h1><h:outputLink title="bifincan, tüketicinin sesini markaya duyuran bi icat" value="#{request.contextPath}/"><ui:insert name="title">bifincan, tüketicinin sesini markaya duyuran bi icat</ui:insert></h:outputLink></h1>
+        <div id="nav">	
+            <h2>Ana Menü</h2>		
+            <ul>
+                <ui:fragment rendered="#{sec:areNotGranted('ROLE_USER')}">
+                    <li><h:link title="bifincan hakkında bilmek istediğin herşey" value="bi ney?" outcome="/staticpages/whatisit.xhtml"/></li>
+                </ui:fragment>
+                <ui:fragment rendered="#{sec:areAnyGranted('ROLE_USER')}">
+                    <li><h:link title="tıkır tıkır yanıtlayabileceğin sorular" value="bi soru?" outcome="/index.xhtml"/></li>
+                </ui:fragment>
+                <li><h:link title="tüketici dostu markaların bifincan'da hediye ettiği ürün ve hizmetler" value="hediyelere bi bakayım" outcome="/product/all.xhtml"/></li>
+                <li><h:link title="markalar, ürünler, hizmetler ve daha pek çok konuda enteresan bilgiler" value="bilogu okuyayım" outcome="/fincanlog/home.xhtml"/></li>
+            </ul>
+        </div>
+    </div> 
+</ui:composition>

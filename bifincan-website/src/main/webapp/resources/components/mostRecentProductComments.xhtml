@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fi="http://java.sun.com/jsf/composite/components"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation xmlns:fi="http://java.sun.com/jsf/composite/components">
+        <div class="most-recent-comments">
+            <h5>son hediye yorumları</h5>
+            <dl>
+                <ui:repeat value="#{productService.findRecentComments()}" var="comment" varStatus="status">
+                    <li style="#{status.last ? 'margin-bottom:0px':''}"><span class="boldText">&#187; </span><h:link outcome="/product/details.xhtml" value="#{comment.product.name}"><f:param name="slug" value="#{comment.product.slug}"/></h:link>#{' '}için: &#34;#{comment.content.length() > 40 ? comment.content.substring(0,37).concat("...") : comment.content}&#34;</li>
+                </ui:repeat>
+            </dl>
+        </div>
+    </cc:implementation>
+</html>

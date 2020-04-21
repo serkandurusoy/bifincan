@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/resources/layouts/standard.xhtml">
+    <ui:define name="metadata">
+    </ui:define>
+
+    <ui:define name="browserTitle">districts - </ui:define>
+    <ui:define name="content">
+      <h:form id="mainForm">
+	      <p:tabView dynamic="true" id="t1"
+				style="border-style:none; padding-left:0px; padding-right: 0px;">
+				<p:tab title="districts" id="t11">
+			<p:panel>
+			<p:commandButton value="New" style="right:0px;"
+						action="#{districtAction.initAdd()}"
+						update=":editForm:districtGrid" onclick="dlg2.show();">
+				<f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />		
+			</p:commandButton>			
+			</p:panel>		
+			<p:messages id="messages" autoUpdate="true"/>	
+		        
+            <p:dataTable id="mainTable" var="district" value="#{districtAction.dataModel}" binding="#{districtAction.dataTable}"
+				style="height:85%" emptyMessage="No records found" paginator="true" paginatorPosition="bottom" 
+				paginatorAlwaysVisible="true" rows="12" pageLinks="10"> 
+                <p:column style="width:35%">
+                    <f:facet name="header">
+                        Name
+                    </f:facet>
+                    <h:outputText value="#{district.name}"/>
+                </p:column>
+                <p:column style="width:35%">
+                    <f:facet name="header">
+                        County
+                    </f:facet>
+                    <h:outputText value="#{district.county.name}, #{district.county.city.name}, #{district.county.city.localRegion.name}, #{district.county.city.localRegion.country.name}, #{district.county.city.localRegion.country.globalRegion.name}"/>
+                </p:column>                
+                 <p:column style="width:20%">
+                    <f:facet name="header">
+                        Postal Code
+                    </f:facet>
+                     <h:outputText value="#{district.postalCode}"/>
+                </p:column>
+                <p:column style="width:10%;text-align:center">
+                    <f:facet name="header">
+                        Action
+                    </f:facet>
+                    <p:commandButton value="Edit"
+						action="#{districtAction.initEdit(district)}"
+						update=":editForm:districtGrid" onclick="dlg2.show();">
+						<f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />
+					</p:commandButton>	
+					<p:commandButton value="Delete"
+						action="#{districtAction.initEdit(district)}"
+					 	onclick="dlg3.show();"/>	
+                </p:column>
+            </p:dataTable> 
+            </p:tab>
+            </p:tabView>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="afterlayout">
+    
+		<p:dialog header="District" widgetVar="dlg2" modal="true"
+				height="160" width="450">
+			<h:form id="editForm">
+				<h:panelGrid id="districtGrid" columns="2" width="100%">
+                    <h:outputText value="County:"/>
+                    <p:autoComplete value="#{districtAction.currentDistrict.county}" converter="#{entityConverter}" 
+                    		var="r"  itemValue="#{r}" itemLabel="#{r.name}, #{r.city.name}, #{r.city.localRegion.name}, #{r.city.localRegion.country.name}"
+                    		completeMethod="#{districtAction.completeCounty}" minQueryLength="3" forceSelection="true"
+                    		required="true" requiredMessage="The county field is required"/>  
+                    <h:outputText value="Name:"/>
+                    <h:inputText value="#{districtAction.currentDistrict.name}" required="true" maxlength="250" requiredMessage="The district's name is required"/>
+                     <h:outputText value="Postal Code"/>
+                     <h:inputText value="#{districtAction.currentDistrict.postalCode}" required="true" maxlength="5" requiredMessage="The postal code field is required"/>
+					<p:spacer width="100%" height="15"/> 
+					<f:facet name="footer">
+						<p:commandButton value="Save" action="#{districtAction.save}"
+							update=":mainForm:t1:mainTable" 
+							oncomplete="dlg2.hide();" />					
+						<p:commandButton value="Cancel" 
+							onclick="dlg2.hide();" type="button" />	
+					</f:facet>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+		
+		<p:confirmDialog message="Are you sure to delete the district?"
+			header="Initiating deletion process" severity="alert"
+			widgetVar="dlg3">
+			<h:form id="confirmForm">
+				<p:commandButton value="Yes" actionListener="#{districtAction.delete}"
+					update=":mainForm:t1:mainTable" oncomplete="dlg3.hide()"/>
+				<p:commandButton value="No" onclick="dlg3.hide();" type="button" />
+			</h:form>
+		</p:confirmDialog>		    
+      
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <h:inputText id="kaptcha" autocomplete="off" required="true" requiredMessage=" kodu girmelisin" style="float: left; min-width: 50px; width: 50px; border-right-style: none; font-family: monospace; font-weight: bold" maxlength="5">
+            <f:validator validatorId="kaptchaValidator" />
+        </h:inputText>
+        <img src="/fi/kaptcha.jpg" id="kaptchaImage" style="margin-left: 0;" height="28" title="#{messages['signup.kaptcha.cannotread']}" alt="#{messages['signup.kaptcha.cannotread']}"/>
+        <h:message for="kaptcha" styleClass="error" style="position: relative; bottom: 10px"/>
+        <script type="text/javascript">
+            $(function() {
+                $('#kaptchaImage').click(function() {
+                    $(this).hide()
+                    .attr('src', '/fi/kaptcha.jpg?' + Math.floor(Math.random()*100) )
+                    .show();
+                })
+            });
+        </script>
+    </cc:implementation>
+</html>

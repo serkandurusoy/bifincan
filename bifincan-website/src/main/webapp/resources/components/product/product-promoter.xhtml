@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<cc:interface>
+        <cc:attribute name="productName" type="java.lang.String" required="true" default="Product Name"/> 
+        <cc:attribute name="productBrand" type="java.lang.String" required="true" default="Product Brand"/>  <!--product brand should also be added-->
+		<cc:attribute name="productPointValue" type="java.lang.Integer" required="true" default="0"/>
+		<cc:attribute name="userBalance" type="java.lang.Integer" required="true" default="0"/>    <!-- Product Short Description -->
+		<cc:attribute name="productSlug" type="java.lang.String" required="true" default="-"/>
+		<cc:attribute name="classifier" type="java.lang.String" required="false" default=""/>
+	</cc:interface>
+	
+	<!-- IMPLEMENTATION -->
+	
+	<cc:implementation>
+            Eğer #{cc.attrs.productPointValue-cc.attrs.userBalance} fi daha biriktirirsen, <h:link outcome="/product/details.xhtml"><f:param  name="slug" value="#{cc.attrs.productSlug}"/><h:outputText value="#{cc.attrs.productBrand} #{cc.attrs.productName}"/></h:link> alabilirsin.
+	</cc:implementation>
+</html>

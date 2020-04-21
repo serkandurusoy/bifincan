@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:fi="http://java.sun.com/jsf/composite/components"
+                template="/resources/layouts/primary-content.xhtml"
+                xmlns:pretty="http://ocpsoft.com/prettyfaces">
+
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewParam name="id" value="#{productDetailsAction.productId}"/>
+            <f:viewParam name="slug" value="#{productDetailsAction.slug}"/>
+            <f:event listener="#{productDetailsAction.initProduct()}" type="preRenderView"/>
+        </f:metadata>
+    </ui:define>
+
+    <ui:define name="headIncludes">
+        <script type="text/javascript" src="/fi/resources/scripts/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+        <link type="text/css" rel="stylesheet" href="/fi/resources/scripts/fancybox/jquery.fancybox-1.3.4.css" />
+        <script type="text/javascript" src="/fi/resources/scripts/fancybox/bifincan-product-image-fancybox.js"></script>
+
+        <ui:fragment rendered="#{(currentUser eq null or (currentUser ne null and currentUser.age lt 18 and currentUser.acceptedInvitation ne null)) and productDetailsAction.product.classifier ne 'NORMAL'}">
+            <script type="text/javascript" src="/fi/resources/scripts/blockui/jquery.blockui.js"></script>
+            <script type="text/javascript" src="/fi/resources/scripts/blockui/blocker.fullpage.js"></script>
+            <ui:fragment rendered="#{productDetailsAction.product.classifier eq 'ALCOHOL'}">
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        blockContent("alkollü içecek");
+                    });
+                </script>
+            </ui:fragment>
+            <ui:fragment rendered="#{productDetailsAction.product.classifier eq 'TOBACCO'}">
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        blockContent("tütün ürünleri");
+                    });
+                </script>
+            </ui:fragment>
+            <ui:fragment rendered="#{productDetailsAction.product.classifier eq 'MEDICAL'}">
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        blockContent("medikal ürünler");
+                    });
+                </script>
+            </ui:fragment>
+        </ui:fragment>
+
+        <!-- SOCIAL POINT: JAVASCRIPT CODE; PUT THIS IN YOUR PAGE WITH THE JSF UI COMPONENT 
+             [ and in your callback just write for example: triggerSocialPointAction('facebook');. ]-->
+        <script type="text/javascript">
+            function triggerSocialPointAction(actionType) {
+                var socialLink = $('#social');
+                socialLink.unbind('click');
+                socialLink.bind('click', function(e) {
+                    sendSocialPointActionRequest(this, e, actionType);
+                    return false;
+                });
+                socialLink.trigger('click');   	   				
+            }
+            function sendSocialPointActionRequest(link, event, actionType) {
+                //jsf.ajax.request(link, event, {render: '@all', action: actionType, prettyurl:'#{prettyContext.requestURL.toURL()}' });
+                jsf.ajax.request(link, event, {render: '@form', action: actionType, prettyurl:'#{prettyContext.requestURL.toURL()}' });
+            }           
+        </script>
+        <!-- SOCIAL POINT -->
+        <!-- Fix for rerendering facebook and twitter buttons when page is updated by ajax but it is not working-->
+        <!--
+        <script type="text/javascript">
+        function socialrefresh(data) {
+            var buttonElement = data.source; // The HTML DOM element which invoked the ajax event.
+            var ajaxStatus = data.status; // Can be "begin", "complete" and "success".
+
+            switch (ajaxStatus) {
+                case "begin": // This is called right before ajax request is been sent.
+                    buttonElement.disabled = true;
+                    break;
+
+                case "complete": // This is called right after ajax response is received.
+                    // We don't want to enable it yet here, right?
+                    break;
+
+                case "success": // This is called when ajax response is successfully processed.
+                    buttonElement.disabled = false;
+                    socialrefreshaction();
+                    
+                    break;
+            }
+        }        
+        
+        function socialrefreshaction() {
+            FB.XFBML.parse(document.getElementById('socialcontainer'));
+            /*$('#socialcontainer').find('a.twitter-share-button').each(function(){
+                var tweet_button = new twttr.TweetButton( $( this ).get( 0 ) );
+                tweet_button.render();
+            });*/
+        }
+        /*$('#yorumeklebutton').ajaxComplete(function(){
+            //re-render the facebook icons (in a div with id of 'content')
+            FB.XFBML.parse(document.getElementById('socialcontainer'));
+
+            //re-render twitter icons by calling the render() method on each
+            $('#socialcontainer').find('a.twitter-share-button').each(function(){
+                var tweet_button = new twttr.TweetButton( $( this ).get( 0 ) );
+                tweet_button.render();
+            });
+        });*/
+        </script>
+        -->
+
+        <ui:fragment rendered="#{sec:areAnyGranted('ROLE_USER')}">
+            <link type="text/css" rel="stylesheet" href="/fi/resources/scripts/grumblejs/css/grumble.css" />
+            <script type="text/javascript" src="/fi/resources/scripts/grumblejs/js/bubble.js"></script>
+            <script type="text/javascript" src="/fi/resources/scripts/grumblejs/js/jquery.grumble.js"></script>
+            <script type="text/javascript" src="/fi/resources/scripts/grumblejs/bifincan-comment-grumble.js"></script>
+            <script type="text/javascript" src="/fi/resources/scripts/filike/fisevdisevmedi.js"></script>
+        </ui:fragment>
+    </ui:define>
+
+    <ui:define name="title">#{productDetailsAction.product.brand.name} - #{productDetailsAction.product.name} - bifincan</ui:define>
+    <ui:define name="metakeywords">
+        <meta name="keywords" content="#{productDetailsAction.product.keywords}, #{productDetailsAction.product.brand.name}, #{productDetailsAction.product.name}, bifincan, hediye, tüketici dostu, marka, bilinçli tüketici" />
+    </ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="#{productDetailsAction.product.brand.name} - #{productDetailsAction.product.name} - bifincan" />
+    </ui:define>
+    <ui:define name="metatags">
+        <meta name="description" content="#{productDetailsAction.product.shortDescription}" />
+        <meta name="abstract" content="#{productDetailsAction.product.shortDescription}" />
+        <meta property="og:description" content="#{productDetailsAction.product.shortDescription}" />
+
+        <meta property="og:type" content="website" />
+
+        <meta property="og:image" content="#{utilsBean.applicationCanonicalURL}/fi/gorseller/hediye-resimleri/#{productDetailsAction.product.slug}-detay-resim.jpg" />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="900" />
+        <meta property="og:image:height" content="450" />
+    </ui:define>
+    <ui:define name="fblike">
+        <div id="fb-root"></div>
+        <script type="text/javascript">
+            window.fbAsyncInit = function() {
+                FB.init({
+                    appId      : '380542895302133', // App ID
+                    channelUrl : '//www.bifincan.com/fi/channel.html', // Channel File
+                    status     : true, // check login status
+                    cookie     : true, // enable cookies to allow the server to access the session
+                    xfbml      : true  // parse XFBML
+                });
+
+                FB.Event.subscribe('edge.create',
+                function(response) {
+                    triggerSocialPointAction('facebook');
+                }
+            );
+            };
+
+            // Load the SDK Asynchronously
+            (function(d){
+                var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+                if (d.getElementById(id)) {return;}
+                js = d.createElement('script'); js.id = id; js.async = true;
+                js.src = '//connect.facebook.net/en_US/all.js';
+                ref.parentNode.insertBefore(js, ref);
+            }(document));
+        </script>
+    </ui:define>  
+
+    <ui:define name="pageTitle">#{productDetailsAction.product.brand.name} - #{productDetailsAction.product.name}</ui:define>
+
+    <ui:define name="pageContent">
+
+        <h:panelGroup layout="block" styleClass="alert-a otherproduct" rendered="#{productDetailsAction.product.classifier eq 'ALCOHOL'}">
+            <p><strong>bu hediye bir &#34;alkollü içecek&#34; markasına ait</strong></p>
+        </h:panelGroup>
+        <h:panelGroup layout="block" styleClass="alert-a otherproduct" rendered="#{productDetailsAction.product.classifier eq 'TOBACCO'}">
+            <p><strong>bu hediye bir &#34;tütün ürünleri&#34; markasına ait</strong></p>
+        </h:panelGroup>
+        <h:panelGroup layout="block" styleClass="alert-a otherproduct" rendered="#{productDetailsAction.product.classifier eq 'MEDICAL'}">
+            <p><strong>bu hediye bir &#34;medikal ürünler&#34; markasına ait</strong></p>
+        </h:panelGroup>
+
+        <h:outputLink id="product-image" title="#{productDetailsAction.product.brand.name} - #{productDetailsAction.product.name}: #{productDetailsAction.product.shortDescription}" value="/productimage?productslug=#{productDetailsAction.product.slug}&amp;size=detay">
+            <h:graphicImage id="product-large-image" alt="#{productDetailsAction.product.brand.name} - #{productDetailsAction.product.name}: #{productDetailsAction.product.shortDescription}" value="/productimage?productslug=#{productDetailsAction.product.slug}&amp;size=buyuk" width="614" height="307" class="blogImage" />
+        </h:outputLink>
+        <div class="module-a postBodyFirst" style="padding-bottom: 22px; margin-bottom: 0">
+            <h5><h:outputText value="#{productDetailsAction.product.shortDescription}"/> </h5>
+            <div>
+                <div style="float: right; width: 40%; text-align: right; ">
+                    <h:link value="&#171; tüm hediyeler" title="tüm hediyeler" outcome="/product/all" />
+                </div>
+            </div>
+        </div>
+        <div class="module-a" style="padding-top: 10px; padding-bottom: 0; margin-top: 0; border-top-style: none">
+            <!-- SOCIAL POINT: JSF UI COMPONENT (NO CONTENT SO IT IS INVISIBLE TO THE USER)-->
+            <div id="socialcontainer">
+                <h:form id="socialForm" prependId="false" >
+                    <h:commandLink id="social" actionListener="#{socialPointAction.savePoints}" onclick="return false"/>
+                </h:form>
+                <div class="socialcounters">
+                    <div class="fb-like" data-send="false" data-layout="button_count" data-width="90" data-show-faces="false"></div>
+                </div>
+                <div class="socialcounters">
+                    <a href="https://twitter.com/share" class="twitter-share-button" data-via="bifincancom" data-hashtags="bifincan" data-lang="en" data-count="horizontal" data-url="#{utilsBean.applicationCanonicalURL}/fi#{prettyContext.requestURL.toURL()}">Tweet</a>
+                    <script type="text/javascript" charset="utf-8">
+                        window.twttr = (function (d,s,id) {
+                            var t, js, fjs = d.getElementsByTagName(s)[0];
+                            if (d.getElementById(id)) return; js=d.createElement(s); js.id=id;
+                            js.src="//platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs);
+                            return window.twttr || (t = { _e: [], ready: function(f){ t._e.push(f) } });
+                        }(document, "script", "twitter-wjs"));
+                        twttr.ready(function(twttr){
+                            twttr.events.bind('tweet', function(event) { triggerSocialPointAction('twitter'); });
+                        });
+                    </script>
+                </div>
+                <div class="socialcounters">
+                    <div class="g-plusone" data-size="medium" data-callback="plusclick"></div>
+                    <script type="text/javascript">
+                        function plusclick(data) {
+                            if(data.state=="on"){triggerSocialPointAction('googleplus');}
+                        }
+                    </script>
+                    <script type="text/javascript">
+                        (function() {
+                            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                            po.src = 'https://apis.google.com/js/plusone.js';
+                            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+                        })();
+                    </script>
+                </div>
+                <div class="socialcounters">
+                    <h:outputLink value="http://pinterest.com/pin/create/button/" styleClass="pin-it-button" count-layout="horizontal">
+                        <f:param name="url" value="#{utilsBean.applicationCanonicalURL}/fi#{prettyContext.requestURL.toURL()}"/>
+                        <f:param name="media" value="#{utilsBean.applicationCanonicalURL}/fi/gorseller/hediye-resimleri/#{productDetailsAction.product.slug}-detay-resim.jpg"/>
+                        <f:param name="description" value="#{productDetailsAction.product.shortDescription}"/>
+                        <img border="0" src="//assets.pinterest.com/images/PinExt.png" title="Pin It" />
+                    </h:outputLink>
+                </div>
+            </div>
+            <!-- END: SOCIAL POINT -->
+        </div>
+
+        <h:panelGrid columns="2" styleClass="orderTable productDetailTable" >
+            <h:column>
+
+                <!--
+                <ui:fragment rendered="#{sec:areAnyGranted('ROLE_USER')}">
+                    <div style="padding-left: 4px; margin-bottom: 12px">
+                        <img src="/fi/resources/images/global/star/#{productDetailsAction.averageRating}.png" alt="bu hediyeyi alan bifincan üyeleri, ortlama #{productDetailsAction.averageRating} yıldız veriyor"/>
+                    </div>
+                </ui:fragment>
+                -->
+                <p>
+                    <h:graphicImage styleClass="brandLogo" alt="#{productDetailsAction.product.brand.name}" width="143" height="103" value="/productimage?brandslug=#{productDetailsAction.product.brand.slug}" />
+
+                </p>
+                <p>
+                    <h:outputLink rendered="#{not empty productDetailsAction.product.brand.urlFacebook}"
+                                  rel="external"
+                                  styleClass="facebook"
+                                  value="#{productDetailsAction.product.brand.urlFacebook}"
+                                  title="#{productDetailsAction.product.brand.name} facebook sayfası - #{productDetailsAction.product.brand.urlFacebook}">
+                        <h:outputText value="#{productDetailsAction.product.brand.name} facebook sayfası - #{productDetailsAction.product.brand.urlFacebook}"/>
+                    </h:outputLink>
+                    <h:outputLink rendered="#{not empty productDetailsAction.product.brand.urlTwitter}"
+                                  rel="external"
+                                  styleClass="twitter"
+                                  value="#{productDetailsAction.product.brand.urlTwitter}"
+                                  title="#{productDetailsAction.product.brand.name} twitter sayfası - #{productDetailsAction.product.brand.urlTwitter}">
+                        <h:outputText value="#{productDetailsAction.product.brand.name} twitter sayfası - #{productDetailsAction.product.brand.urlTwitter}"/>
+                    </h:outputLink>
+                    <h:outputLink rendered="#{not empty productDetailsAction.product.brand.urlWebsite}"
+                                  rel="external"
+                                  styleClass="website"
+                                  value="#{productDetailsAction.product.brand.urlWebsite}"
+                                  title="#{productDetailsAction.product.brand.name} web sitesi - #{productDetailsAction.product.brand.urlWebsite}">
+                        <h:outputText value="#{productDetailsAction.product.brand.name} web sitesi - #{productDetailsAction.product.brand.urlWebsite}"/>
+                    </h:outputLink>
+                    <h:outputLink rendered="#{not empty productDetailsAction.product.brand.urlBlog}"
+                                  rel="external"
+                                  styleClass="blog"
+                                  value="#{productDetailsAction.product.brand.urlBlog}"
+                                  title="#{productDetailsAction.product.brand.name} blogu - #{productDetailsAction.product.brand.urlBlog}">
+                        <h:outputText value="#{productDetailsAction.product.brand.name} blogu - #{productDetailsAction.product.brand.urlBlog}"/>
+                    </h:outputLink>
+                </p>
+                <!--
+                <div style="clear: both; color: #998a3d; font-style: italic; text-decoration: line-through; padding-top: 12px; padding-bottom: 4px; font-size: 120%; font-weight: bold"><h:outputText value="#{productDetailsAction.product.priceMoney}"/> TL</div>
+                <div style="font-size: 120%; font-weight: bold; color: #998a3d; padding-bottom: 8px;"><h:outputText value="#{productDetailsAction.product.pricePoints}"/> fi</div>
+                <ui:fragment rendered="#{sec:areAnyGranted('ROLE_USER')}">
+                    <div>
+                        <h:form prependId="false">
+                            <h:commandLink id="addToCartDetail" action="#{productAvailListAction.addProductSlug}" rendered="#{(currentUser != null) and (productDetailsAction.available==true) and
+                                                                          (productDetailsAction.product.pricePoints le (currentUser.pointsBalance - currentUser.shoppingCart.totalPointsOfProducts) ) }"
+                                           immediate="true">
+                                #{messages['product.addToCart1']}<span>#{messages['product.addToCart2']}</span>
+                                <f:setPropertyActionListener target="#{flash.productSlug}" value="#{productDetailsAction.product.slug}" />
+                            </h:commandLink>
+
+                            <h:commandLink id="removeFromCartDetail" action="#{shoppingCartAction.removeProductSlug}" rendered="#{productDetailsAction.removable == true}" immediate="true">
+                                #{messages['product.deleteFromCart1']}<span>#{messages['product.deleteFromCart2']}</span>
+                                <f:setPropertyActionListener target="#{flash.productSlug}" value="#{productDetailsAction.product.slug}" />
+                            </h:commandLink>                            
+                        </h:form>
+                    </div>
+                </ui:fragment>
+                -->
+            </h:column>
+            <h:outputText value="#{productDetailsAction.product.description}" escape="false"/>
+        </h:panelGrid>
+
+        <h:form prependId="false">
+            <h:panelGroup id="cmntsPane">
+                <h4 class="module-a" style="padding-top: 10px; margin-bottom: 0">
+                    yorumlar
+                    <!--
+                    <h:outputText value="şu ana kadar #{productDetailsAction.product.comments.size()} yorum yapıldı" style="font-weight: normal; font-style: italic; font-size: 80%" />
+                    -->
+                    <h:outputText rendered="#{sec:areNotGranted('ROLE_USER')}" value="bifincan üyelerinin beğendiği yorumlar" style="font-weight: normal; font-style: italic; font-size: 80%" />
+                    <h:panelGroup rendered="#{sec:areAnyGranted('ROLE_USER')}" style="font-weight: normal; font-style: italic; font-size: 80%">
+                        &#187; <a href="#yorum-ekle">#{productDetailsAction.product.comments.size() > 0 ? 'sen de yorum ekle' : 'ilk yorumu sen ekle'}</a>
+                    </h:panelGroup>
+                </h4>
+
+                <h:panelGroup id="comments" layout="block">
+                    <ui:fragment rendered="#{not empty productDetailsAction.product.comments }">
+                        <div style="display: none; position: absolute;" id="filikecontainer"><h:graphicImage value="/resources/images/global/filikedislike/filike.png"/></div>
+                        <div style="display: none; position: absolute;" id="fidislikecontainer"><h:graphicImage value="/resources/images/global/filikedislike/fidislike.png"/></div>
+                        <ui:repeat value="#{productDetailsAction.product.comments}" var="comment" varStatus="status">
+
+                            <ui:fragment rendered="#{!((comment.numberOfDisLikes-comment.numberOfLikes) ge 3)}">
+
+                                <ui:param name="filikeid" value="filike#{comment.id}"/>
+                                <ui:param name="fidislikeid" value="fidislike#{comment.id}"/>
+                                <span style="display: block" id="#{!((sec:areAnyGranted('ROLE_USER') and (comment.fiLike or comment.fiDisLike))) ? '' : comment.fiLike ? filikeid : fidislikeid}" class="#{(sec:areAnyGranted('ROLE_USER') and (comment.numberOfLikes-comment.numberOfDisLikes) lt 0 and comment.user.acceptedInvitation ne null) ? 'renkli':''}">
+
+                                    <ui:fragment rendered="#{!(sec:areNotGranted('ROLE_USER') and ((comment.numberOfLikes-comment.numberOfDisLikes) lt 1))}" >
+
+                                        <ui:fragment rendered="#{!(sec:areNotGranted('ROLE_USER') and (comment.user.acceptedInvitation eq null))}" >
+
+                                            <h6 class="comment" style="#{status.first ? '':'border-top: 1px dashed #D9DFDF'}" >
+                                                <ui:fragment rendered="#{comment.user.acceptedInvitation eq null}">
+                                                    <div class="filogo">#{'fi - '}</div>#{'fi'}
+                                                </ui:fragment>
+                                                <ui:fragment rendered="#{comment.user.acceptedInvitation ne null}">
+                                                    <fi:userNameWithDescription userBean="#{comment.user}"/>
+                                                </ui:fragment>
+                                            </h6>
+                                            <!--<h:outputText title="pek bialaka" value="&#9733; " styleClass="commentstar" rendered="#{(comment.numberOfLikes-comment.numberOfDisLikes) gt 9 and comment.user.acceptedInvitation ne null}"/>-->
+                                            <h:outputText value="#{productDetailsAction.getCleanHTML(comment.content)}" escape="false"/>
+
+                                            <ui:fragment rendered="#{currentUser != null and comment.user.acceptedInvitation ne null}">
+                                                <p class="alaka">
+                                                    <ui:fragment rendered="#{currentUser != null and comment.getVotingEligibility(currentUser) and !(productService.countDisLikesReceivedForUserAtProduct(productDetailsAction.product, currentUser)-productService.countLikesReceivedForUserAtProduct(productDetailsAction.product, currentUser) gt 2*productService.countCommentsbyProductAndUser(productDetailsAction.product, currentUser))}" >
+                                                        <h:commandLink styleClass="bialaka" value="bialaka" action="#{productDetailsAction.vote(comment.id, true)}" >
+                                                            <f:ajax execute="@this" render="@form"></f:ajax> 
+                                                        </h:commandLink>
+                                                    </ui:fragment>
+                                                    <ui:fragment rendered="#{currentUser == null or !comment.getVotingEligibility(currentUser) or (productService.countDisLikesReceivedForUserAtProduct(productDetailsAction.product, currentUser)-productService.countLikesReceivedForUserAtProduct(productDetailsAction.product, currentUser) gt 2*productService.countCommentsbyProductAndUser(productDetailsAction.product, currentUser))}" >bialaka</ui:fragment>
+                                                    <span class="boldText"><h:outputText value="#{comment.numberOfLikes}" /> : <h:outputText value="#{comment.numberOfDisLikes}" /> </span>
+                                                    <ui:fragment rendered="#{currentUser != null and comment.getVotingEligibility(currentUser) and !(productService.countDisLikesReceivedForUserAtProduct(productDetailsAction.product, currentUser)-productService.countLikesReceivedForUserAtProduct(productDetailsAction.product, currentUser) gt 2*productService.countCommentsbyProductAndUser(productDetailsAction.product, currentUser))}" >
+                                                        <h:commandLink styleClass="kelalaka" value="kelalaka" action="#{productDetailsAction.vote(comment.id, false)}" >
+                                                            <f:ajax execute="@this" render="@form"></f:ajax> 
+                                                        </h:commandLink>
+                                                    </ui:fragment>
+                                                    <ui:fragment rendered="#{currentUser == null or !comment.getVotingEligibility(currentUser) or (productService.countDisLikesReceivedForUserAtProduct(productDetailsAction.product, currentUser)-productService.countLikesReceivedForUserAtProduct(productDetailsAction.product, currentUser) gt 2*productService.countCommentsbyProductAndUser(productDetailsAction.product, currentUser))}" >kelalaka</ui:fragment>
+                                                </p>
+                                            </ui:fragment>
+
+
+                                        </ui:fragment>
+
+                                    </ui:fragment>
+
+                                </span>
+                            </ui:fragment>
+                        </ui:repeat>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{empty productDetailsAction.product.comments }" >
+                        <p style="text-align: center; margin-top: 28px">
+                            Bu hediyeye henüz yorum yapılmadı.
+                        </p>
+                    </ui:fragment>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{sec:areAnyGranted('ROLE_USER')}" layout="block" class="module-a">
+                    <a name="yorum-ekle"></a>
+
+                    <ui:fragment rendered="#{productDetailsAction.product.lastComment.user eq currentUser}">
+                        <span style="font-style: italic">bu hediyeye en son yorumu sen yaptın, tekrar yorum yapabilmen için önce bir başkasının yorum yapmasını beklemelisin. bu arada diğer hediye ve bilog yazılarına yorum yapabilir veya sorular yanıtlayarak fi kazanmaya ve görüşlerini paylaşmaya devam edebilirsin.<br/><br/></span>
+                    </ui:fragment>
+
+                    <ui:fragment rendered="#{productDetailsAction.product.lastComment.user ne currentUser}">
+                        <!--
+                        number of comments: #{productService.countCommentsbyProductAndUser(productDetailsAction.product, currentUser)}<br/>
+                        my likes: #{productService.countCommentLikessbyProductAndUser(productDetailsAction.product, currentUser)}<br/>
+                        my dislikes: #{productService.countCommentsDislikesbyProductAndUser(productDetailsAction.product, currentUser)}<br/>
+                        my received likes: #{productService.countLikesReceivedForUserAtProduct(productDetailsAction.product, currentUser)}<br/>
+                        my received dislikes: #{productService.countDisLikesReceivedForUserAtProduct(productDetailsAction.product, currentUser)}
+                        -->
+                        <ui:fragment rendered="#{productService.countCommentsbyProductAndUser(productDetailsAction.product, currentUser) ge 3 and currentUser.acceptedInvitation ne null}">
+                            <p>Bu hediyeye üç yorum yapma hakkının tamamını kullandın, artık diğer üyelere de biraz söz hakkı vermelisin :) Sen de bu arada diğer hediyelere ve bilog yazılarına yorum yapabilir veya sorular yanıtlayarak görüşlerini markalara iletmeye devam edebilirsin.</p>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{productService.countCommentsbyProductAndUser(productDetailsAction.product, currentUser) lt 3 or currentUser.acceptedInvitation eq null}">
+                            <ui:fragment rendered="#{((productService.countCommentLikessbyProductAndUser(productDetailsAction.product, currentUser)+productService.countCommentsDislikesbyProductAndUser(productDetailsAction.product, currentUser)) lt 5) and (productDetailsAction.votableCommentCount gt 10)}">
+                                <ui:fragment rendered="#{productService.countDisLikesReceivedForUserAtProduct(productDetailsAction.product, currentUser)-productService.countLikesReceivedForUserAtProduct(productDetailsAction.product, currentUser) gt 2*productService.countCommentsbyProductAndUser(productDetailsAction.product, currentUser)}">
+                                    <p>Bu hediyeye yaptığın yorumlar diğer üyeler tarafından çoğunlukla kelalaka bulunmuş, dolayısıyla bu hediyeye daha fazla yorum yapamıyor ve yorumları da değerlendiremiyorsun :(</p>
+                                    <p>Diğer hediye ve bilog yazılarına yorum yapabilir veya sorular yanıtlayarak fi kazanmaya devam edebilirsin.</p>
+                                    <p>Yorumların ne kadar konu ile alakalı ve faydalı olursa diğer üyeler o kadar bialaka olarak işaretleyecekler, bu sayede sen de hem bu bialakalardan fi kazanmaya devam edecek hem de yeni yorumlar yapabileceksin :)</p>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{!(productService.countDisLikesReceivedForUserAtProduct(productDetailsAction.product, currentUser)-productService.countLikesReceivedForUserAtProduct(productDetailsAction.product, currentUser) gt 2*productService.countCommentsbyProductAndUser(productDetailsAction.product, currentUser))}">
+                                    <span style="font-style: italic">Bu hediyeye yorum yapmadan önce, diğer yorumları gözden geçirip en azından birkaç tanesini bialaka veya kelalaka olarak işaretlemelisin. Bu sayede hem farklı görüşleri okuma fırsatın olacak hem de bifincan'da gerçekten en faydalı içeriğin öne çıkmasına katkıda bulunmuş olacaksın :)<br/><br/></span>
+                                </ui:fragment>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{!(((productService.countCommentLikessbyProductAndUser(productDetailsAction.product, currentUser)+productService.countCommentsDislikesbyProductAndUser(productDetailsAction.product, currentUser)) lt 5) and (productDetailsAction.votableCommentCount gt 10))}">
+
+                                <ui:fragment rendered="#{productService.countDisLikesReceivedForUserAtProduct(productDetailsAction.product, currentUser)-productService.countLikesReceivedForUserAtProduct(productDetailsAction.product, currentUser) gt 2*productService.countCommentsbyProductAndUser(productDetailsAction.product, currentUser)}">
+                                    <p>Bu hediyeye yaptığın yorumlar diğer üyeler tarafından çoğunlukla kelalaka bulunmuş, dolayısıyla bu hediyeye daha fazla yorum yapamıyor ve yorumları da değerlendiremiyorsun :(</p>
+                                    <p>Diğer hediye ve bilog yazılarına yorum yapabilir veya sorular yanıtlayarak fi kazanmaya devam edebilirsin.</p>
+                                    <p>Yorumların ne kadar konu ile alakalı ve faydalı olursa diğer üyeler o kadar bialaka olarak işaretleyecekler, bu sayede sen de hem bu bialakalardan fi kazanmaya devam edecek hem de yeni yorumlar yapabileceksin :)</p>
+                                </ui:fragment>
+
+                                <ui:fragment rendered="#{!(productService.countDisLikesReceivedForUserAtProduct(productDetailsAction.product, currentUser)-productService.countLikesReceivedForUserAtProduct(productDetailsAction.product, currentUser) gt 2*productService.countCommentsbyProductAndUser(productDetailsAction.product, currentUser))}">
+                                    <ui:fragment rendered="#{!productDetailsAction.author}" >
+                                        <p>Bu hediyeye henüz hiç yorum yapmadın. Önemli olan yorumunun olumlu veya olumsuz olması değil, gerçekten de bu hediye ve marka ile ilgili düşüncelerini yansıtması ve okuyan herkese bir fayda sağlaması, farklı bir bakış açısı getirmesi.</p>
+                                        <p>Yapacağın yorumlar diğer bifincan üyeleri ve markalar için <strong>ne kadar faydalı ve alakalı olursa, o kadar fazla fi</strong> kazanacaksın.</p>
+                                        <p>Bir hediyeye en fazla üç defa yorum yapabilirsin, dolayısıyla bu haklarını gerçekten de en bialaka yorumlarını yazmak için kullanmalısın.</p>
+                                    </ui:fragment>
+
+                                    <p>Bu hediye için kalan yorum yazma hakkın #{3 - productService.countCommentsbyProductAndUser(productDetailsAction.product, currentUser)}.</p>
+                                    <h:inputTextarea required="true" requiredMessage="ama birşey yazmadın ki?" validatorMessage="bu yorum çok kısa olmadı mı?" id="comment" value="#{productDetailsAction.newComment.content}" style="width:100%; height: 160px; margin-bottom: 12px" />
+                                    <h:messages  globalOnly="true" showDetail="false" showSummary="true" styleClass="commentError"/>
+                                    <p class="rightText">
+                                        <h:message for="comment" showDetail="false" showSummary="true" />
+                                        <h:commandButton value="yorum ekle" action="#{productDetailsAction.saveComment()}" id="yorumeklebutton">
+                                            <f:ajax execute="comment" render="@form" />
+                                        </h:commandButton>
+                                    </p>  
+                                </ui:fragment>
+
+                            </ui:fragment>
+                        </ui:fragment>
+
+                    </ui:fragment>
+
+                </h:panelGroup>
+            </h:panelGroup>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="sidebar">
+        <div class="sidebar">
+            <h:form prependId="false">
+                <fi:mostRecentProductComments/> 
+            </h:form>    
+        </div>
+    </ui:define>
+    <ui:define name="pinjs">
+        <!--<script type="text/javascript" src="//assets.pinterest.com/js/pinit.js"></script>-->
+        <script type="text/javascript" src="/fi/resources/scripts/social/pin.js"></script>
+    </ui:define>    
+
+</ui:composition>

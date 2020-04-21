@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="tr">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>bifincan marka sunumu</title>
+
+        <meta name="robots" content="NOINDEX, NOFOLLOW" >
+
+        <meta name="keywords" content="bilinçli tüketici, tüketici dostu marka, pazar araştırma, doğrudan pazarlama, izinli pazarlama, izinli reklam, hedefli pazarlama, hedefli reklam, ödül, fırsat, hediye, ücretsiz, görüş, fikir, anket, puan" >
+        <meta name="description" content="Daha kaliteli ürün ve hizmetler almak için biraraya gelerek markalara ve ürünlerine sesini duyuran bilinçli tüketicilerin, tüketici dostu markalar ile buluşma noktası." >
+        <meta name="abstract" content="Daha kaliteli ürün ve hizmetler almak için biraraya gelerek markalara ve ürünlerine sesini duyuran bilinçli tüketicilerin, tüketici dostu markalar ile buluşma noktası." >
+
+        <meta name="Author" content="Bifincan Interaktif Tanıtım ve Araştırma Hizmetleri A.Ş. - www.bifincan.com" >
+        <meta name="Publisher" content="Bifincan Interaktif Tanıtım ve Araştırma Hizmetleri A.Ş. - www.bifincan.com" >
+        <meta name="Copyright" content="(c) 2012 - 2013 - Bifincan Interaktif Tanıtım ve Araştırma Hizmetleri A.Ş. - www.bifincan.com" >
+        <meta name="Distribution" content="Global" >
+        <meta name="Rating" content="General" >
+        <meta name="Classification" content="Market Research, Direct Marketing, Pazar Araştırma, Doğrudan Pazarlama" >
+        <meta name="Resource-type" content="Document" >
+
+        <link rel="canonical" href="https://www.bifincan.com/fi/marka-sunumu" >
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="https://www.bifincan.com/fi/rss-feed" >
+
+        <link rel="shortcut icon" href="/fi/resources/images/global/favicons/favicon.ico" type="image/x-icon" >
+        <link rel="icon" href="/fi/resources/images/global/favicons/favicon.ico" type="image/x-icon" >
+        <link rel="apple-touch-startup-image" href="/fi/resources/images/global/favicons/touch-icon-iphone.png" >
+        <link rel="apple-touch-icon" href="/fi/resources/images/global/favicons/touch-icon-iphone.png" >
+        <link rel="apple-touch-icon" sizes="72x72" href="/fi/resources/images/global/favicons/touch-icon-ipad.png" >
+        <link rel="apple-touch-icon" sizes="114x114" href="/fi/resources/images/global/favicons/touch-icon-iphone4.png" >
+
+        <meta name="apple-mobile-web-app-capable" content="yes" >
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" >
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+
+        <link rel="stylesheet" href="/fi/resources/scripts/revealjs/css/reveal.min.css">
+        <link rel="stylesheet" href="/fi/resources/scripts/revealjs/css/theme/default.css" id="theme">
+
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="/fi/resources/scripts/revealjs/lib/css/zenburn.css">
+
+        <style>
+            .valueLabels {
+                font-size:70%;
+                color:black;
+            }
+            div.valueLabelLight {
+                opacity:0.5;
+                background-color: white;
+                border:none;
+                position:absolute;
+            }
+            div.valueLabel {
+                position:absolute;
+                border:none;
+            }
+
+        </style>
+
+        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+        <script>
+            document.write('<link rel="stylesheet" href="/fi/resources/scripts/revealjs/css/print/' + (window.location.search.match(/print-pdf/gi) ? 'pdf' : 'paper') + '.css" type="text/css" media="print">');
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+
+        <script type="text/javascript" src="/fi/resources/scripts/jquery-1.7.2.min.js"></script>
+
+        <script type="text/javascript" src="/fi/resources/scripts/browsermode.js"></script>
+
+        <script type="text/javascript" src="/fi/resources/scripts/flot/jquery.flot.min.js"></script>
+        <script type="text/javascript" src="/fi/resources/scripts/flot/jquery.flot.categories.min.js"></script>
+        <script type="text/javascript" src="/fi/resources/scripts/flot/jquery.flot.tooltip.min.js"></script>
+
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-30504939-1']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+
+            var dataMetrics = null;
+            $.ajax({
+                url: '/fi/marka-sunumu/realtimedata/metrics.js',
+                async: false,
+                dataType: 'json',
+                success: function(responseJson) {
+                    dataMetrics = responseJson;
+                }
+            });
+
+            var dataImages = null;
+            $.ajax({
+                url: '/fi/marka-sunumu/realtimedata/images.js',
+                async: false,
+                dataType: 'json',
+                success: function(responseJson) {
+                    dataImages = responseJson;
+                }
+            });
+
+            var dataCharts = null;
+            $.ajax({
+                url: '/fi/marka-sunumu/realtimedata/charts.js',
+                async: false,
+                dataType: 'json',
+                success: function(responseJson) {
+                    dataCharts = responseJson;
+                }
+            });
+
+            function shuffle(o) {
+                for (var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x)
+                    ;
+                return o;
+            }
+            ;
+
+            function renderChart(container, dataarray) {
+                $.plot(container, dataarray, {
+                    grid: {
+                        borderColor: "#ffffff",
+                        borderWidth: 1,
+                        hoverable: true
+                    },
+                    series: {
+                        bars: {
+                            show: true,
+                            barWidth: 0.6,
+                            align: "center",
+                            fillColor: "rgb(102, 204, 204)",
+                            lineWidth: 0
+                        }
+                    },
+                    xaxis: {
+                        mode: "categories",
+                        tickLength: 0,
+                        font: {size: 16, color: "#ffffff"},
+                        tickColor: "#ffffff",
+                        color: "#ffffff"
+                    },
+                    yaxis: {
+                        font: {size: 16, color: "#ffffff"},
+                        tickColor: "#ffffff",
+                        color: "#ffffff"
+                    },
+                    tooltip: true,
+                    tooltipOpts: {
+                        content: "%y.2 %"
+                    }
+                });
+            }
+            ;
+
+        </script>
+    </head>
+
+    <body>
+
+        <div class="reveal">
+            <div class="slides">
+
+                <section>
+                    <p style="color: #66CCCC; font-size: 200%"><strong>bifincan marka sunumu</strong></p>
+                    <h3><span style="color: #66CCCC;">OK</span> tuşları senin dostun!</h3>
+                    <p style="font-size: 120%">sağ alt köşeye bak ;)</p>
+                    <p style="font-size: 100%">sırayla ilerlemek istersen</p>
+                    <p style="font-size: 140%; color: #66CCCC; font-weight: bold">[spacebar]</p>
+                    <p style="font-size: 100%">tuşunu da kullanabilirsin</p>
+                    <small>tüm kareleri aynı anda görmek için <span style="color: #66CCCC; font-weight: bold">[esc]</span> tuşuna basabilirsin</small>
+                </section>
+
+                <section>
+                    <section>
+                        <p><img src="/fi/resources/images/global/bifincan-logo-large.png" style="border: none; background-color: transparent; box-shadow: none"></p>
+                        <p class="fragment roll-in">tüketicinin sesini markaya duyuran bi icat</p>
+                        <small class="fragment roll-in">bilinçli tüketiciler ile tüketici dostu markaları buluşturan platform</small>
+                    </section>
+
+                    <section>
+                        <h3>bilinçli tüketici için bifincan</h3>
+                        <div>
+                            <video id="bifincan-video"
+                                   width="640" height="360" controls="controls" preload="auto"
+                                   poster="/fi/resources/videos/bifincan-video.jpg" >
+                                <source type="video/mp4" src="/fi/resources/videos/bifincan-video.mp4" />
+                                <source type="video/webm" src="/fi/resources/videos/bifincan-video.webm" />
+                                <source type="video/ogg" src="/fi/resources/videos/bifincan-video.ogv" />
+                            </video>
+                        </div>
+                        <p>sesi açmayı unutma :)</p>
+                    </section>
+
+                    <section>
+                        <h3>tüketici dostu marka için bifincan</h3>
+                        <ul>
+                            <li class="fragment roll-in" style="color: #66CCCC;">doğrudan pazarlama <em style="font-size: 80%; color: #ffffff">ürün ile fiziksel temas</em></li>
+                            <li class="fragment roll-in" style="color: #66CCCC;">sosyal pazarlama <em style="font-size: 80%; color: #ffffff">ilk temastan organik yayılım</em></li>
+                            <li class="fragment roll-in" style="color: #66CCCC;">pazar araştırma <em style="font-size: 80%; color: #ffffff">hızlı ve etkin araştırma</em></li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section>
+                    <section data-state="metrics1">
+                        <p style="font-size: 140%"><span id="totalDays"></span> günde</p>
+                        <p style="font-size: 200%" class="fragment roll-in"><span id="totalUser"></span> üye</p>
+                        <p style="font-size: 260%" class="fragment roll-in"><strong id="totalOpinion" style="color: #66CCCC"></strong> soru yanıtladı</p>
+                    </section>
+
+                    <section data-state="metrics2">
+                        <p style="font-size: 140%"><span id="totalProductCategory"></span> ürün kategorisinde</p>
+                        <p style="font-size: 140%"><span id="totalBrand" style="color: #66CCCC;"></span> marka ile ilgili</p>
+                        <div class="fragment roll-in">
+                            <p style="font-size: 140%">temel algı</p>
+                            <p style="font-size: 140%">tüketim alışkanlıkları</p>
+                            <p style="font-size: 140%">detaylı profil soruları</p>
+                        </div>
+                    </section>
+
+                    <section data-state="metrics3andimages">
+                        <p style="font-size: 140%"><span id="totalCustomers" style="color: #66CCCC; font-weight: bold"></span> markadan <span id="totalProductMoneyValue" style="color: #66CCCC; font-weight: bold"></span> TL değerinde hediye</p>
+                        <div id="images" style="line-height: 0; min-height: 540px"></div>
+                    </section>
+
+                    <section data-state="metrics4">
+                        <p style="font-size: 140%"><span id="totalGoogleVisitors" style="color: #66CCCC;"></span> tekil ziyaretçi</p>
+                        <div class="fragment roll-in">
+                            <p style="font-size: 140%">ziyaret başına <span id="totalGooglePagesPerVisitTimesInt" style="color: #66CCCC;"></span>.<span id="totalGooglePagesPerVisitTimesDec"></span> sayfa gösterimi</p>
+                            <p style="font-size: 140%">ortalama <span id="totalGoogleTimePerVisitMin" style="color: #66CCCC;"></span>dk <span id="totalGoogleTimePerVisitSec"></span>sn ziyaret süresi</p>
+                        </div>
+                        <div class="fragment roll-in">
+                            <p style="font-size: 140%">sadece bifincan'dan <span style="color: #66CCCC;">direkt</span> sosyal paylaşımlarda:</p>
+                            <p style="font-size: 140%"><span id="totalSocialFacebook" style="color: #66CCCC;"></span> like, <span id="totalSocialTwitter" style="color: #66CCCC;"></span> tweet, <span id="totalSocialGooglePlus" style="color: #66CCCC;"></span> plus, <span id="totalSocialPinterest" style="color: #66CCCC;"></span> pin</p>
+                        </div>
+                        <div class="fragment roll-in">
+                            <p style="font-size: 140%">ile toplamda <span id="totalSocialShare" style="color: #66CCCC;"></span> ilk etkileşimden</p>
+                            <p style="font-size: 140%"><span style="color: #66CCCC;">100binlerce</span> kişiye erişim</p>
+                        </div>
+                    </section>
+                </section>
+
+                <section>
+                    <section data-state="charts1">
+                        <h3>yaşadığı şehir</h3>
+                        <div style="box-sizing: border-box; width: 800px; height: 400px; text-align: center; margin-left: auto; margin-right: auto;">
+                            <div id="charts1" style="width: 100%; height: 100%;"></div>
+                        </div>
+                        <small style="font-size: 50%; font-style: italic; margin-top: 20px"><span style="color: #66CCCC; font-weight: bold">ipucu:</span> yüzdeleri görmek için grafiğin üzerinde gezinebilirsin</small>
+                    </section>
+
+                    <section data-state="charts2">
+                        <h3>yaş aralığı</h3>
+                        <div style="box-sizing: border-box; width: 800px; height: 400px; text-align: center; margin-left: auto; margin-right: auto;">
+                            <div id="charts2" style="width: 100%; height: 100%;"></div>
+                        </div>
+                        <small style="font-size: 50%; font-style: italic; margin-top: 20px"><span style="color: #66CCCC; font-weight: bold">ipucu:</span> yüzdeleri görmek için grafiğin üzerinde gezinebilirsin</small>
+                    </section>
+
+                    <section data-state="charts3">
+                        <h3>cinsiyet</h3>
+                        <div style="box-sizing: border-box; width: 800px; height: 400px; text-align: center; margin-left: auto; margin-right: auto;">
+                            <div id="charts3" style="width: 100%; height: 100%;"></div>
+                        </div>
+                        <small style="font-size: 50%; font-style: italic; margin-top: 20px"><span style="color: #66CCCC; font-weight: bold">ipucu:</span> yüzdeleri görmek için grafiğin üzerinde gezinebilirsin</small>
+                    </section>
+
+                    <section data-state="charts4">
+                        <h3>mezuniyet durumu</h3>
+                        <div style="box-sizing: border-box; width: 800px; height: 400px; text-align: center; margin-left: auto; margin-right: auto;">
+                            <div id="charts4" style="width: 100%; height: 100%;"></div>
+                        </div>
+                        <small style="font-size: 50%; font-style: italic; margin-top: 20px"><span style="color: #66CCCC; font-weight: bold">ipucu:</span> yüzdeleri görmek için grafiğin üzerinde gezinebilirsin</small>
+                    </section>
+
+                    <section data-state="charts5">
+                        <h3>çalışma durumu</h3>
+                        <div style="box-sizing: border-box; width: 800px; height: 400px; text-align: center; margin-left: auto; margin-right: auto;">
+                            <div id="charts5" style="width: 100%; height: 100%;"></div>
+                        </div>
+                        <small style="font-size: 50%; font-style: italic; margin-top: 20px"><span style="color: #66CCCC; font-weight: bold">ipucu:</span> yüzdeleri görmek için grafiğin üzerinde gezinebilirsin</small>
+                    </section>
+
+                    <section data-state="charts6">
+                        <h3>aylık bireysel tl gelir</h3>
+                        <div style="box-sizing: border-box; width: 800px; height: 400px; text-align: center; margin-left: auto; margin-right: auto;">
+                            <div id="charts6" style="width: 100%; height: 100%;"></div>
+                        </div>
+                        <small style="font-size: 50%; font-style: italic; margin-top: 20px"><span style="color: #66CCCC; font-weight: bold">ipucu:</span> yüzdeleri görmek için grafiğin üzerinde gezinebilirsin</small>
+                    </section>
+
+                    <section data-state="charts7">
+                        <h3>medeni durum</h3>
+                        <div style="box-sizing: border-box; width: 800px; height: 400px; text-align: center; margin-left: auto; margin-right: auto;">
+                            <div id="charts7" style="width: 100%; height: 100%;"></div>
+                        </div>
+                        <small style="font-size: 50%; font-style: italic; margin-top: 20px"><span style="color: #66CCCC; font-weight: bold">ipucu:</span> yüzdeleri görmek için grafiğin üzerinde gezinebilirsin</small>
+                    </section>
+
+                    <section data-state="charts8">
+                        <h3>çocuk</h3>
+                        <div style="box-sizing: border-box; width: 800px; height: 400px; text-align: center; margin-left: auto; margin-right: auto;">
+                            <div id="charts8" style="width: 100%; height: 100%;"></div>
+                        </div>
+                        <small style="font-size: 50%; font-style: italic; margin-top: 20px"><span style="color: #66CCCC; font-weight: bold">ipucu:</span> yüzdeleri görmek için grafiğin üzerinde gezinebilirsin</small>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <img src="/fi/resources/images/global/bifincan-logo-fi-pen.png" style="border: none; background-color: transparent; box-shadow: none">
+                        <h2>peki ya <span style="color: #66cccc">nasıl işliyor</span>?</h2>
+                    </section>
+
+                    <section>
+                        <h2><span style="color: #66cccc">doğrudan</span> pazarlama</h2>
+                        <ul>
+                            <li class="fragment roll-in">üyenin adresine mutlaka fiziksel olarak bir hediye gönderiliyor
+                                <ul>
+                                    <li class="fragment roll-in">ürünün/hizmetin kendisi olabileceği gibi</li>
+                                    <li class="fragment roll-in">hediye/indirim kuponu olabiliyor ve üye, müşteriye dönüşüyor</li>
+                                    <li class="fragment roll-in">etkinlik vb bir deneyim olabiliyor</li>
+                                    <li class="fragment roll-in">yani, marka ile fiziksel temas sağlanıyor</li>
+                                </ul>
+                            </li>
+                            <li class="fragment roll-in" style="margin-top: 20px">hedefli çalışmalar yapılıyor
+                                <ul>
+                                    <li class="fragment roll-in">belirli profildeki üyelerle etkileşim sağlanabiliyor</li>
+                                    <li class="fragment roll-in">adresine gönderi, e-posta, sms ile takip çalışmaları yapılabiliyor</li>
+                                    <li class="fragment roll-in">tabii ki taciz etmeden ;)</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2><span style="color: #66cccc">sosyal</span> pazarlama</h2>
+                        <ul>
+                            <li class="fragment roll-in">markayı ve hediyeyi "fi" karakteri anlatıyor
+                                <ul>
+                                    <li class="fragment roll-in">hediyeye özel ürün sayfası</li>
+                                    <li class="fragment roll-in">markanın ürün gamını destekleyen "bilog" yazısı</li>
+                                    <li class="fragment roll-in">sosyal butonlarla etkileşim yayılımı</li>
+                                    <li class="fragment roll-in">marka sosyal kanallarına bağlantılar</li>
+                                </ul>
+                            </li>
+                            <li class="fragment roll-in" style="margin-top: 20px">üyeler etkileşimleri ile "fi" kazanıyorlar
+                                <ul>
+                                    <li class="fragment roll-in">bitmek tükenmek bilmeyen anket soruları</li>
+                                    <li class="fragment roll-in">hediye ve bilog yazılarında yorumlar</li>
+                                    <li class="fragment roll-in">sosyal paylaşımlar</li>
+                                    <li class="fragment roll-in">arkadaş davetleri</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>pazar <span style="color: #66cccc">araştırma</span></h2>
+                        <ul>
+                            <li class="fragment roll-in">üyelerin anket sonuçları markaya raporlanıyor
+                                <ul>
+                                    <li class="fragment roll-in">profil soruları</li>
+                                    <li class="fragment roll-in">ürün kategori soruları</li>
+                                    <li class="fragment roll-in">marka algı soruları</li>
+                                    <li class="fragment roll-in">hediyeye özel deneyim soruları</li>
+                                </ul>
+                            </li>
+                            <li class="fragment roll-in" style="margin-top: 20px">proje sonrasında dahi sorular yanıt almaya devam edebiliyor
+                                <ul>
+                                    <li class="fragment roll-in">zaman içindeki değişim</li>
+                                    <li class="fragment roll-in">yeni üyelerin yanıtları</li>
+                                    <li class="fragment roll-in">düzenli raporlar ve trendler</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section>
+                    <h4>bifincan üyeleri de bu döngüden faydalanıyorlar</h4>
+                    <img src="/fi/resources/images/global/bifincan-logo-fi-pen.png" style="border: none; background-color: transparent; box-shadow: none; float: left">
+                    <ul style="margin-top: 140px; font-size: 80%">
+                        <li>hediyeler alıyor,</li>
+                        <li>tüketici dostu markalar ile iletişim kuruyorlar.</li>
+                        <li>markaları daha iyi tanıyorlar,</li>
+                        <li>beklentilerini anlatıyorlar</li>
+                        <li>diğer bilinçli tüketicilerin seslerine kulak verip,</li>
+                        <li>bilinçli alışveriş yapıyorlar.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <section>
+                        <h2><span style="color: #66cccc">tamam,</span><br><br>ne yapmak gerekiyor?</h2>
+                    </section>
+
+                    <section>
+                        <h4>önce <span style="color: #66cccc">ne hediye</span> etmek istediğine karar vermelisin</h4>
+                        <ul>
+                            <li>ürünün veye hizmetini mi</li>
+                            <li>hediye, indirim kuponu mu</li>
+                            <li>bir deneyim mi?</li>
+                            <li>peki ya kaç kişiye? ne kadar çok, o kadar iyi, 1 de veren var 1000 de</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h4>peki ya <span style="color: #66cccc">kimlerle</span> temas etmek istiyorsun?</h4>
+                        <ul>
+                            <li class="fragment roll-in">belirli bir hedef kitlen var mı?</li>
+                            <li class="fragment roll-in">yoksa bütüüüün bifincan üyeleri senin hediyenden faydalanabilir mi?</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h4>hadi "fi" seni <span style="color: #66cccc">bilinçli tüketicilere</span> anlatsın</h4>
+                        <ul>
+                            <li class="fragment roll-in">hediyeni anlatan görseller ve yazıyı hazırlıyorum</li>
+                            <li class="fragment roll-in">senin için bir "bilog" yazısı da hazırlıyorum</li>
+                            <li class="fragment roll-in">web sitene ve sosyal medya varlıklarına bağlantılar veriyorum</li>
+                            <li class="fragment roll-in">ve bunları uzun uzun yayında tutuyorum</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h4>hediyelerin heeeepsini <span style="color: #66cccc">bana veriyorsun</span></h4>
+                        <ul>
+                            <li class="fragment roll-in">kişiye özel mektup yazıyor</li>
+                            <li class="fragment roll-in">renkli renkli şekerler ekliyor</li>
+                            <li class="fragment roll-in">güzelce paketleyip</li>
+                            <li class="fragment roll-in">bifincan üyelerine kargoyla iletiyorum</li>
+                            <li class="fragment roll-in">memnuniyetler bozulmasın diye UPS ile çalışıyorum, marka önemli ;)</li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section>
+                    <h3>bitmediiii :)</h3>
+                    <ul>
+                        <li class="fragment roll-in"><span style="color: #66cccc">peki ya merak ettiklerin?</span>
+                            <ul>
+                                <li>ben zaten bool bol soru soruyorum</li>
+                                <li>senin özel sorularına öncelik veriyorum</li>
+                                <li>öyle 3-5 soru limiti yok, bifincan üyeleri soru canavarı!</li>
+                            </ul>
+                        </li>
+                        <li class="fragment roll-in" style="margin-top: 20px"><span style="color: #66cccc">gelsin raporlar...</span>
+                            <ul>
+                                <li>öncelikle, ham verileri olduğu gibi veriyorum</li>
+                                <li>rapor formatına birlikte karar veriyoruz ve senin için hazırlıyorum</li>
+                                <li>istersen bu raporu her ay düzenli sunabiliyorum ki trendleri gör</li>
+                                <li>arzu edersen yeni sorular ekleyebiliyorsun</li>
+                            </ul>
+                        </li>
+                        <li class="fragment roll-in" style="margin-top: 20px"><span style="color: #66cccc">peki başka?</span>
+                            <ul>
+                                <li>istersen artık hediye sayını artırabilir,</li>
+                                <li>yeni hediyeler ekleyebilir,</li>
+                                <li>hediyeni alan üyelerle yeni etkileşimler başlatabilirsin</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>ee iyiymiş bu, herşey <span style="color: #66cccc">bedava mı?</span></h3>
+                        <p>tabii ki değil, bifincan bu kadar şeyi</p>
+                        <p>nasıl yapıyor sanıyorsun :)</p>
+                    </section>
+
+                    <section>
+                        <div style="text-align: left">
+                            <h4><span style="color: #66cccc">şöyle</span> oluyor</h4>
+                            <ul style="margin-top: 20px">
+                                <li>bifincan'da nasıl ve ne kadar hediyeyle yer alacağına</li>
+                                <li>ne kadar soru soracağına</li>
+                                <li>ne kapsam ve ne kadar süreyle rapor isteyeceğine</li>
+                                <li>nasıl ve ne kadar takip çalışması istediğine</li>
+                            </ul>
+                            <p style="margin-top: 20px">göre bir <span style="color: #66cccc">proje bütçesi</span> belirliyorum, ama merak etme</p>
+                            <ul style="margin-top: 20px">
+                                <li>doğrudan pazarlama</li>
+                                <li>sosyal pazarlama</li>
+                                <li>pazar araştırma</li>
+                            </ul>
+                            <p style="margin-top: 20px">çalışmalarına ayrı ayrı gereken bütçelerin yanında, bütünleşik bu hizmet için ayıracağın bütçe için neredeyse <span style="color: #66cccc">hediye</span> diyebilirsin :)</p>
+                        </div>
+                    </section>
+                </section>
+                
+                <section>
+                    <img src="/fi/resources/images/global/bifincan-couch-girl.jpg" style="border: 1px solid #d9dfdf; box-shadow: none">
+                    <p>daha detaylı bilgi için</p>
+                    <p><a href="mailto:fi@bifincan.com">fi@bifincan.com</a></p>
+                </section>
+
+            </div>
+        </div>
+
+        <script src="/fi/resources/scripts/revealjs/lib/js/head.min.js"></script>
+        <script src="/fi/resources/scripts/revealjs/js/reveal.min.js"></script>
+
+        <script>
+
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                theme: Reveal.getQueryHash().theme || 'default', // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    {src: '/fi/resources/scripts/revealjs/lib/js/classList.js', condition: function() {
+                            return !document.body.classList;
+                        }},
+                    {src: '/fi/resources/scripts/revealjs/plugin/markdown/marked.js', condition: function() {
+                            return !!document.querySelector('[data-markdown]');
+                        }},
+                    {src: '/fi/resources/scripts/revealjs/plugin/markdown/markdown.js', condition: function() {
+                            return !!document.querySelector('[data-markdown]');
+                        }},
+                    {src: '/fi/resources/scripts/revealjs/plugin/highlight/highlight.js', async: true, callback: function() {
+                            hljs.initHighlightingOnLoad();
+                        }},
+                    {src: '/fi/resources/scripts/revealjs/plugin/zoom-js/zoom.js', async: true, condition: function() {
+                            return !!document.body.classList;
+                        }},
+                    {src: '/fi/resources/scripts/revealjs/plugin/notes/notes.js', async: true, condition: function() {
+                            return !!document.body.classList;
+                        }}
+                    // { src: '/fi/resources/scripts/revealjs/plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+                    // { src: '/fi/resources/scripts/revealjs/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+
+            Reveal.addEventListener('metrics1', function() {
+                $("#totalUser").text(dataMetrics.totalUser);
+                $("#totalDays").text(dataMetrics.totalDays);
+                $("#totalOpinion").text(dataMetrics.totalOpinion);
+            });
+
+            Reveal.addEventListener('metrics2', function() {
+                $("#totalProductCategory").text(dataMetrics.totalProductCategory);
+                $("#totalBrand").text(dataMetrics.totalBrand);
+            });
+
+            Reveal.addEventListener('metrics3andimages', function() {
+                $("#totalProductMoneyValue").text(dataMetrics.totalProductMoneyValue);
+                $("#totalCustomers").text(dataMetrics.totalCustomers);
+                $('#images').empty();
+                dataImages = shuffle(dataImages);
+                $.each(dataImages, function(index, item) {
+                    $('<img>').attr('src', item).attr('width', 93).attr('height', 67).css({"border": "1px solid #d9dfdf", "margin": "4px", "background-color": "#f2f4f4"}).appendTo('#images');
+                });
+            });
+            Reveal.addEventListener('metrics4', function() {
+                $("#totalGoogleVisitors").text(dataMetrics.totalGoogleVisitors);
+                $("#totalGooglePagesPerVisitTimesInt").text(dataMetrics.totalGooglePagesPerVisitTimesInt);
+                $("#totalGooglePagesPerVisitTimesDec").text(dataMetrics.totalGooglePagesPerVisitTimesDec);
+                $("#totalGoogleTimePerVisitMin").text(dataMetrics.totalGoogleTimePerVisitMin);
+                $("#totalGoogleTimePerVisitSec").text(dataMetrics.totalGoogleTimePerVisitSec);
+                $("#totalSocialFacebook").text(dataMetrics.totalSocialFacebook);
+                $("#totalSocialTwitter").text(dataMetrics.totalSocialTwitter);
+                $("#totalSocialGooglePlus").text(dataMetrics.totalSocialGooglePlus);
+                $("#totalSocialPinterest").text(dataMetrics.totalSocialPinterest);
+                $("#totalSocialShare").text(dataMetrics.totalSocialShare);
+            });
+
+            Reveal.addEventListener('charts1', function() {
+                var data = [
+                    ["istanbul", dataCharts.cityChart.istanbul],
+                    ["diğer", dataCharts.cityChart.otherCities]
+                ];
+                renderChart("#charts1", [data]);
+            });
+
+            Reveal.addEventListener('charts2', function() {
+                var data = [
+                    ["14-18", dataCharts.ageChart.age018],
+                    ["19-22", dataCharts.ageChart.age1822],
+                    ["23-26", dataCharts.ageChart.age2226],
+                    ["27-30", dataCharts.ageChart.age2630],
+                    ["31-35", dataCharts.ageChart.age3035],
+                    ["36-40", dataCharts.ageChart.age3540],
+                    ["41-50", dataCharts.ageChart.age4050],
+                    ["50+", dataCharts.ageChart.age50p]
+                ];
+                renderChart("#charts2", [data]);
+            });
+
+            Reveal.addEventListener('charts3', function() {
+                var data = [
+                    ["kadın", dataCharts.genderChart.female],
+                    ["erkek", dataCharts.genderChart.male]
+                ];
+                renderChart("#charts3", [data]);
+            });
+
+            Reveal.addEventListener('charts4', function() {
+                var data = [
+                    ["yok", dataCharts.educationTypeChart.educationTypeNone],
+                    ["ilköğrenim", dataCharts.educationTypeChart.educationTypePrimarySchool],
+                    ["lise", dataCharts.educationTypeChart.educationTypeHighSchool],
+                    ["yükseköğrenim", dataCharts.educationTypeChart.educationTypeHigherEducation],
+                    ["üniversite", dataCharts.educationTypeChart.educationTypeUniversity],
+                    ["lisansüstü", dataCharts.educationTypeChart.educationTypeGraduate],
+                    ["doktora+", dataCharts.educationTypeChart.educationTypeDoctorate]
+                ];
+                renderChart("#charts4", [data]);
+            });
+
+            Reveal.addEventListener('charts5', function() {
+                var data = [
+                    ["çalışmıyor", dataCharts.employmentStatusChart.employmentStatusUnemployed],
+                    ["yarı zamanlı", dataCharts.employmentStatusChart.employmentStatusPartTime],
+                    ["tam zamanlı", dataCharts.employmentStatusChart.employmentStatusFullTime],
+                    ["kendi işi", dataCharts.employmentStatusChart.employmentStatusSelfEmployed]
+                ];
+                renderChart("#charts5", [data]);
+            });
+
+            Reveal.addEventListener('charts6', function() {
+                var data = [
+                    ["yok", dataCharts.monthlyIncomeChart.monthlyIncomeNone],
+                    ["<1000", dataCharts.monthlyIncomeChart.monthlyIncome01],
+                    ["1-2000", dataCharts.monthlyIncomeChart.monthlyIncome12],
+                    ["2-3000", dataCharts.monthlyIncomeChart.monthlyIncome23],
+                    ["3-5000", dataCharts.monthlyIncomeChart.monthlyIncome35],
+                    ["5000<", dataCharts.monthlyIncomeChart.monthlyIncome5p]
+                ];
+                renderChart("#charts6", [data]);
+            });
+
+            Reveal.addEventListener('charts7', function() {
+                var data = [
+                    ["evli", dataCharts.maritalStatusChart.married],
+                    ["bekar", dataCharts.maritalStatusChart.single]
+                ];
+                renderChart("#charts7", [data]);
+            });
+
+            Reveal.addEventListener('charts8', function() {
+                var data = [
+                    ["var", dataCharts.hasChildrenChart.hasChildrenYes],
+                    ["yok", dataCharts.hasChildrenChart.hasChildrenNo]
+                ];
+                renderChart("#charts8", [data]);
+            });
+
+
+        </script>
+
+        <noscript>
+        <div style="position:fixed; top:0; left:0; margin: 0; padding: 0; z-index:9999; height:100%; width:100%; background: url('/fi/resources/images/global/style/background.png') center 0 no-repeat #fff;">
+            <p style="margin-top: 100px"><img src="/resources/images/global/500-server-error.png"/></p>	
+            <p style="text-align: center; font-size: 140%;">bifincan'dan en iyi deneyimi elde edebilmek için</p>
+            <p style="text-align: center; font-size: 140%;">tarayıcının javascript özelliğini devre dışı bırakmamış olman gerekiyor</p>
+            <p style="text-align: center; font-size: 140%;">javascript özelliğini tekrar devreye aldığında</p>
+            <p style="text-align: center; font-size: 140%;">bifincan'ı sorunsuz ve en iyi haliyle gezebilirsin</p>
+        </div>
+        </noscript>
+    </body>
+</html>

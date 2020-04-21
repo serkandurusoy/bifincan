@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: https://www.bifincan.com/fi/sitemap.xml

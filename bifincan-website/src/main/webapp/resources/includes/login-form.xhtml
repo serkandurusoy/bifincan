@@ -1,0 +1,30 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:c="http://java.sun.com/jsp/jstl/core"    
+                 xmlns:pretty="http://ocpsoft.com/prettyfaces"    
+                 xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+    <form id="loginForm" method="post"  autocomplete="off" action="#{facesContext.externalContext.requestContextPath}/j_spring_security_check?spring-security-redirect=#{prettyContext.requestURL.toURL()}">
+       
+        <fieldset>
+            <legend>#{messages['login.title']}</legend>
+            <p>
+                <label for="login-a">#{messages['login.username']}</label>
+                <c:if test="#{not empty param.loginerror}">
+                    <c:set var="username" value="#{sessionScope.SPRING_SECURITY_LAST_USERNAME}"/>
+                </c:if>
+                <input id="login-a" type="text" name="j_username" value="#{username}" class="#{not empty param.loginerror ? 'loginerror':''}"/>
+            </p>
+            <p>
+                <label for="login-b">#{messages['login.password']}</label>
+                <input id="login-b" type="password" name="j_password"  class="#{not empty param.loginerror ? 'loginerror':''}"/>
+            </p>
+            <p class="submit">
+                <a href="#{facesContext.externalContext.requestContextPath}/unuttum-neydi">#{messages['resetPassword.link']}</a>
+                <button type="submit">#{messages['login.action']}</button>
+            </p>
+        </fieldset>
+    </form>
+
+</ui:composition>

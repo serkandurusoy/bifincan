@@ -1,0 +1,194 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:hh="http://balusc.net/jsf/html"
+                template="/resources/layouts/standard.xhtml">
+    <ui:define name="metadata">
+    </ui:define>
+
+    <ui:define name="browserTitle">survey criteria - </ui:define>
+    <ui:define name="content">
+        <h:form id="mainForm">
+            <p:tabView dynamic="true" id="t1"
+                       style="border-style:none; padding-left:0px; padding-right: 0px;">
+                <p:tab title="survey criteria" id="t11">
+                    <p:panel>
+                        <p:commandButton value="New" style="right:0px;"
+                                         action="#{surveyCriteriaAction.initAdd()}"
+                                         update=":editForm:prodGrid" onclick="dlg2.show();">
+                             <f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />            
+                        </p:commandButton>                 
+                    </p:panel>		
+                    <p:messages id="messages" autoUpdate="true"/>	
+					<p:dataTable id="mainTable" var="criterion" value="#{surveyCriteriaAction.dataModel}" binding="#{surveyCriteriaAction.dataTable}"
+								style="height:85%" emptyMessage="No records found" paginator="true" paginatorPosition="bottom" 
+								paginatorAlwaysVisible="true" rows="12" pageLinks="10">                                  
+                        <p:column style="width:30%">
+                            <f:facet name="header" style="background-color:red">
+                                Survey Title
+                            </f:facet>
+                            <h:outputText value="#{criterion.survey.title}" />
+                        </p:column>
+                        <p:column style="width:10%">
+                            <f:facet name="header" style="background-color:red">
+                                Property Type
+                            </f:facet>
+                            <h:outputText value="#{messages[criterion.propertyType.label]}" />
+                        </p:column>	                        
+                        <p:column style="width:10%">
+                            <f:facet name="header" style="background-color:red">
+                                Operator Type
+                            </f:facet>
+                            <h:outputText value="#{messages[criterion.operatorType.label]}" />
+                        </p:column>				
+                        <p:column style="width:10%">
+                            <f:facet name="header" style="background-color:red">
+                                Operand Value
+                            </f:facet>
+                            <h:outputText value="#{surveyCriteriaAction.displayLabelValue(criterion)}" />
+                        </p:column>	
+                        <p:column style="width:10%">
+                            <f:facet name="header" style="background-color:red">
+                                Operand Value Type
+                            </f:facet>
+                            <h:outputText value="#{messages[criterion.operatorValueType.label]}" />
+                        </p:column>
+                        <p:column style="width:10%">
+                            <f:facet name="header" style="background-color:red">
+                                Survey option
+                            </f:facet>
+                            <h:outputText value="#{criterion.fullDescription}" />
+                        </p:column>	         														
+                        <p:column style="width:10%;text-align:center">
+                            <f:facet name="header">
+                                Action
+                            </f:facet>
+                            <p:commandButton value="Edit"
+                                             action="#{surveyCriteriaAction.initEdit(criterion)}"
+                                             update=":editForm:prodGrid" onclick="dlg2.show();">
+                                  <f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />           
+                            </p:commandButton>                 
+
+                            <p:commandButton value="Delete"
+                                             action="#{surveyCriteriaAction.initEdit(criterion)}"
+                                             onclick="dlg3.show();"/>					
+                        </p:column>
+                    </p:dataTable>
+
+                </p:tab>
+            </p:tabView>
+
+        </h:form>
+    </ui:define>
+
+    <ui:define name="afterlayout">
+        <p:dialog header="Survey criterion" widgetVar="dlg2" modal="true"
+                  height="260" width="500">
+            <h:form id="editForm" enctype="multipart/form-data" acceptcharset="UTF-8">
+                <h:panelGrid id="prodGrid" columns="2" width="100%">
+                
+					<h:outputText value="Survey:" />
+					<h:selectOneMenu value="#{surveyCriteriaAction.currentSurveyCriteria.survey}" converter="#{entityConverter}" style="height:27px" 
+                    		required="true" requiredMessage="The survey field is required">
+                        <f:selectItems value="#{surveyService.findAll()}" var="r" itemLabel="#{r.title}"/>
+                    </h:selectOneMenu>						
+                    		
+                    <h:outputText value="Property type:" />				
+                    <h:selectOneMenu value="#{surveyCriteriaAction.currentSurveyCriteria.propertyType}" style="height:27px">
+                        <f:selectItems value="#{utilsBean.criteriaPropertyTypes}" var="r" itemLabel="#{messages[r.label]}"/>
+                        <f:ajax render="valuePane opvt" event="change" listener="#{surveyCriteriaAction.updateExpessionParts}" />
+                    </h:selectOneMenu> 
+                                        
+                    <h:outputText value="Operator type: " />				
+                    <h:selectOneMenu id="opvt" value="#{surveyCriteriaAction.currentSurveyCriteria.operatorType}" style="height:27px">
+                        <f:selectItems value="#{surveyCriteriaAction.operatorTypes}" var="r" itemLabel="#{messages[r.label]}"/>
+                    </h:selectOneMenu>                   
+                 
+                    <h:outputText value="Operand value:" />		
+                    <h:panelGroup id="valuePane">		
+                      <p:autoComplete value="#{surveyCriteriaAction.selectedCity}" converter="#{entityConverter}" style="width:250px"
+                    		var="r"  itemValue="#{r}" itemLabel="#{r.name}, #{r.localRegion.name}"
+                    		completeMethod="#{utilsBean.completeCity}" minQueryLength="2" forceSelection="true"
+                    		rendered="#{surveyCriteriaAction.currentSurveyCriteria.propertyType == 'ADDRESS'}"/> 
+                    		
+                      <h:selectOneMenu value="#{surveyCriteriaAction.currentSurveyCriteria.operatorValue}" style="height:27px"
+                      		rendered="#{surveyCriteriaAction.currentSurveyCriteria.propertyType == 'AGE'}">
+                        <f:selectItems value="#{utilsBean.ageOptions}" />
+                      </h:selectOneMenu>  
+                             
+                      <h:selectOneMenu value="#{surveyCriteriaAction.currentSurveyCriteria.operatorValue}" style="height:27px"
+                      		rendered="#{surveyCriteriaAction.currentSurveyCriteria.propertyType == 'EDUCATION'}">
+                        <f:selectItems value="#{utilsBean.educationOptions}"  var="r" itemLabel="#{messages[r.label]}" itemValue="#{r.ordinal()}"/>
+                      </h:selectOneMenu>  
+                        
+                      <h:selectOneMenu value="#{surveyCriteriaAction.currentSurveyCriteria.operatorValue}" style="height:27px"
+                      		rendered="#{surveyCriteriaAction.currentSurveyCriteria.propertyType == 'EMPLOYMENT_STATUS'}">
+                        <f:selectItems value="#{utilsBean.employmentStatusOptions}"  var="r" itemLabel="#{messages[r.label]}" itemValue="#{r.ordinal()}"/>
+                      </h:selectOneMenu>     
+                      
+                      <h:selectOneMenu value="#{surveyCriteriaAction.currentSurveyCriteria.operatorValue}" style="height:27px"
+                      		rendered="#{surveyCriteriaAction.currentSurveyCriteria.propertyType == 'GENDER'}">
+                        <f:selectItems value="#{utilsBean.genderOptions}"  var="r" itemLabel="#{messages[r.label]}" itemValue="#{r.ordinal()}"/>
+                      </h:selectOneMenu> 
+                      
+                      <h:selectOneMenu value="#{surveyCriteriaAction.currentSurveyCriteria.operatorValue}" style="height:27px"
+                      		rendered="#{surveyCriteriaAction.currentSurveyCriteria.propertyType == 'HAS_CHILDREN'}">
+                        <f:selectItems value="#{utilsBean.hasChildrenOptions}"  var="r" itemLabel="#{messages[r.label]}" itemValue="#{r.ordinal()}"/>
+                      </h:selectOneMenu>                      
+
+                      <h:selectOneMenu value="#{surveyCriteriaAction.currentSurveyCriteria.operatorValue}" style="height:27px"
+                      		rendered="#{surveyCriteriaAction.currentSurveyCriteria.propertyType == 'MARITAL_STATUS'}">
+                       <f:selectItems value="#{utilsBean.maritalStatusOptions}"  var="r" itemLabel="#{messages[r.label]}" itemValue="#{r.ordinal()}"/>
+                      </h:selectOneMenu>
+                        
+                      <h:selectOneMenu value="#{surveyCriteriaAction.currentSurveyCriteria.operatorValue}" style="height:27px"
+                      		rendered="#{surveyCriteriaAction.currentSurveyCriteria.propertyType == 'MONTHLY_INCOME'}">
+                       <f:selectItems value="#{utilsBean.monthlyIncomeOptions}"  var="r" itemLabel="#{messages[r.label]}" itemValue="#{r.ordinal()}"/>                        
+                      </h:selectOneMenu>                                                                                                                          		
+                    </h:panelGroup>                 
+                      
+                     
+                    <h:outputText value="Operand value type:" />				
+                    <h:selectOneMenu value="#{surveyCriteriaAction.currentSurveyCriteria.operatorValueType}" style="height:27px">
+                        <f:selectItems value="#{surveyCriteriaAction.operandValueTypes}" var="r" itemLabel="#{messages[r.label]}"/>
+                    </h:selectOneMenu> 
+                                                        
+					<h:outputText value="Survey option:" />     
+					<p:autoComplete value="#{surveyCriteriaAction.currentSurveyCriteria.surveyOption}" converter="#{entityConverter}" style="width:250px"
+                    		var="r"  itemValue="#{r}" itemLabel="#{r.title}, #{r.question.title}"
+                    		completeMethod="#{utilsBean.completeSurveyOption}" minQueryLength="1" forceSelection="true"/> 
+                    		                    		                                                                                                                                                                                                                                                                    					
+                    <p:spacer width="100%" height="15"/> 
+                    <f:facet name="footer">
+                        <p:commandButton value="Save" action="#{surveyCriteriaAction.save}"
+                                         update=":mainForm:t1:mainTable" 
+                                         oncomplete="dlg2.hide();" ajax="false" />
+                        <p:commandButton value="Cancel" 
+                                         onclick="dlg2.hide();" type="button" />	
+                    </f:facet> 
+
+             </h:panelGrid>   
+            </h:form>
+        </p:dialog>
+
+        <p:confirmDialog message="Are you sure to delete the surveycriterion?"
+                         header="Initiating deletion process" severity="alert"
+                         widgetVar="dlg3">
+            <h:form id="confirmForm">
+                <p:commandButton value="Yes" actionListener="#{surveyCriteriaAction.delete}"
+                                 update=":mainForm:t1:mainTable" oncomplete="dlg3.hide()"/>
+                <p:commandButton value="No" onclick="dlg3.hide();" type="button" />
+            </h:form>
+        </p:confirmDialog>	
+    </ui:define>
+
+</ui:composition>
+
+
+
+
+

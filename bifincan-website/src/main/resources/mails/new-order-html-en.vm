@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body style="padding: 12px">
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Sevgili ${userfirstname},
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Siparişini aldım, teşekkür ederim. En kısa sürede paketini hazırlayıp sana ileteceğim. Paketinin içeriğini aşağıda görebilirsin.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Sana göndereceğim paketin üzerinde bir de <span style="font-weight: bold">onay kodu</span> olacak ki paketi sağ salim aldığından emin olalım diye sen de bu kodu <a style="color: #000000;" href="${baseurl}/hediyelerim">${baseurl}/hediyelerim</a> ekranından gireceksin. Zaten bunu daha önce yapmıştın, biliyorsun nasıl işlediğini.
+        </p>
+
+        #foreach($item in $products)
+            <p style="border: 1px solid #D9DFDF; background: #F2F4F4; padding: 24px; font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+                <span style="font-weight: bold">${item.brandName} - ${item.productName}</span> <span style="font-style: italic">${item.productMoneyValue} TL yerine ${item.productPointValue} fi</span><br/>
+                ${item.productShortDescription}
+            </p>
+
+        #end
+        #if($freeproducts.size() > 0)
+            <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+                Sürpriiiz, sana bir de aşağıdakini vereyim dedim, hem de bırak ücret ödemeyi, fi dahi harcamıyorsun bunun için :)
+            </p>
+
+        #end
+        #foreach($item in $freeproducts)
+            <p style="border: 1px solid #D9DFDF; background: #F2F4F4; padding: 24px; font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+                <span style="font-weight: bold">${item.brandName} - ${item.productName}</span> <span style="font-style: italic">${item.productMoneyValue} TL yerine 0 fi</span><br/>
+                ${item.productShortDescription}
+            </p>
+
+        #end
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Sevgiler,<br/>
+            "fi"<br/>
+            <br/>
+            <a style="color: #000000;" href="${baseurl}">${baseurl}</a>
+        </p>
+    </body>
+</html>

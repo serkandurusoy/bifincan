@@ -1,0 +1,243 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:hh="http://balusc.net/jsf/html"
+                template="/resources/layouts/standard.xhtml">
+    <ui:define name="metadata">
+    </ui:define>
+
+    <ui:define name="browserTitle">product quizzes - </ui:define>
+    <ui:define name="content">
+        <h:form id="mainForm">
+            <p:tabView dynamic="true" id="t1"
+                       style="border-style:none; padding-left:0px; padding-right: 0px;">
+                <p:tab title="product quizzes" id="t11">
+                    <p:panel>
+                
+                    </p:panel>		
+                    <p:messages id="messages" autoUpdate="true"/>	
+					<p:dataTable id="mainTable" var="product" value="#{quizAction.dataModel}" binding="#{quizAction.dataTable}"
+								style="height:85%" emptyMessage="No records found" paginator="true" paginatorPosition="bottom" 
+								paginatorAlwaysVisible="true" rows="12" pageLinks="10">                                  
+                        <p:column style="width:15%">
+                            <f:facet name="header" style="background-color:red">
+                                Associated Product Name
+                            </f:facet>
+                            <h:outputText value="#{product.name}" />
+                        </p:column>
+                        <p:column style="width:13%">
+                            <f:facet name="header" style="background-color:red">
+                                Brand
+                            </f:facet>
+                            <h:outputText value="#{product.brand.name}, #{product.brand.company.name}" />
+                        </p:column>	                        
+                        <p:column style="width:25%">
+                            <f:facet name="header" style="background-color:red">
+                                Category
+                            </f:facet>
+                            <h:outputText value="#{product.category.name}, #{product.category.parent.name}, #{product.category.parent.parent.name}" />
+                        </p:column>					
+                        <p:column style="width:25%">
+                            <f:facet name="header" style="background-color:red">
+                                Quiz Question
+                            </f:facet>
+                            <h:outputText value="#{product.quizQuestion != null ? product.quizQuestion.question : ''}"/>
+                        </p:column>
+                        <p:column style="width:6%">
+                            <f:facet name="header" style="background-color:red">
+                                Active
+                            </f:facet>
+                            <h:outputText value="#{product.quizQuestion != null ? (product.quizQuestion.active == true ? 'Yes' : 'No') : ''}"/>
+                        </p:column>
+                        <p:column style="width:6%">
+                            <f:facet name="header" style="background-color:red">
+                                Points
+                            </f:facet>
+                            <h:outputText value="#{product.quizQuestion != null ? product.quizQuestion.points : ''}"/>
+                         </p:column>
+                                                                                 														
+                        <p:column style="width:10%;text-align:center">
+                            <f:facet name="header">
+                                Action
+                            </f:facet>
+							<p:commandButton value="Add Quiz" style="right:0px;"
+                                         action="#{quizAction.initAddQuestion(product)}" rendered="#{product.quizQuestion == null}"
+                                         update=":editForm:queGrid :optForm:opt_add_pane :optForm:mainTable" onclick="dlg1.show();">
+                                     <f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />    
+                            </p:commandButton>             
+                                                                     
+                            <p:commandButton value="Edit" rendered="#{product.quizQuestion != null}"
+                                             action="#{quizAction.initEditQuestion(product)}"
+                                             update=":editForm:queGrid :optForm:opt_add_pane :optForm:mainTable" onclick="dlg1.show();">
+                                     <f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />        
+                            </p:commandButton>                 
+
+                            <p:commandButton value="Delete Quiz" rendered="#{product.quizQuestion != null}"
+                                             action="#{quizAction.initEditQuestion(product)}"
+                                             onclick="dlg2.show();"/>					
+                        </p:column>
+                    </p:dataTable>
+
+                </p:tab>
+            </p:tabView>
+
+        </h:form>
+    </ui:define>
+
+    <ui:define name="afterlayout">
+        <p:dialog header="Quiz Question" widgetVar="dlg1" modal="true"
+                  height="450" width="700">
+            <h:form id="editForm">
+                <h:panelGrid id="queGrid" columns="2" width="100%">
+                	<h:outputText value="Product: "/>
+                	<h:outputText value="#{quizAction.currentQuizQuestion.product.name}"/>
+                
+					<h:outputText value="Title: "/>
+                    <h:inputTextarea value="#{quizAction.currentQuizQuestion.question}" required="true" style="width:100%" 
+                    		requiredMessage="The question's title is required"/>
+                      
+					<h:outputText value="Points: "/>
+					<h:inputText value="#{quizAction.currentQuizQuestion.points}" style="width:50%" maxlength="9" required="true" requiredMessage="The points field is required"
+                    	validatorMessage="The points value accepts only positive numbers" converterMessage="The points value accepts only integers">
+                      <f:validateLongRange minimum="0"/>
+                    </h:inputText>					
+                    		    
+					<h:outputText value="Active:" />				
+                    <h:selectOneMenu value="#{quizAction.currentQuizQuestion.active}" style="height:27px" required="true" requiredMessage="The active field is required">
+                        <f:selectItem itemLabel="Yes" itemValue="true" />
+                        <f:selectItem itemLabel="No" itemValue="false" />
+                    </h:selectOneMenu>
+                                        		                                                                                                                                                                             					
+                    <p:spacer width="100%" height="15"/> 
+                    <f:facet name="footer">
+                        <p:commandButton value="Save" action="#{quizAction.save}"
+                                         update=":mainForm:t1:mainTable" 
+                                         oncomplete="dlg1.hide();" ajax="false" />
+                        <p:commandButton value="Cancel" 
+                                         onclick="dlg1.hide();" type="button" />	
+                    </f:facet> 
+ 
+                
+             </h:panelGrid>   
+            </h:form>
+            
+            
+		 <!-- grid of survey items -->
+		  <h:form id="optForm" prependId="false">  
+			<p:separator id="separator" style="height:1px"/>
+			<p:messages  autoUpdate="true"/>
+			
+	        <h:panelGroup id="opt_add_pane" style="width:100%">
+				<h:outputText value="Options" style="font-weight:bold"/>&#160;
+				<p:commandButton value="New" style="right:0px;" id="newBtn"
+							action="#{quizAction.initAddOption}"
+							update=":editOptForm:queOptGrid" onclick="dlg3.show();"
+							rendered="#{quizAction.currentQuizQuestion.id gt 0}">  	
+					<f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />			
+				</p:commandButton>
+		    </h:panelGroup>  
+		    
+			<p:dataTable id="mainTable" value="#{quizAction.currentQuizQuestion.quizOptions}" var="option" style="height:85%;padding-top:5px"
+			  	emptyMessage="No records found" paginator="false">  
+  
+		        <p:column style="width:49%">  
+		            <f:facet name="header">  
+		                Text  
+		            </f:facet>  
+		            <h:outputText value="#{option.optionText}" />  
+		        </p:column>  
+
+		        <p:column style="width:14%">  
+		            <f:facet name="header">  
+		                Correct  
+		            </f:facet>  
+		            <h:outputText value="#{option.correctOption ? messages['option.true'] : messages['option.false'] }" />  
+		        </p:column> 
+		        
+		        <p:column style="width:14%">  
+		            <f:facet name="header">  
+		                Active  
+		            </f:facet>  
+		            <h:outputText value="#{option.active ? messages['option.true'] : messages['option.false'] }" />  
+		        </p:column> 
+
+		        <p:column style="width:23%;text-align:center">  
+					<f:facet name="header">
+		                Action
+		            </f:facet>
+		        	<p:commandButton value="Edit" style="right:0px;"
+							action="#{quizAction.initEditOption(option)}" update=":editOptForm:queOptGrid"
+								onclick="dlg3.show();">
+						<f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />		
+					</p:commandButton>			  	
+					<p:commandButton value="Delete" 
+								action="#{quizAction.initEditOption(option)}"
+							 	onclick="dlg4.show();" />							 					 	
+		        </p:column>  
+    		</p:dataTable>
+		</h:form>	            
+        </p:dialog>
+
+        <p:confirmDialog message="Are you sure to delete the quiz question?"
+                         header="Initiating deletion process" severity="alert"
+                         widgetVar="dlg2">
+            <h:form id="confirmForm">
+                <p:commandButton value="Yes" actionListener="#{quizAction.delete}"
+                                 update=":mainForm:t1:mainTable" oncomplete="dlg2.hide()"/>
+                <p:commandButton value="No" onclick="dlg2.hide();" type="button" />
+            </h:form>
+        </p:confirmDialog>
+        
+    	<p:dialog header="Survey Question Option" widgetVar="dlg3" modal="true"
+				height="210" width="450">
+			<h:form id="editOptForm">
+				<h:panelGrid id="queOptGrid" columns="2" width="100%">
+                    <h:outputText value="Text: "/>
+                    <h:inputTextarea value="#{quizAction.currentQuizOption.optionText}" required="true" style="width:100%" 
+                    		requiredMessage="The option's text is required"/>
+ 
+                    <h:outputText value="Correct: "/>       
+                    <h:selectOneMenu value="#{quizAction.currentQuizOption.correctOption}" required="true" style="height:27px">
+                       <f:selectItem itemValue="true" itemLabel="#{messages['option.true']}" />      
+                       <f:selectItem itemValue="false" itemLabel="#{messages['option.false']}" />                    
+                    </h:selectOneMenu>
+                                        
+                    <h:outputText value="Active: "/>       
+                    <h:selectOneMenu value="#{quizAction.currentQuizOption.active}" required="true" style="height:27px">
+                       <f:selectItem itemValue="true" itemLabel="#{messages['option.true']}" />      
+                       <f:selectItem itemValue="false" itemLabel="#{messages['option.false']}" />                    
+                    </h:selectOneMenu>
+
+					<p:spacer width="100%" height="15"/> 
+					<f:facet name="footer">
+						<p:commandButton value="Save" action="#{quizAction.saveOption}"
+							update=":optForm:mainTable" 
+							oncomplete="dlg3.hide();" />					
+						<p:commandButton value="Cancel" 
+							onclick="dlg3.hide();" type="button" />	
+					</f:facet>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+		
+        <p:confirmDialog message="Are you sure to delete the quiz option?"
+                         header="Initiating deletion process" severity="alert"
+                         widgetVar="dlg4">
+            <h:form id="confirmOptForm">
+                <p:commandButton value="Yes" actionListener="#{quizAction.deleteOption}"
+                                 update=":optForm:mainTable" oncomplete="dlg4.hide()"/>
+                <p:commandButton value="No" onclick="dlg4.hide();" type="button" />
+            </h:form>
+        </p:confirmDialog>		
+    </ui:define>
+
+</ui:composition>
+
+
+
+
+

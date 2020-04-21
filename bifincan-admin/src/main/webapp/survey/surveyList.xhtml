@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/resources/layouts/standard.xhtml">
+    <ui:define name="metadata">
+    </ui:define>
+
+    <ui:define name="browserTitle">#{messages[surveyListAction.type.label]} List - </ui:define>
+    <ui:define name="content">
+      <h:form id="mainForm">
+
+	      <p:tabView dynamic="true" id="t1"
+				style="border-style:none; padding-left:0px; padding-right: 0px;">
+				<p:tab title="#{messages[surveyListAction.type.label]} List" id="t11">
+			<p:panel>
+			<p:commandButton value="New" style="right:0px;"
+						action="#{surveyListAction.initAdd()}"
+						update=":editForm:surveyGrid" onclick="dlg2.show();">
+			  	<f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />  	
+			</p:commandButton>			
+			</p:panel>		
+			<p:messages id="messages" autoUpdate="true"/>	
+		        
+            <p:dataTable id="mainTable" var="survey" value="#{surveyListAction.dataModel}" binding="#{surveyListAction.dataTable}"
+				style="height:85%" emptyMessage="No records found" paginator="true" paginatorPosition="bottom" 
+				paginatorAlwaysVisible="true" rows="12" pageLinks="10"> 
+                <p:column style="width:50%">
+                    <f:facet name="header">
+                        Title
+                    </f:facet>
+                    <h:outputText value="#{survey.title}"/>
+                </p:column>
+                <p:column style="width:10%">
+                    <f:facet name="header">
+                        Type
+                    </f:facet>
+                    <h:outputText value="#{messages[surveyListAction.type.label]}"/>
+                </p:column>                
+                 <p:column style="width:15%">
+                    <f:facet name="header">
+                        Active
+                    </f:facet>
+                    <h:outputText value="#{survey.active ? messages['option.true'] : messages['option.false'] }" />
+                </p:column>
+                 <p:column style="width:15%">
+                    <f:facet name="header">
+                        Create Date
+                    </f:facet>
+                    <h:outputText value="#{survey.createDate}" >
+                       <f:convertDateTime dateStyle="full" type="date" />
+                    </h:outputText>
+                </p:column>                
+                <p:column style="width:10%;text-align:center">
+                    <f:facet name="header">
+                        Action
+                    </f:facet>
+                    <p:button value="Edit"
+						outcome="surveyInfo?faces-redirect=true&amp;surveyId=#{survey.id}" />
+					<p:commandButton value="Delete"
+						action="#{surveyListAction.initEdit(survey)}"
+					 	onclick="dlg3.show();"/>	
+                </p:column>
+            </p:dataTable> 
+            </p:tab>
+            </p:tabView>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="afterlayout">
+    
+		<p:dialog header="Survey" widgetVar="dlg2" modal="true"
+				height="170" width="450">
+			<h:form id="editForm">
+				<h:panelGrid id="surveyGrid" columns="2" width="100%">
+                    <h:outputText value="Name:"/>
+                    <h:inputTextarea value="#{surveyListAction.currentSurvey.title}" required="true" style="width:100%" requiredMessage="The survey's title is required"/>
+                     <h:outputText value="Active"/>       
+                     <h:selectOneMenu value="#{surveyListAction.currentSurvey.active}" required="true" style="height:27px">
+                       <f:selectItem itemValue="true" itemLabel="#{messages['option.true']}" />      
+                       <f:selectItem itemValue="false" itemLabel="#{messages['option.false']}" />                    
+                     </h:selectOneMenu> 
+					<p:spacer width="100%" height="15"/> 
+					<f:facet name="footer">
+						<p:commandButton value="Save" action="#{surveyListAction.save}"
+							update=":mainForm:t1:mainTable" 
+							oncomplete="dlg2.hide();" />					
+						<p:commandButton value="Cancel" 
+							onclick="dlg2.hide();" type="button" />	
+					</f:facet>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+		
+		<p:confirmDialog message="Are you sure to delete the survey?"
+			header="Initiating deletion process" severity="alert"
+			widgetVar="dlg3">
+			<h:form id="confirmForm">
+				<p:commandButton value="Yes" actionListener="#{surveyListAction.delete}"
+					update=":mainForm:t1:mainTable" oncomplete="dlg3.hide()"/>
+				<p:commandButton value="No" onclick="dlg3.hide();" type="button" />
+			</h:form>
+		</p:confirmDialog>		    
+      
+    </ui:define>
+</ui:composition>

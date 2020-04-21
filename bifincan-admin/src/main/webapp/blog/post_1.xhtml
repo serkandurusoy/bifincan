@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:hh="http://balusc.net/jsf/html"
+                template="/resources/layouts/standard.xhtml">
+    <ui:define name="metadata">
+    </ui:define>
+
+    <ui:define name="browserTitle">blog posts - </ui:define>
+    <ui:define name="content">
+        <h:form id="mainForm">
+        
+	<p:tabView dynamic="true" id="t1"
+		style="border-style:none; padding-left:0px; padding-right: 0px;">
+		<p:tab title="blog posts" id="t11">
+			
+		   <p:panel>
+		      <p:commandButton value="New" style="right:0px;"
+                 action="#{blogPostAction.initAdd()}"
+                 update=":editForm:postGrid" onclick="dlg2.show();" />
+		   </p:panel>		
+		   <p:messages id="messages" autoUpdate="true"/>
+		        
+              <p:dataTable id="mainTable" var="post" value="#{blogPostAction.dataModel}" binding="#{blogPostAction.dataTable}"
+                             style="height:85%" emptyMessage="No records found" paginator="true" paginatorPosition="bottom" 
+                             paginatorAlwaysVisible="true" rows="12" pageLinks="10">          
+                    <p:column style="width:50%">
+                        <f:facet name="header">
+                            Title
+                        </f:facet>
+                        <h:outputText value="#{post.title}"/>
+                    </p:column>				 
+                    <p:column style="width:15%">
+                        <f:facet name="header">
+                            Posted At
+                        </f:facet>
+                        <h:outputText value="#{post.postedAt}"/>
+                    </p:column>
+                    
+                    <p:column style="width:15%">
+                        <f:facet name="header">
+                            Last Comment
+                        </f:facet>
+                        <h:outputText value="#{post.lastComment.commentedAt}"/>
+                    </p:column>
+                    <p:column style="width:10%">
+                        <f:facet name="header">
+                            Comments
+                        </f:facet>
+                        <h:outputText value="#{post.comments.size()}"/>
+                    </p:column>
+                    <p:column style="width:10%;text-align:center">
+                        <f:facet name="header">
+                            Action
+                        </f:facet>
+                        <p:commandButton value="Edit" style="right:0px;"
+                                         action="#{blogPostAction.initEdit(post)}"
+                                         update=":editForm:postGrid" onclick="dlg2.show();" />
+                        <p:commandButton value="Delete"
+                                         action="#{blogPostAction.initEdit(post)}"
+                                         onclick="dlg3.show();"/>
+                    </p:column>
+                </p:dataTable> 
+	         </p:tab>
+	      </p:tabView> 
+	                  
+        </h:form>
+    </ui:define>
+    
+    <ui:define name="afterlayout">
+        <p:dialog header="Blog Post" widgetVar="dlg2" modal="true"
+                  height="540" width="740">
+
+            <h:form id="editForm" enctype="multipart/form-data" acceptcharset="UTF-8">
+                <h:panelGrid id="postGrid" width="100%" >
+                    <h:panelGrid columns="4" width="100%" cellpadding="2" cellspacing="2">
+                        <h:outputText value="Title:" style="display:block; width:110px"/>
+                        <h:inputText  value="#{blogPostAction.currentPost.title}" required="true" style="width:220px"
+                        	requiredMessage="The post's title is required"/>
+                        <h:outputText value="Slug:" style="display:block; width:110px" /> 
+                        <h:inputText  value="#{blogPostAction.currentPost.slug}" required="true" style="width:220px"
+                        	requiredMessage="The slug field is required"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" width="100%" cellpadding="2" cellspacing="2">
+                        <h:outputText value="Meta Keywords:" style="display:block; width:108px" />
+                        <h:inputTextarea style="width:575px;height:70px" value="#{blogPostAction.currentPost.keywords}" required="true" 
+                        	requiredMessage="The keywords field is required"/>
+                    </h:panelGrid>  
+                    
+                    <h:panelGrid columns="2" width="100%" cellpadding="2" cellspacing="2">
+                        <h:outputText value="Teaser:" style="display:block; width:108px" />
+                        <h:inputTextarea style="width:575px;height:70px" value="#{blogPostAction.currentPost.teaser}" required="true" 
+                        	requiredMessage="The teaser field is required"/>
+                    </h:panelGrid>  
+                    
+                    <h:panelGrid columns="2" width="100%" cellpadding="2" cellspacing="2">
+                        <h:outputText value="Image large:" style="width:108px"/>
+						<hh:inputFile id="file1" value="#{blogPostAction.imageLarge}" />
+                    </h:panelGrid>  
+                    
+                    <h:panelGrid columns="2" width="100%" cellpadding="2" cellspacing="2">
+                        <h:outputText value="Image small:" style="width:108px"/>
+						<hh:inputFile id="file2" value="#{blogPostAction.imageSmall}" /> 
+                    </h:panelGrid>                                          
+
+                    <p:editor value="#{blogPostAction.currentPost.content}" width="696" height="250" 
+                    		validatorMessage="The content of the post must contain more than 20 characters">
+                        <f:validateLength minimum="20"/>
+                    </p:editor> 
+                    
+					<p:spacer width="100%" height="15"/> 
+                    <f:facet name="footer"> 
+                        <p:commandButton value="Save" action="#{blogPostAction.save}" ajax="false"
+                             update=":mainForm:t1:mainTable"
+                             oncomplete="dlg2.hide()"/>	          
+                        <p:commandButton value="Cancel" onclick="dlg2.hide();" type="button" />	
+                    </f:facet>     
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+        
+        <p:confirmDialog message="Are you sure to delete the post?"
+                         header="Initiating deletion process" severity="alert"
+                         widgetVar="dlg3">
+            <h:form id="confirmForm">
+                <p:commandButton value="Yes" actionListener="#{blogPostAction.delete}" 
+                                 update=":mainForm:t1:mainTable" oncomplete="dlg3.hide()"/>
+                <p:commandButton value="No" onclick="dlg3.hide();" type="button" />
+            </h:form>
+        </p:confirmDialog>
+        
+    </ui:define>
+</ui:composition>

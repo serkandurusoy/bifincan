@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="/resources/layouts/primary-content.xhtml">
+
+    <ui:define name="metadata"></ui:define>
+
+    <ui:define name="headIncludes"></ui:define>
+
+    <ui:define name="title">hediyelerim - bifincan</ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="hediyelerim - bifincan" />
+    </ui:define>
+
+    <ui:define name="pageTitle">hediyelerim</ui:define>
+
+    <ui:define name="pageContent">
+        <h:form prependId="false">
+            <ui:fragment rendered="#{orderHistoryAction.currentOrder.sentTime != null and orderHistoryAction.currentOrder.receivedTime == null}">
+                <p>hediyen eline ulaştığında, paketinden çıkan onay kodunu buraya yazmalısın.</p>
+            </ui:fragment>
+            <p>
+                <f:ajax render="@form" event="change" listener="#{orderHistoryAction.loadOrderItems}">
+                    <h:selectOneMenu id="orders" value="#{flash.orderId}">
+                        <f:selectItems value="#{orderHistoryAction.orders}" var="order" itemValue="#{order.id}" 
+                                       itemLabel="#{orderHistoryAction.formatDateToYYYYMMDD(order.placedTime)} - #{order.totalPoints} fi - #{orderHistoryAction.displayStatusIndicator(order.placedTime, order.sentTime, order.receivedTime)}"/>
+                    </h:selectOneMenu>
+                </f:ajax>
+
+                <h:panelGroup id="container">
+                    <h:panelGroup id="code-box" style="padding-left:15px;" rendered="#{orderHistoryAction.currentOrder.sentTime != null and orderHistoryAction.currentOrder.receivedTime == null}">
+                        onay kodu 
+                        <h:inputText value="#{flash.confirmationCode}" required="true" id="code" requiredMessage="onay kodunu girmelisin"/>&#160; 
+                        <f:ajax render="orders container errors" execute="code" listener="#{orderHistoryAction.validateConfirmationCode}">    
+                            <h:commandButton value="onayla"/>
+                        </f:ajax>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </p>
+            <p>
+                <h:messages id="errors"/>
+            </p>
+
+            <h:panelGroup id="prod-details" layout="block" styleClass="module-a">
+                <h:dataTable value="#{orderHistoryAction.orderItems}"
+                             var="item" id="item-results" styleClass="orderTable" columnClasses="width150,,rightText width100">
+                    <h:column>
+                        <h:link outcome="/product/details.xhtml" title="#{item.brandName} - #{item.name} hediyesinin detaylarını görmek için tıklayabilirsin">
+                            <f:param  name="slug" value="#{item.slug}"/>
+                            <h:graphicImage styleClass="productImageSmall" id="image1" value="/productimage?productslug=#{item.slug}&amp;size=kucuk" />
+                        </h:link>  
+                    </h:column>
+                    <h:column>
+                        <h:outputText value="#{item.brandName} #{item.name}" />
+                    </h:column>					
+                    <h:column>
+                        <h:outputText value="0 fi :) " rendered="#{item.welcomeProduct == true or item.surpriseProduct == true}" />
+                        <h:outputText value="#{item.points} fi" styleClass="#{item.welcomeProduct == true or item.surpriseProduct == true ? 'strike' : ''}" />
+                    </h:column>				
+                </h:dataTable>		
+            </h:panelGroup>
+
+        </h:form>	
+    </ui:define>
+
+</ui:composition>

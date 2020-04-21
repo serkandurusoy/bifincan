@@ -1,0 +1,11 @@
+Dear ${userfirstname},
+
+Welcome to bifincan.
+
+Your username is ${username} and password is ${password} .
+
+You can see your welcome product at ${baseurl}/hediyelerim .
+
+The FAQ page is at ${baseurl}/bazen-sorulan-sorular-ve-hic-okunmayan-yanitlari .
+
+${baseurl}

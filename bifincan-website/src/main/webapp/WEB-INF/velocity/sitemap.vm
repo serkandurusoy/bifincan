@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+   <url>
+      <loc>$base/</loc>
+   </url>
+   <url>
+      <loc>$base/bilog</loc>
+   </url>
+   <url>
+      <loc>$base/tum-hediyeler</loc>
+   </url>
+   <url>
+      <loc>$base/fiseverler</loc>
+   </url>
+   <url>
+      <loc>$base/hediyeseverler</loc>
+   </url>
+   <url>
+      <loc>$base/bi-ney</loc>
+   </url>
+   <url>
+      <loc>$base/bazen-sorulan-sorular-ve-hic-okunmayan-yanitlari</loc>
+   </url>
+   <url>
+      <loc>$base/bifincan-hakkinda</loc>
+   </url>
+   <url>
+      <loc>$base/bifincan-ekibi</loc>
+   </url>
+   <url>
+      <loc>$base/iletisim-bilgileri</loc>
+   </url>
+   <url>
+      <loc>$base/mesajim-var</loc>
+   </url>
+   <url>
+      <loc>$base/uye-olayim</loc>
+   </url>
+   <url>
+      <loc>$base/davetiyelerimi-kaybettim</loc>
+   </url>
+   <url>
+      <loc>$base/kullanim-kosullari</loc>
+   </url>
+   <url>
+      <loc>$base/unuttum-neydi</loc>
+   </url>
+#foreach($item in $items)   
+   <url>
+      <loc>$base/$item.url</loc>
+   </url>
+#end
+</urlset> 

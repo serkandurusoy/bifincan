@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body style="padding: 12px">
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Sevgili ${userfirstname},
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Bifincan'a hoşgeldin. Artık sen de bifincan'a üye diğer tüm bilinçli tüketiciler gibi, tüketici dostu markalarla ortak bir platformda buluşarak görüşlerini paylaşabilecek, bu görüşlerin sayesinde kazanacağın fi'lerini bifincan'daki hediyeleri hiçbir ücret ödemeden alıp deneyebilmek için dilediğince harcayacabileceksin.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Üyelik işlemlerini tamamlamak için şu andan itibaren en geç 3 gün içinde en az 100 soru yanıtlaman gerekiyor ki bu yaklaşık 15 dakikanı alacak.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Ha unutmadan, <span style="font-weight: bold"><a style="color: #000000;" href="${baseurl}/hediyelerim">hoşgeldin hediyeni</a> üyelik işlemlerin tamamlanır tamamlanmaz sana iletmek üzere hazırlamaya başladım bile</span>. Merak etme, bu ilk hediyen için bırak ücret ödemeyi, fi dahi harcamadın ;) Bundan sonraki hediyelerini sen kendin seçebileceksin.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Sana göndereceğim <span style="font-weight: bold">paketin üzerinde bir de onay kodu olacak</span> ki paketi sağ salim aldığından emin olalım diye sen de bu kodu <a style="color: #000000;" href="${baseurl}/hediyelerim">hediyelerim</a> sayfandan gireceksin.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Bu sırada bifincan'daki sorulara yanıt vererek, yorumlar yaparak, arkadaşlarını davet ederek fi'lerini artırabilirsin.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Bifincan'ın işleyişi hakkında merak ettiklerin varsa, <a style="color: #000000;" href="${baseurl}/bazen-sorulan-sorular-ve-hic-okunmayan-yanitlari">bazen sorulan sorular ve hiç okunmayan yanıtları</a> sayfasına göz at istersen.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Sevgiler,<br/>
+            "fi"<br/>
+            <br/>
+            <a style="color: #000000;" href="${baseurl}">www.bifincan.com</a>
+        </p>
+    </body>
+</html>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:sec="http://www.springframework.org/security/tags"
+                template="/resources/layouts/home-public.xhtml">
+
+    <ui:define name="metadata"></ui:define>
+
+    <ui:define name="headIncludes">
+        <ui:fragment  rendered="#{sec:areAnyGranted('ROLE_USER')}">
+            #{facesContext.externalContext.redirect("bisoru")}
+        </ui:fragment>
+    </ui:define>
+
+    <ui:define name="title">bifincan, tüketicinin sesini markaya duyuran bi icat</ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="bifincan, tüketicinin sesini markaya duyuran bi icat" />
+    </ui:define>
+
+    <ui:define name="biurunImage">
+        <h:graphicImage alt="#{homeAction.product.brandName} - #{homeAction.product.productName}" width="143" height="103" value="/productimage?productslug=#{homeAction.product.productSlug}&amp;size=kucuk"/>
+    </ui:define>
+
+    <ui:define name="biurunProductName">
+        <h:outputText value="#{homeAction.product.productName}" />
+    </ui:define>
+
+    <ui:define name="biurunProductDescription">
+        <h:outputText value="#{homeAction.product.productShortDescription}" />
+    </ui:define>
+
+    <ui:define name="bigorusChart">
+        <h:graphicImage alt="% #{homeAction.product.percentage} - #{homeAction.product.optionText}" width="143" height="103" value="/homepagechart?percentage=#{homeAction.product.percentage}"/>
+    </ui:define>
+
+    <ui:define name="biurunProductName">
+        <h:outputText value="#{homeAction.product.productName}"/>
+    </ui:define>
+
+    <ui:define name="bigorusQuestion">
+        <h:outputText value="#{homeAction.product.questionText}" />
+    </ui:define>
+
+    <ui:define name="bigorusPercentage">
+        <h:outputText value="#{homeAction.product.percentage}" />
+    </ui:define>
+
+    <ui:define name="bigorusAnswer">
+        <h:outputText value="#{homeAction.product.optionText}" />
+    </ui:define>
+
+    <ui:define name="noOfUsers">
+        <h:outputText value="#{userService.noOfUsers()}">
+            <f:convertNumber pattern="#"/>
+        </h:outputText>
+    </ui:define>
+
+    <ui:define name="noOfAnswers">
+        <h:outputText value="#{blogService.noOfBlogComments()+productService.noOfProductComments()+quizService.noOfQuizAnswers() + ratingService.noOfRatings() + surveyService.noOfSurveyAnswerOptions() + userService.noOfSocialActions()}">
+            <f:convertNumber pattern="#"/>
+        </h:outputText>
+    </ui:define>
+
+    <ui:define name="totalProductMoneyValue">
+        <h:outputText value="#{productService.totalProductMoneyValue()}">
+            <f:convertNumber pattern="#"/>
+        </h:outputText>
+    </ui:define>
+
+
+
+</ui:composition>

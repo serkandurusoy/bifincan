@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+              version="2.0">
+    <factory>
+        <exception-handler-factory>com.dna.bifincan.exception.handler.DefaultExceptionHandlerFactory</exception-handler-factory>
+    </factory>
+    <application>
+        <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+        <locale-config>
+            <default-locale>tr</default-locale>
+            <supported-locale>tr</supported-locale>
+            <supported-locale>en</supported-locale>
+        </locale-config>
+        <resource-bundle>
+            <base-name>messages</base-name>
+            <var>messages</var>
+        </resource-bundle>
+    </application>
+	
+    <render-kit> 
+        <renderer> 
+            <component-family>javax.faces.Output</component-family> 
+            <renderer-type>javax.faces.Link</renderer-type> 
+            <renderer-class>com.dna.bifincan.util.ExtendedLinkRendererForPinterest</renderer-class> 
+        </renderer> 
+    </render-kit>
+    <!--
+    <converter>
+        <converter-id>entityConverter</converter-id>
+        <converter-class>com.dna.bifincan.converter.EntityConverter</converter-class>
+    </converter>
+    -->	
+    <validator>
+        <validator-id>kaptchaValidator</validator-id>
+        <validator-class>com.dna.bifincan.validator.KaptchaValidator</validator-class>
+    </validator>
+    <validator>
+        <validator-id>notNullValidator</validator-id>
+        <validator-class>com.dna.bifincan.validator.NotNullValidator</validator-class>
+    </validator>
+
+    <navigation-rule>
+        <from-view-id>/user/password.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{changePasswordAction.changePassword}</from-action>
+            <if>#{changePasswordAction.changed}</if>
+            <to-view-id>/user/home.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/contact.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{contactAction.send}</from-action>
+            <if>#{true}</if>
+            <to-view-id>/contact.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/retrieveinvitations.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{retrieveInvitationsAction.retrieve}</from-action>
+            <if>#{true}</if>
+            <to-view-id>/retrieveinvitations.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    <!--
+     <navigation-rule>
+        <from-view-id>/fincanlog/post.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{blogPostViewAction.saveComment()}</from-action>
+            <if>#{blogPostViewAction.dataValid}</if>
+            <to-view-id>/fincanlog/post.xhtml</to-view-id>
+            <redirect>
+                  <view-param>
+                      <name>slug</name>
+                      <value>#{blogPostViewAction.slug}</value>
+                  </view-param>
+            </redirect>
+                
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/product/details.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{productDetailsAction.saveComment()}</from-action>
+            <if>#{productDetailsAction.dataValid}</if>
+            <to-view-id>/product/details.xhtml</to-view-id>
+              <redirect>
+                  <view-param>
+                      <name>slug</name>
+                      <value>#{productDetailsAction.slug}</value>
+                  </view-param>
+                   <view-param>
+                      <name>id</name>
+                      <value>#{productDetailsAction.productId}</value>
+                  </view-param>
+            </redirect>
+        </navigation-case>
+    </navigation-rule>
+    -->
+    <navigation-rule>
+        <from-view-id>/user/email.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{changeEmailAction.changeEmail}</from-action>
+            <to-view-id>/user/home.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/user/invitation.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{inviteFriendAction.sendInvitation}</from-action>
+            <if>#{inviteFriendAction.sent}</if>
+            <to-view-id>/user/home.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/resetpassword.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{resetPasswordAction.resetPassword}</from-action>
+            <if>#{resetPasswordAction.reset}</if>
+            <to-view-id>/resetpasswordsuccess.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>shoppingcart</from-outcome>
+            <to-view-id>/order/shoppingcart.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>		
+    </navigation-rule>    
+    <lifecycle>
+        <phase-listener>com.dna.bifincan.security.URIPhaseListener</phase-listener>
+        <phase-listener>com.dna.bifincan.security.MessageHandler</phase-listener> 
+        <phase-listener>com.dna.bifincan.security.NoCachePhaseListener</phase-listener>
+        <!-- this is jsf debug...should be removed in production phase-->
+        <!--<phase-listener>org.springframework.faces.support.RequestLoggingPhaseListener</phase-listener>-->
+    </lifecycle>
+
+</faces-config>

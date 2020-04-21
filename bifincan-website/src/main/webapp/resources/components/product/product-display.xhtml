@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:cc="http://java.sun.com/jsf/composite"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<cc:interface>
+            <cc:attribute name="productName" type="java.lang.String" required="true" default="Product Name"/> 
+            <cc:attribute name="productBrand" type="java.lang.String" default="Product Brand"/>  <!--product brand should also be added-->
+            <cc:attribute name="productPointValue" type="java.lang.Integer" default="0"/>
+            <cc:attribute name="productShortDescription" type="java.lang.String" default="Product Short Description"/>    <!-- Product Short Description -->
+            <cc:attribute name="productMoneyValue" type="java.math.BigDecimal" required="true" default="0"/>
+            <cc:attribute name="productSlug" type="java.lang.String" default="-"/>
+            <cc:attribute name="available" type="java.lang.Boolean" default="false"/>   <!-- indicates whether a product is available for ordering or not -->
+            <cc:attribute name="removable" type="java.lang.Boolean" default="false"/>   <!-- indicates whether a product can be removed from the list or not -->
+            <cc:attribute name="classifier" type="java.lang.String" required="false" default=""/>
+            <cc:attribute name="outOfStock" type="java.lang.Boolean" default="false"/>   <!-- indicates whether a product is out of stock or not -->
+	</cc:interface>
+	
+	<!-- IMPLEMENTATION -->
+	
+	<cc:implementation>
+		<div class="product-a #{cc.attrs.classifier}-product#{cc.attrs.outOfStock ? ' outofstock':''}" >
+			<h2>
+                                <h:outputText value="#{cc.attrs.productBrand} #{cc.attrs.productName}" />
+				<span><h:outputText value="#{cc.attrs.productPointValue}" /> </span>
+			</h2>
+			<div class="description">
+				<p>
+					<h:outputText value="#{cc.attrs.productShortDescription}" />
+				</p>
+				<p class="price">
+					<span>#{messages['product.value']}</span> &#160;
+					<h:outputText value="#{cc.attrs.productMoneyValue}" />
+					TL
+                                        <ui:fragment rendered="#{cc.attrs.outOfStock}">
+                                            <em>bu hediye şimdilik bitti...</em>
+                                        </ui:fragment>
+				</p>
+				<p class="image">
+                                    <h:link outcome="/product/details.xhtml" title="#{cc.attrs.productBrand} #{cc.attrs.productName}">
+                                        <f:param  name="slug" value="#{cc.attrs.productSlug}"/>
+                                        <h:graphicImage value="/productimage?productslug=#{cc.attrs.productSlug}&amp;size=kucuk" alt="#{cc.attrs.productBrand} #{cc.attrs.productName}" width="143" height="103" />
+                                    </h:link>
+                                </p>
+			</div>
+			
+			<ul class="details">
+                            <li><h:link outcome="/product/details.xhtml">
+                                    <f:param  name="slug" value="#{cc.attrs.productSlug}"/>
+                                    <h:outputText value="#{messages['product.viewDetails1']}"/>
+                                    <span>#{messages['product.viewDetails2']}</span></h:link></li>
+                            <li>
+                                <h:commandLink action="#{productAvailListAction.addProductSlug}" rendered="#{(cc.attrs.available == true) and (surveyService.countSurveyAnswersByUserSinceDate(currentUser, 1) ge 50) and 
+                                		(cc.attrs.productPointValue le (currentUser.pointsBalance - currentUser.shoppingCart.totalPointsOfProducts) ) }" immediate="true">
+                                 #{messages['product.addToCart1']} <span>#{messages['product.addToCart2']}</span>
+                                   <f:setPropertyActionListener target="#{flash.productSlug}" value="#{cc.attrs.productSlug}" />
+                                </h:commandLink>
+                                
+				<h:commandLink action="#{shoppingCartAction.removeProductSlug}" rendered="#{cc.attrs.removable == true}" immediate="true">
+                                 #{messages['product.deleteFromCart1']} <span>#{messages['product.deleteFromCart2']}</span>
+                                   <f:setPropertyActionListener target="#{flash.productSlug}" value="#{cc.attrs.productSlug}" />
+                                </h:commandLink>
+                            </li>
+			</ul>
+		</div>
+	</cc:implementation>
+</html>

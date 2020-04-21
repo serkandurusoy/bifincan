@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:fi="http://java.sun.com/jsf/composite/components"
+                xmlns:sec="http://www.springframework.org/security/tags"
+                template="/resources/layouts/primary-content.xhtml">
+    <ui:define name="metadata"></ui:define>
+
+    <ui:define name="headIncludes"></ui:define>
+
+    <ui:define name="title">davetiyelerimi kaybettim - bifincan</ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="davetiyelerimi kaybettim - bifincan" />
+    </ui:define>
+
+    <ui:define name="pageTitle">davetiyelerimi kaybettim</ui:define>
+
+    <ui:define name="pageContent">
+
+        <ui:fragment rendered="#{sec:areAnyGranted('ROLE_USER')}">
+            <p class="centerText"><h:graphicImage value="/resources/images/global/islem-tamam.png"/></p>	
+            <p class="centerText">hmm... e ama zaten üyesin ki, eski davetiyelerini alıp da ne yapacaksın?</p>
+        </ui:fragment>
+
+        <ui:fragment rendered="#{sec:areNotGranted('ROLE_USER')}">
+            <p>Demek arkadaşlarının sana daha önce ilettikleri davetleri bir kenara attın ama sonra içine bir kurt düştü ve sen de bifincan'a üye olmazsam olmaz dedin.</p>
+            <p>Hiç problem değil, önemli olan aramıza katılmaya karar vermiş olman. Sana daha önce gelen davetiyelerine erişmek için aşağıya e-posta adresini yaz lütfen.</p>
+            <p>Ben de hemen bu davetiyeleri bulup sana tekrar ileteceğim.</p>
+
+            <h:form id="emailForm" prependId="false">
+                    <p>
+                        <h:outputLabel for="email" value="#{messages['user.email']}" /><br/>
+                        <h:inputText id="email" value="#{retrieveInvitationsAction.email}">
+                            <f:validateBean for="email" />
+                        </h:inputText>
+                        <h:message for="email" styleClass="error" />
+                    </p>
+                    <p>
+                        <fi:kaptcha/>
+                    </p>
+                    <p>
+                        <h:messages id="messages" globalOnly="true" class="error"/>
+                    </p>
+
+                    <p>
+                        <h:commandButton id="retrieveAction" value="#{messages['retrieveinvitations.button.retrive']}"
+                                         action="#{retrieveInvitationsAction.retrieve}" />
+                    </p>
+            </h:form>
+        </ui:fragment>
+
+
+    </ui:define>
+</ui:composition>

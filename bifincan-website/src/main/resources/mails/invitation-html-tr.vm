@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body style="padding: 12px">
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Merhaba,
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            ${userfirstname} ${userlastname} <span style="font-weight: bold">yalnızca sana özel bu bir kişilik davetiyeyle</span>, seni <a style="color: #000000;" href="${baseurl}">bifincan.com</a>'a katılmaya davet ediyor.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Eğer ${userfirstname}'ın daveti senin için yeterli ise veya "${userfirstname} kim yahu?" diyor ama şu an meraktan yerinde duramıyorsan, üye olmak için <a style="color: #000000;" href="${link}">buraya tıklaman</a> veya aşağıdaki bağlantının tamamını kopyalayıp tarayıcının adres satırına yapıştırman yeterli :)
+        </p>
+
+        <p style="border: 1px solid #D9DFDF; background: #F2F4F4; padding: 24px; font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            <a style="color: #000000;" href="${link}">${link}</a>
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            "Bifincan da ne?" diyorsan, tüketicinin sesini markaya duyuran bi icat. Daha uzun bir anlatımla, daha kaliteli ürün ve hizmetler almak için biraraya gelerek markalara ve ürünlerine sesini duyuran bilinçli tüketicilerin, tüketici dostu markalar ile buluşma noktası.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Bifincan'da markaların sana hediye ettiği <span style="font-weight: bold">ürün ve hizmetlere hiçbir ücret ödemeden</span> sahip olabiliyorsun, seçtiğin ürünler <span style="font-weight: bold">kargo ücreti dahi talep edilmeden</span> kapına kadar gönderiliyor.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Bunun için tek yapman gereken, markalar ve ürünleri ile ilgili sorulara tık tık cevap vermek, o kadar. Önce şöyle bir gezeyim diyorsan, <a style="color: #000000;" href="${baseurl}">bifincan.com</a> adresindeyim. Bifincan'ın işleyişi hakkında merak ettiklerin varsa, <a style="color: #000000;" href="${baseurl}/bazen-sorulan-sorular-ve-hic-okunmayan-yanitlari">bu sayfaya</a> göz at istersen.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Üye olmak zorunda değilsin elbet, ama ben ara ara sana bu daveti hatırlatacağım. Eğer "Bu daveti bana hatırlatma" diyorsan <a style="color: #000000;" href="${link2}">buraya tıkla</a> lütfen.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Ama eğer bir gün pişman olur, arkadaşlarının üçer beşer bifincan üyesi olduğunu duymaya başlar da "Hay Allah, üye olmak istiyordum aslında yaa :(" dersen merak etme, bu davetiye sen ne zaman istersen senin için hazır. Bu mesajı sakla istersen ;)
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Sevgiler,<br/>
+            "fi"<br/>
+            <br/>
+            <a style="color: #000000;" href="${baseurl}">www.bifincan.com</a>
+        </p>
+    </body>
+</html>

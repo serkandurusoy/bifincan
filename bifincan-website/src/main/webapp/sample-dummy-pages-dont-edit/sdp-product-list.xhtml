@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    template="/resources/layouts/product-list.xhtml">
+
+    <ui:define name="metadata"></ui:define>
+
+    <ui:define name="headIncludes"></ui:define>
+
+    <ui:define name="title">profiline uygun hediyeler - bifincan</ui:define>
+
+    <ui:define name="pageTitle">profiline uygun hediyeler</ui:define>
+    <ui:define name="tabMenu">
+        <ul class="tabs-a">
+            <li class="active"><h:outputLink>profiline uygun hediyeler</h:outputLink></li>
+            <li><h:outputLink>diğer hediyeler</h:outputLink></li>
+            <li><h:outputLink>biten hediyeler</h:outputLink></li>
+        </ul>
+    </ui:define>
+
+    <ui:define name="tabContent">
+        <ui:decorate template="/resources/includes/product-box.xhtml">
+            <ui:define name="productName">{product name}</ui:define>
+            <ui:define name="productDescription">{product description}</ui:define>
+            <ui:define name="productPointValue">{0000}</ui:define>
+            <ui:define name="productMoneyValue">{00000000}</ui:define>
+        </ui:decorate>
+        <ui:decorate template="/resources/includes/product-box.xhtml">
+            <ui:define name="productName">{product name}</ui:define>
+            <ui:define name="productDescription">{product description}</ui:define>
+            <ui:define name="productPointValue">{0000}</ui:define>
+            <ui:define name="productMoneyValue">{00000000}</ui:define>
+        </ui:decorate>
+        <ui:decorate template="/resources/includes/product-box.xhtml">
+            <ui:define name="productName">{product name}</ui:define>
+            <ui:define name="productDescription">{product description}</ui:define>
+            <ui:define name="productPointValue">{0000}</ui:define>
+            <ui:define name="productMoneyValue">{00000000}</ui:define>
+        </ui:decorate>
+        <ui:decorate template="/resources/includes/product-box.xhtml">
+            <ui:define name="productName">{product name}</ui:define>
+            <ui:define name="productDescription">{product description}</ui:define>
+            <ui:define name="productPointValue">{0000}</ui:define>
+            <ui:define name="productMoneyValue">{00000000}</ui:define>
+        </ui:decorate>
+        <ui:decorate template="/resources/includes/product-box.xhtml">
+            <ui:define name="productName">{product name}</ui:define>
+            <ui:define name="productDescription">{product description}</ui:define>
+            <ui:define name="productPointValue">{0000}</ui:define>
+            <ui:define name="productMoneyValue">{00000000}</ui:define>
+        </ui:decorate>
+    </ui:define>
+
+</ui:composition>
+    

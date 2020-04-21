@@ -1,0 +1,93 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:sec="http://www.springframework.org/security/tags"
+                 xmlns:pretty="http://ocpsoft.com/prettyfaces">
+
+    <title><ui:insert name="title">bifincan, tüketicinin sesini markaya duyuran bi icat</ui:insert></title>
+    
+    <meta http-equiv="x-ua-compatible" content="IE=9" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    
+    <ui:insert name="metakeywords">
+        <meta name="keywords" content="bilinçli tüketici, tüketici dostu marka, pazar araştırma, doğrudan pazarlama, izinli pazarlama, izinli reklam, hedefli pazarlama, hedefli reklam, ödül, fırsat, hediye, ücretsiz, görüş, fikir, anket, puan" />
+    </ui:insert>
+
+    <ui:insert name="titleog">
+        <meta property="og:title" content="bifincan, tüketicinin sesini markaya duyuran bi icat" />
+    </ui:insert>
+    <ui:insert name="metatags">
+        <meta name="description" content="Daha kaliteli ürün ve hizmetler almak için biraraya gelerek markalara ve ürünlerine sesini duyuran bilinçli tüketicilerin, tüketici dostu markalar ile buluşma noktası." />
+        <meta name="abstract" content="Daha kaliteli ürün ve hizmetler almak için biraraya gelerek markalara ve ürünlerine sesini duyuran bilinçli tüketicilerin, tüketici dostu markalar ile buluşma noktası." />
+        <meta property="og:description" content="Daha kaliteli ürün ve hizmetler almak için biraraya gelerek markalara ve ürünlerine sesini duyuran bilinçli tüketicilerin, tüketici dostu markalar ile buluşma noktası." />
+
+        <meta property="og:type" content="website" />
+
+        <meta property="og:image" content="#{utilsBean.applicationCanonicalURL}/fi/resources/images/global/bifincan-cover-image.jpg" />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="640" />
+        <meta property="og:image:height" content="360" />
+    </ui:insert>
+
+    <meta property="fb:app_id" content="380542895302133" />
+    <meta property="fb:admins" content="751534304,558223177,330002867054883" />
+    <meta property="fb:page_id" content="330002867054883" />
+    <meta property="og:url" content="#{utilsBean.applicationCanonicalURL}/fi#{prettyContext.requestURL.toURL()}" />
+    <meta property="og:site_name" content="bifincan" />
+    <meta property="og:locale" content="tr_TR" />
+
+    <meta name="Author" content="Bifincan Interaktif Tanıtım ve Araştırma Hizmetleri A.Ş. - www.bifincan.com" />
+    <meta name="Publisher" content="Bifincan Interaktif Tanıtım ve Araştırma Hizmetleri A.Ş. - www.bifincan.com" />
+    <meta name="Copyright" content="(c) #{utilsBean.thisYear} - Bifincan Interaktif Tanıtım ve Araştırma Hizmetleri A.Ş. - www.bifincan.com" />
+    <meta name="Distribution" content="Global" />
+    <meta name="Rating" content="General" />
+    <meta name="Classification" content="Market Research, Direct Marketing, Pazar Araştırma, Doğrudan Pazarlama" />
+    <meta name="Resource-type" content="Document" />
+
+    <ui:insert name="robots">
+        <meta name="robots" content="INDEX, FOLLOW" />
+        <meta http-equiv="pragma" content="no-cache" />
+    </ui:insert>
+
+    <link rel="canonical" href="#{utilsBean.applicationCanonicalURL}/fi#{prettyContext.requestURL.toURL()}"/>
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="#{utilsBean.applicationCanonicalURL}/fi/rss-feed" />
+    <link rel="shortcut icon" href="/fi/resources/images/global/favicons/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="/fi/resources/images/global/favicons/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-startup-image" href="/fi/resources/images/global/favicons/touch-icon-iphone.png" />
+    <link rel="apple-touch-icon" href="/fi/resources/images/global/favicons/touch-icon-iphone.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/fi/resources/images/global/favicons/touch-icon-ipad.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/fi/resources/images/global/favicons/touch-icon-iphone4.png" />
+
+    <h:outputText value="&lt;!--[if lt IE 9]&gt;&lt;script type=&#34;text/javascript&#34; src=&#34;/fi/resources/scripts/html5.js&#34;&gt;&lt;/script&gt;&lt;![endif]--&gt;" escape="false" />
+
+    <link type="text/css" rel="stylesheet" href="/fi/resources/styles/global.css?version=20130125" />
+    
+    <h:outputScript name="jsf.js" library="javax.faces" target="head"/>
+    <ui:insert name="jquery">
+        <script type="text/javascript" src="/fi/resources/scripts/jquery-1.7.2.min.js"></script>
+    </ui:insert>
+    <!--<h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />-->
+
+    <script type="text/javascript" src="/fi/resources/scripts/css-selector.js"></script>
+
+    <ui:insert name="headIncludes" />
+
+    <ui:insert name="browserMode" >
+        <ui:fragment rendered="#{sec:areAnyGranted('ROLE_USER')}">
+            <script type="text/javascript" src="/fi/resources/scripts/browsermode.js"></script>
+        </ui:fragment>
+    </ui:insert>
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-30504939-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+</ui:composition>

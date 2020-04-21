@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+	version="2.0">
+
+	<application>
+	    <variable-resolver>org.springframework.web.jsf.SpringBeanVariableResolver</variable-resolver>
+		<locale-config>
+			<default-locale>en</default-locale>
+			<supported-locale>en</supported-locale>
+			<supported-locale>tr</supported-locale>
+		</locale-config>
+		<resource-bundle>
+			<base-name>messages</base-name>
+			<var>messages</var>
+		</resource-bundle>
+	</application>
+
+
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>surveyInfo</from-outcome>
+            <to-view-id>/survey/surveyInfo.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>		
+    </navigation-rule> 
+    
+    <navigation-rule>
+        <from-view-id>/blog/postEdit.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{postEditAction.save}</from-action>
+            <if>#{true}</if>
+            <to-view-id>/blog/posts.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>		
+    </navigation-rule> 
+    
+	<!-- <converter>
+            <converter-id>entityConverter</converter-id>
+            <converter-class>com.dna.bifincan.converter.EntityConverter</converter-class> 
+	</converter> -->
+	<validator>
+		<validator-id>kaptchaValidator</validator-id>
+		<validator-class>com.dna.bifincan.validator.KaptchaValidator</validator-class>
+	</validator>
+
+
+	<lifecycle>
+                <phase-listener>com.dna.bifincan.admin.security.MessageHandler</phase-listener>
+		<!-- this is jsf debug...should be removed in production phase -->
+		<!--
+                <phase-listener>org.springframework.faces.support.RequestLoggingPhaseListener</phase-listener>
+                -->
+		<!-- <phase-listener>com.dna.bifincan.security.DebugPhaseListener</phase-listener> -->
+		<!-- <phase-listener>com.dna.bifincan.security.NoCachePhaseListener</phase-listener> -->
+	</lifecycle>
+
+</faces-config>

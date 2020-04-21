@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/resources/layouts/standard.xhtml">
+    <ui:define name="metadata">
+    </ui:define>
+
+    <ui:define name="browserTitle">admin users - </ui:define>
+    <ui:define name="content">
+        <h:form id="adminUserForm">
+            <p:tabView dynamic="true" id="t1"
+                       style="border-style:none; padding-left:0px; padding-right: 0px;">
+                <p:tab title="admin users" id="t11">
+                    <p:panel>
+                        <p:commandButton value="New" style="right:0px;"
+                                         action="#{adminUserAction.initAdd()}"
+                                         update=":editForm:adminUserGrid" onclick="dlg2.show();">
+                             <f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />            
+                        </p:commandButton>                 
+                    </p:panel>		
+                    <p:messages id="messages" autoUpdate="true"/>	
+
+                    <p:dataTable id="mainTable" var="adminUser" value="#{adminUserAction.dataModel}" binding="#{adminUserAction.dataTable}"
+                                 style="height:85%" emptyMessage="No records found" paginator="true" paginatorPosition="bottom" 
+                                 paginatorAlwaysVisible="true" rows="12" pageLinks="10">  
+                        <p:column style="width:20%">
+                            <f:facet name="header">
+                                First Name
+                            </f:facet>
+                            <h:outputText value="#{adminUser.firstName}"/>
+                        </p:column>
+                        <p:column style="width:20%">
+                            <f:facet name="header">
+                                Last Name
+                            </f:facet>
+                            <h:outputText value="#{adminUser.lastName}"/>
+                        </p:column>
+                        <p:column style="width:20%">
+                            <f:facet name="header">
+                                Role
+                            </f:facet>
+                            <h:outputText value="#{adminUser.roleType}"/>
+                        </p:column>
+                        <p:column style="width:20%">
+                            <f:facet name="header">
+                                Active
+                            </f:facet>
+                            <h:outputText value="#{adminUser.active}"/>
+                        </p:column>
+
+                        <p:column style="width:10%;text-align:center">
+                            <f:facet name="header">
+                                Action
+                            </f:facet>
+                            <p:commandButton value="Edit"
+                                             action="#{adminUserAction.initEdit(adminUser)}"
+                                             update=":editForm:adminUserGrid" onclick="dlg2.show();">
+                                   <f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />          
+                            </p:commandButton>                 
+                            <p:commandButton value="Delete"
+                                             action="#{adminUserAction.initEdit(adminUser)}"
+                                             onclick="dlg3.show();" rendered="#{currentUser ne null and currentUser.id ne adminUser.id}"/>						
+                        </p:column>
+                    </p:dataTable> 
+
+                </p:tab>
+            </p:tabView>            
+        </h:form>
+    </ui:define>
+
+    <ui:define name="afterlayout">
+
+        <p:dialog id="dialog" header="adminUser" widgetVar="dlg2" modal="true"
+                  width="600">
+            <h:form id="editForm">
+                <h:panelGrid id="adminUserGrid" columns="2" width="100%">
+                    <h:outputText value="Acitve:"/>
+                    <h:selectBooleanCheckbox value="#{adminUserAction.user.active}"/>
+
+                    <h:outputText value="First Name:"/>
+                    <h:panelGroup layout="block">
+                        <h:panelGroup style="float:left">*</h:panelGroup>
+                        <h:inputText id="firstName" value="#{adminUserAction.user.firstName}" maxlength="250" style="width:98%" required="true" />
+                        <h:message for="firstName" showDetail="false" showSummary="true"/>
+                    </h:panelGroup>
+
+
+                    <h:outputText value="Last Name:"/>
+                    <h:panelGroup>
+                        <h:panelGroup>*</h:panelGroup>
+                        <h:inputText id="lastName" value="#{adminUserAction.user.lastName}" maxlength="250" style="width:98%" required="true" />
+                        <h:message for="lastName" showDetail="false" showSummary="true"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Email:"/>
+                    <h:panelGroup>
+                        <h:panelGroup>*</h:panelGroup>
+                        <h:inputText id="email" value="#{adminUserAction.user.email}" maxlength="250" style="width:98%" required="true" />
+                        <h:message for="email" showDetail="false" showSummary="true"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Role:"/>
+                    <h:panelGroup>
+                        <h:panelGroup>*</h:panelGroup>
+                        <h:selectOneRadio id="roleType" value="#{adminUserAction.user.roleType}" layout="pageDirection">
+                            <f:selectItems value="#{referenceData.adminRoleTypes}" var="_role" itemLabel="#{_role.label}"/> 
+                        </h:selectOneRadio>  
+                         <h:message for="roleType" showDetail="false" showSummary="true"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="User Name:"/>
+                    <h:panelGroup>
+                        <h:panelGroup>*</h:panelGroup>
+                        <h:inputText id="username" value="#{adminUserAction.username}" maxlength="250" style="width:98%" required="true" />
+                        <h:message for="username" showDetail="false" showSummary="true"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Password:"/>
+                    <h:panelGroup>
+                        <h:panelGroup rendered="#{adminUserAction.user.id eq null}">*</h:panelGroup>
+                        <h:inputText id="password" value="#{adminUserAction.password}" 
+                                     maxlength="250" 
+                                     style="width:98%"  required="#{adminUserAction.user.id eq null}" />
+                        <h:message for="password" showDetail="false" showSummary="true"/>
+                        <h:panelGroup rendered="#{adminUserAction.user.id ne null}"> Leave this field blank when you do not want to change username and password.</h:panelGroup>
+                    </h:panelGroup>
+                    <f:facet name="footer">
+                        <p:commandButton value="Save" action="#{adminUserAction.save}"
+                                         update=":adminUserForm:t1:mainTable" 
+                                         oncomplete="handleSaveRequest(xhr, status, args)" />					
+                        <p:commandButton value="Cancel" 
+                                         onclick="dlg2.hide();" type="button" />	
+                    </f:facet>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <p:confirmDialog message="Are you sure to delete the adminUser?"
+                         header="Initiating deletion process" severity="alert"
+                         widgetVar="dlg3">
+            <h:form id="confirmForm">
+                <p:commandButton value="Yes" actionListener="#{adminUserAction.delete}"
+                                 update=":adminUserForm:t1:mainTable" oncomplete="dlg3.hide()"/>
+                <p:commandButton value="No" onclick="dlg3.hide();" type="button" />
+            </h:form>
+        </p:confirmDialog>	
+        <script type="text/javascript">  
+            function handleSaveRequest(xhr, status, args) {  
+                if(args.validationFailed|| !args.dataValid) {  
+                    jQuery('#dialog').effect("shake", { times:3 }, 100);  
+                } else {  
+                    dlg2.hide();  
+                    // jQuery('#loginLink').fadeOut();  
+                }  
+            }  
+        </script>  
+
+    </ui:define>
+
+
+</ui:composition>

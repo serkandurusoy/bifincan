@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+	<!-- Configure Spring Security -->	
+	<http auto-config="false" use-expressions="true"
+		entry-point-ref="loginUrlAuthenticationEntryPoint">
+		<custom-filter position="FORM_LOGIN_FILTER" ref="customAuthenticationFilter" />
+		<intercept-url pattern="/resource/*" filters="none" />
+		<intercept-url pattern="/javax.*/**" filters="none" />
+		
+		<intercept-url pattern="/address/**" access="hasRole('ROLE_ADMINISTRATOR')"  requires-channel="@springsec.requires-channel@"/>
+		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMINISTRATOR')" requires-channel="@springsec.requires-channel@" />
+		<intercept-url pattern="/blog/**" access="hasRole('ROLE_ADMINISTRATOR')"  requires-channel="@springsec.requires-channel@"/>
+		<intercept-url pattern="/miscellaneous/**" access="hasRole('ROLE_ADMINISTRATOR')"  requires-channel="@springsec.requires-channel@"/>
+		<intercept-url pattern="/order/**" access="hasRole('ROLE_ADMINISTRATOR')"  requires-channel="@springsec.requires-channel@"/>
+		<intercept-url pattern="/product/**" access="hasRole('ROLE_ADMINISTRATOR')"  requires-channel="@springsec.requires-channel@"/>
+		<intercept-url pattern="/quiz/**" access="hasRole('ROLE_ADMINISTRATOR')"  requires-channel="@springsec.requires-channel@"/>
+		<intercept-url pattern="/rating/**" access="hasRole('ROLE_ADMINISTRATOR')"  requires-channel="@springsec.requires-channel@"/>
+		<intercept-url pattern="/survey/**" access="hasRole('ROLE_ADMINISTRATOR')"  requires-channel="@springsec.requires-channel@"/>
+
+		<intercept-url pattern="/**" access="permitAll()" requires-channel="@springsec.requires-channel@" />
+
+		<logout logout-url="/logout" logout-success-url="/" />
+		<custom-filter position="CONCURRENT_SESSION_FILTER" ref="concurrencyFilter" />
+		<session-management
+			session-authentication-strategy-ref="sas" />
+                <port-mappings>
+                    <port-mapping http="80" https="443"/>
+                    <port-mapping http="8090" https="8443"/>
+                    <port-mapping http="8080" https="8443"/>
+                </port-mappings>
+	</http>
+
+	<beans:bean id="concurrencyFilter"
+		class="org.springframework.security.web.session.ConcurrentSessionFilter">
+		<beans:property name="sessionRegistry" ref="sessionRegistry" />
+		<beans:property name="expiredUrl" value="/login.xhtml?login_error=2" />
+	</beans:bean>
+
+	<beans:bean id="sas"
+		class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
+		<beans:constructor-arg name="sessionRegistry"
+			ref="sessionRegistry" />
+		<beans:property name="maximumSessions" value="1" />
+	</beans:bean>
+
+	<beans:bean id="sessionRegistry"
+		class="org.springframework.security.core.session.SessionRegistryImpl" />
+
+	<beans:bean id="customAuthenticationFilter"
+		class="com.dna.bifincan.admin.security.CustomUsernamePasswordAuthenticationFilter">
+		<beans:property name="authenticationSuccessHandler"
+			ref="successHandler" />
+		<beans:property name="authenticationFailureHandler"
+			ref="failureHandler" />
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="sessionAuthenticationStrategy"
+			ref="sas" />
+	</beans:bean>
+
+	<beans:bean id="exceptionTranslationFilter"
+		class="org.springframework.security.web.access.ExceptionTranslationFilter">
+		<beans:property name="authenticationEntryPoint" ref="loginUrlAuthenticationEntryPoint" />
+		<beans:property name="requestCache" ref="requestCache" />
+	</beans:bean>
+
+	<beans:bean id="successHandler"
+		class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+		<beans:property name="defaultTargetUrl" value="/admin/home.xhtml" />
+		<beans:property name="requestCache" ref="requestCache" />
+	</beans:bean>
+
+	<beans:bean id="requestCache"
+		class="org.springframework.security.web.savedrequest.HttpSessionRequestCache">
+		<beans:property name="justUseSavedRequestOnGet" value="true" />
+	</beans:bean>
+
+	<beans:bean id="failureHandler"
+		class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+		<beans:property name="defaultFailureUrl" value="/login.xhtml?login_error=1" />
+	</beans:bean>
+
+	<beans:bean id="loginUrlAuthenticationEntryPoint"
+		class="com.dna.bifincan.admin.security.CustomAuthenticationEntryPoint">
+		<beans:property name="loginFormUrl" value="/login.xhtml" />
+		<beans:property name="forceHttps" value="false" />
+	</beans:bean>
+
+	<!-- Define local authentication provider -->
+	<!-- security -->
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider user-service-ref="adminUserDetailsService">
+			<password-encoder ref="passwordEncoder">
+				<salt-source ref="saltSource" />
+			</password-encoder>
+		</authentication-provider>
+	</authentication-manager>
+
+	<beans:bean id="passwordEncoder"
+		class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" />
+
+	<global-method-security jsr250-annotations="enabled" />
+</beans:beans>

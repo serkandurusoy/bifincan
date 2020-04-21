@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    template="/resources/layouts/home-user.xhtml">
+
+    <ui:define name="metadata"></ui:define>
+
+    <ui:define name="headIncludes"></ui:define>
+
+    <ui:define name="title">bifincan, tüketicinin sesini markaya duyuran bi icat</ui:define>
+
+    <!-- TODO: If this survey is not related to a product category then 1) if profile survey, display "Profile survey" 2) if brand survey display "Brand Survey"-->
+    <ui:define name="category">{category name}</ui:define>
+    <!-- TODO: If this survey is not related to a brand, instead of the brand name, user's name + lastname is displayed-->
+    <ui:define name="brand">{brand name}</ui:define>
+    <!-- TODO: If this survey is not related to a brand, instead of the brand logo, the nobrandlogo.png is displayed-->
+    <ui:define name="brandLogo"><h:graphicImage value="/resources/images/global/noimage/nobrandlogo.png" alt="" width="143" height="103"/></ui:define>
+    <ui:define name="question">{question text}</ui:define>
+    <ui:define name="options">
+        <li>{checkbox/radio} {option 1 text}</li>
+        <li>{checkbox/radio} {option 2 text}</li>
+        <li>{checkbox/radio} {option 3 text}</li>
+        <li>{checkbox/radio} {option n text}</li>
+    </ui:define>
+
+    <ui:define name="products">
+        <ui:decorate template="/resources/includes/product-box.xhtml">
+            <ui:define name="productName">{product name}</ui:define>
+            <ui:define name="productDescription">{product description}</ui:define>
+            <ui:define name="productPointValue">{0000}</ui:define>
+            <ui:define name="productMoneyValue">{00000000}</ui:define>
+        </ui:decorate>
+        <ui:decorate template="/resources/includes/product-box.xhtml">
+            <ui:define name="productName">{product name}</ui:define>
+            <ui:define name="productDescription">{product description}</ui:define>
+            <ui:define name="productPointValue">{0000}</ui:define>
+            <ui:define name="productMoneyValue">{00000000}</ui:define>
+        </ui:decorate>
+        <ui:decorate template="/resources/includes/product-box.xhtml">
+            <ui:define name="productName">{product name}</ui:define>
+            <ui:define name="productDescription">{product description}</ui:define>
+            <ui:define name="productPointValue">{0000}</ui:define>
+            <ui:define name="productMoneyValue">{00000000}</ui:define>
+        </ui:decorate>
+        <ui:decorate template="/resources/includes/product-box.xhtml">
+            <ui:define name="productName">{product name}</ui:define>
+            <ui:define name="productDescription">{product description}</ui:define>
+            <ui:define name="productPointValue">{0000}</ui:define>
+            <ui:define name="productMoneyValue">{00000000}</ui:define>
+        </ui:decorate>
+        <ui:decorate template="/resources/includes/product-box.xhtml">
+            <ui:define name="productName">{product name}</ui:define>
+            <ui:define name="productDescription">{product description}</ui:define>
+            <ui:define name="productPointValue">{0000}</ui:define>
+            <ui:define name="productMoneyValue">{00000000}</ui:define>
+        </ui:decorate>
+    </ui:define>
+    
+    <ui:define name="userAlerts">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <p>Curabitur dolor nibh.</p>
+        <p>Imperdiet ut cursus a, venenatis sit amet orci. Mauris non.</p>
+    </ui:define>
+
+</ui:composition>
+    

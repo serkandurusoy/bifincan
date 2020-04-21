@@ -1,0 +1,11 @@
+İsim:
+$!{name}
+
+E-posta:
+${email}
+
+Telefon:
+$!{phone}
+
+Mesaj:
+${message}

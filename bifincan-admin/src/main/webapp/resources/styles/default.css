@@ -1,0 +1,81 @@
+/*******************************************
+   APPLICATION SPECIFIC STYLE DEFINITIONS
+                   AND
+             THEME OVERRIDES
+*******************************************/
+.ui-widget { font-family: Arial, Helvetica, "Helvetica Neue", "Myriad PRO", sans-serif !important; }
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Arial, Helvetica, "Helvetica Neue", "Myriad PRO", sans-serif !important; }
+
+.ui-widget, .ui-widget .ui-widget {
+    font-size: 90% !important;
+}
+
+.ui-layout-north {
+    z-index:20 !important;
+    overflow:visible !important;;
+    padding:0px !important;
+    border-style: none !important;
+}
+
+.ui-layout-north .ui-layout-unit-content {
+    overflow:visible !important;
+    border-left-style: none !important;
+    border-right-style: none !important;
+    padding-top: 0 !important;
+}
+
+.ui-layout-south  {
+    border-left-style: none !important;
+    border-right-style: none !important;
+    border-bottom-style: none !important;
+}
+
+.ui-layout-center {
+    border: none !important;
+}
+
+.ui-paginator-bottom {
+    background: none !important;
+    border: none;
+}
+
+.ui-menu {
+    border: none !important;
+    padding: 0px !important;
+    height: 30px;
+    font-size: 16px !important;
+}
+
+.ui-toolbar-group-left {
+    font-size: 20px !important;
+}
+
+.ui-panel {
+    border: none !important;
+}
+
+.ui-messages-warn {
+    display:none !important;
+}
+
+.ui-picklist, .ui-picklist-list {
+    width: 340px !important;
+    font-size: 80%;
+}
+
+.row{
+    clear:both;
+    /*padding-top: 10px;*/
+}
+
+.mainContent{
+    width:96%;
+    min-height: 600px;
+    margin: 0px;
+    padding-left: 2%;
+    padding-right:2%;
+}
+
+.tdVertTop {
+	vertical-align:top !important;
+}

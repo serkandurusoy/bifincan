@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body style="padding: 12px">
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Sevgili ${userfirstname},
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Siparişinin eline sağ salim ulaştığına sevindim.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Ama unutma, sen ürününün keyfini çıkarırken, senin görüşlerini sabırsızlıkla bekleyen bir marka yöneticisi var, seni dinlemek, görüşlerini almak ve ürününü daha da iyiye ulaştırmak için hazırda bekliyor.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Ürününü denemen, kullanman, eşe dosta ne kadar da sözü dinlenen, güvenilir ve bilinçli bir tüketici olduğunu anlatarak hava atman için sana <span style="font-weight: bold">${remainingdaysforsurvey} gün</span> veriyorum.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Bu süre sonunda bifincan'da ansızın karşına bu ürünle ilgili kısa kısa sorular çıkacak ve sana bol bol fi kazandıracak.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Ha bir de, bu ürünle ilgili küçük bir sınav var, korkma, tek soruluk. Doğru yanıtı bilirsen daha da fi kazanacaksın, bu sebeple ürünü ve markayı tanımaya çalış.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Bu arada biliyorsun, yüzbinmilyon ürünümüz - şimdilik ;) - olmadığı için bir sonraki siparişini şu andan itibaren <span style="font-weight: bold">${remainingdaysfornextorder} gün</span> içinde verebilirsin.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Ben bu ürüne bayıldım, bir tane daha istiyorum dersen alışveriş merkezinin yolunu tut derim, ama yok ille de bedava olsun dersen, <span style="font-weight: bold">${remainingdaysfornextordersameproduct} gün</span> beklemen lazım, bu süreden daha önce aynı üründen tekrar veremiyorum maalesef. E normal ama, herkes birer tane alsın, kimsenin hakkı kimseye geçmesin.
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Haydi tekrar güle güle kullan, arada bir bifincan'a uğrayıp seni bekleyen sorularımı yanıtlamaya devam edersen, bilog ve ürünlere yorum yazarsan çok sevinir sana bol bol fi veririm :)
+        </p>
+
+        <p style="font-size: 14px; font-family: Arial, color: #3d4c4c; font-family: Arial, Helvetica, 'Helvetica Neue', 'Myriad PRO', sans-serif; line-height: 20px;">
+            Sevgiler,<br/>
+            "fi"<br/>
+            <br/>
+            <a style="color: #000000;" href="${baseurl}">${baseurl}</a>
+        </p>
+    </body>
+</html>
+

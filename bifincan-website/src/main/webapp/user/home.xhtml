@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:fi="http://java.sun.com/jsf/composite/components/product"   
+                template="/resources/layouts/home-user.xhtml">
+    <ui:define name="metadata"></ui:define>
+
+    <ui:define name="headIncludes">
+        <h:outputText value="&lt;!--[if IE]&gt;" escape="false"/>
+        <script type="text/javascript" src="/fi/resources/scripts/imagesloaded/jquery.imagesloaded.js"></script>
+        <script type="text/javascript" src="/fi/resources/scripts/imagesloaded/member-home-check-images.js"></script>
+        <h:outputText value="&lt;![endif]--&gt;" escape="false"/>
+        <script type="text/javascript" src="/fi/resources/scripts/optionhighlighter/optionhighlighter.js"></script>
+        <script type="text/javascript" src="/fi/resources/scripts/buttontimer/buttontimer.js?version=20130125"></script>
+        <script type="text/javascript" src="/fi/resources/scripts/blockui/jquery.blockui.js"></script>
+        <script type="text/javascript" src="/fi/resources/scripts/blockui/blocker.js"></script>
+    </ui:define>
+
+    <ui:define name="title">bi soru - bifincan</ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="bi soru - bifincan" />
+    </ui:define>
+
+    <ui:define name="category">
+        <h:outputText value="#{surveyAction.data.categoryName}"/>
+        <h:outputText value=" için bi soru " rendered="#{surveyAction.data.surveyQuestion != null}" />
+        <h:outputText value=" için değerlendirmen" rendered="#{surveyAction.data.rating != null}" />
+        <h:outputText value=" ödüllü sorusu" rendered="#{surveyAction.data.quizQuestion != null}" />    
+    </ui:define>
+
+    <ui:define name="brandLogo">
+        <h:graphicImage value="/productimage?productslug=#{surveyAction.data.productSlug}&amp;size=kucuk"
+                        alt="#{surveyAction.data.brandName} - #{surveyAction.data.categoryName}" width="143" height="103" 
+                        rendered="#{surveyAction.data.productSlug != null}"/>
+        <h:graphicImage value="/productimage?brandslug=#{surveyAction.data.brandSlug}"
+                        alt="#{surveyAction.data.brandName}" width="143" height="103" 
+                        rendered="#{surveyAction.data.brandSlug != null and surveyAction.data.productSlug == null}"/>    	
+        <h:graphicImage value="/gorseller/marka-logolari/sen-de-bir-markasin-logo.png" alt="#{surveyAction.data.categoryName}" width="143" height="103" 
+                        rendered="#{surveyAction.data.brandSlug == null and surveyAction.data.productSlug == null}"/>          			
+    </ui:define>
+
+    <ui:define name="question">
+        <!-- Second step message (for quiz & rating) -->
+        <h:outputText value="#{surveyAction.data.message}" rendered="#{ (surveyAction.data.surveyQuestion == null) and 
+                               (surveyAction.data.nonSurveyItemCompleted == true) }"/>
+
+        <!-- Survey -->
+        <h:outputText value="#{surveyAction.data.formattedQuestionText}" rendered="#{surveyAction.data.surveyQuestion != null}"/>
+
+        <!-- Quiz -->
+        <h:outputText value="#{surveyAction.data.quizQuestion.question}" rendered="#{ (surveyAction.data.quizQuestion != null) 
+                               and (surveyAction.data.nonSurveyItemCompleted != true) }"/>
+
+        <!-- standard text for ratings -->
+        <h:outputText value="#{surveyAction.data.brandName} bu aşamada #{surveyAction.data.categoryName} için birkaç kelimelik özet değerlendirmeni, beş üzerinden vereceğin puanı ve kendisine iletmek istediğin, aklına gelen tüm fikir, öneri ve görüşlerini merakla bekliyor." 
+                      rendered="#{ (surveyAction.data.rating != null) and (surveyAction.data.nonSurveyItemCompleted != true) }"/>
+
+        <h:outputText value="şimdilik başka sorum yok ama daha sonra tekrar beklerim. bu arada hediyelere ve bilog yazılarında da görüşlerini paylaşırsan çok sevinirim." 
+                      rendered="#{ (surveyAction.data.quizQuestion == null and surveyAction.data.surveyQuestion == null and 
+                                   surveyAction.data.nonSurveyItemCompleted == false and surveyAction.data.rating == null) }"/>
+
+    </ui:define>
+
+    <ui:define name="options">
+        <!-- Survey -->
+        <h:panelGroup rendered="#{surveyAction.data.surveyQuestion != null}">
+            <h:selectOneRadio id="Option1" required="true" requiredMessage="herhangi bir seçenek işaretlemedin" rendered="#{!surveyAction.data.surveyQuestion.selectMultiple}" value="#{surveyAction.data.surveyOption}" converter="#{entityConverter}" layout="pageDirection">
+                <f:selectItems value="#{surveyAction.data.activeSurveyOptions}"  var="v" itemLabel="#{v.title}"></f:selectItems>
+            </h:selectOneRadio>
+            <p style="padding-left: 30px"><h:message for="Option1" styleClass="error"/></p>
+
+            <h:selectManyCheckbox id="Option2" required="true" requiredMessage="herhangi bir seçenek işaretlemedin" rendered="#{surveyAction.data.surveyQuestion.selectMultiple}" value="#{surveyAction.data.multiAnswers}" layout="pageDirection">
+                <f:selectItems value="#{surveyAction.data.activeSurveyOptions}"  var="v" itemLabel="#{v.title}" itemValue="#{v.id}"></f:selectItems>
+            </h:selectManyCheckbox>
+            <p style="padding-left: 30px"><h:message for="Option2" styleClass="error"/></p>
+    
+            <p><h:messages globalOnly="true" styleClass="error" /></p>
+
+        </h:panelGroup>   
+
+        <!-- Rating -->
+        <h:panelGroup rendered="#{ (surveyAction.data.rating != null) and (surveyAction.data.nonSurveyItemCompleted != true) }">
+            <div style="clear: both"/>
+            <p>
+                <h:outputText value="özet değerlendirmen nedir?" />
+                <br />
+                <h:inputText id="opinion" value="#{surveyAction.data.rating.opinion}"
+                             required="true" requiredMessage=" hiç görüşün yok mu?"
+                             validatorMessage=" bu çok kısa olmadı mı :)"
+                             maxlength="125" style="width:585px; font-size: 90%; border-color: #d9dfdf" >
+                    <f:validateLength minimum="10" />
+                </h:inputText>
+                <h:message for="opinion" styleClass="surveyerror"/>
+            </p>
+            <p>
+                <h:outputText value="bu hediyeye kaç yıldız veriyorsun?" />
+                <br />
+                <h:selectOneMenu id="subscriptions" style="font-size: 90%; border-color: #d9dfdf"
+                                 value="#{surveyAction.data.rating.star}" required="true" requiredMessage=" 1 puan bile vermiyor musun?">
+                    <f:selectItem id="notselected" itemLabel="#{messages['selectItems.noSelection']}" itemValue="" />
+                    <f:selectItem id="star1" itemLabel="1 (en düşük)" itemValue="1" />
+                    <f:selectItem id="star2" itemLabel="2" itemValue="2" />
+                    <f:selectItem id="star3" itemLabel="3" itemValue="3" />
+                    <f:selectItem id="star4" itemLabel="4" itemValue="4" />
+                    <f:selectItem id="star5" itemLabel="5 (en yüksek)" itemValue="5" />
+                </h:selectOneMenu>
+                <h:message for="subscriptions" styleClass="surveyerror"/>
+            </p>
+            <p>
+                <h:outputText value="bu hediye ve markayla ilgili fikir ve önerilerin neler?" />  
+                <br />
+                <h:inputTextarea id="comment" rows="8"
+                                 required="true" requiredMessage=" gerçekten görüşün yok mu?"
+                                 validatorMessage=" bu çok kısa olmadı mı :)"
+                                 value="#{surveyAction.data.rating.comment}" style="width:587px; padding: 4px; font-size: 90%; border-color: #d9dfdf">
+                    <f:validateLength minimum="20" />
+                </h:inputTextarea>
+                <h:message for="comment" styleClass="surveyerror" />
+            </p>
+        </h:panelGroup>   
+
+        <!-- Quiz -->	 
+        <h:panelGroup rendered="#{ (surveyAction.data.quizQuestion != null) and (surveyAction.data.nonSurveyItemCompleted != true) }">
+            <p>
+                <h:selectOneRadio id="RatOption1" required="true"
+                                  requiredMessage="soruyu cevaplamazsan nasıl fi ödülü kazanabilirsin ki :)"
+                                  value="#{surveyAction.data.quizOption}"
+                                  converter="#{entityConverter}" layout="pageDirection">
+                    <f:selectItems
+                        value="#{surveyAction.data.activeQuizOptions}" var="v"
+                        itemLabel="#{v.optionText}"></f:selectItems>
+                </h:selectOneRadio>
+                <p style="padding-left: 30px"><h:message for="RatOption1" styleClass="error" /></p>
+            </p>
+        </h:panelGroup>        
+    </ui:define>
+
+    <ui:define name="action">
+        <h:graphicImage value="/resources/images/global/pacman.gif" style="position: relative; left: 526px; top: 5px; display: none" id="pacman"/>
+        <h:commandButton id="surveySaveAndNextButton" value="kaydet" 
+                       action="#{surveyAction.saveAndNextQuestion}" rendered="#{surveyAction.data.surveyQuestion != null}">
+            <f:ajax execute="@form" render="@all" onevent="preventDoubleClick"></f:ajax>
+        </h:commandButton>
+
+        <h:commandLink id="ratingSaveButton" value="kaydet"
+                       action="#{surveyAction.saveRating}" rendered="#{surveyAction.data.rating != null}">
+            <f:ajax execute="@form" render="@all"></f:ajax>
+        </h:commandLink>
+
+        <h:commandLink id="quizSaveButton" value="#{surveyAction.data.quizOption == null ? 'kaydet' : 'devam'}"
+                       action="#{surveyAction.saveQuizAnswer}" rendered="#{surveyAction.data.quizQuestion != null}">
+            <f:ajax execute="@form" render="@all"></f:ajax>
+        </h:commandLink>               
+    </ui:define>
+
+    <ui:define name="products">
+
+        <!-- we just pass the values into the UI component's attributes -->		
+        <h:panelGroup rendered="#{surveyAction.availableProduct != null}">
+            <fi:product-display productName="#{surveyAction.availableProduct.productName}"
+                                productBrand="#{surveyAction.availableProduct.brandName}"
+                                productPointValue="#{surveyAction.availableProduct.productPointValue}" 
+                                productMoneyValue="#{surveyAction.availableProduct.productMoneyValue}"
+                                productShortDescription="#{surveyAction.availableProduct.productShortDescription}" 
+                                productSlug="#{surveyAction.availableProduct.productSlug}"
+                                available="#{surveyAction.availableProduct.available}"
+                                removable="#{surveyAction.availableProduct.removable}"
+                                classifier="#{surveyAction.availableProduct.classifier}"/>
+
+        </h:panelGroup>
+
+    </ui:define> 
+    
+    <ui:define name="userAlerts" >
+        <h:panelGroup layout="block" styleClass="alert-a" rendered="#{orderStatusAction.message != null}">
+            <p><h:outputText value="#{orderStatusAction.message}"/></p>
+        </h:panelGroup>
+        <h:panelGroup layout="block" styleClass="alert-a" rendered="#{orderStatusAction.message == null and currentUser.activityLevel eq 1}">
+            <p><h:outputText value="sade üyelik seviyesinde sipariş veremiyorsun maalesef. bu hafta bitmeden daha çok soru yanıtlar ve yorumlar yaparak fi kazanırsan pazartesiye orta olarak girebilirsin."/></p>
+        </h:panelGroup>
+        <h:panelGroup layout="block" styleClass="alert-a" rendered="#{orderStatusAction.message == null and currentUser.activityLevel gt 1 and surveyService.countSurveyAnswersByUserSinceDate(currentUser, 1) lt 50}">
+            <p><h:outputText value="hediye siparişi verebilmek için son 24 saat içinde 50 soru yanıtlamış olman gerekiyor. sen son 24 saat içerisinde #{surveyService.countSurveyAnswersByUserSinceDate(currentUser, 1)} soru yanıtladın, kaldı #{50-surveyService.countSurveyAnswersByUserSinceDate(currentUser, 1)} ;)"/></p>
+        </h:panelGroup>
+    </ui:define>
+
+</ui:composition>

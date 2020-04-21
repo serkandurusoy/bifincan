@@ -1,0 +1,17 @@
+Sevgili ${firstName},
+
+Sana ${sent_time} tarihinde UPS Kargo ile gönderdiğim son hediyenin onay kodunu henüz girmedin.
+
+Paketinin içinden çıkan onay kodunu hediyelerim [1] sayfandan girebilirsin.
+
+Bifincan'dan kargo bedeli dahil hiçbir ücret ödemeden hediye almaya devam edebilmek için bu adımı tamamlaman gerekiyor.
+
+Hediyenden keyif aldığını umarım :)
+
+Sevgiler,
+"fi"
+
+${baseurl}
+
+Bağlantılar:
+[1] ${baseurl}/hediyelerim

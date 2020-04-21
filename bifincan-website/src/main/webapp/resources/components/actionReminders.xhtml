@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:sec="http://www.springframework.org/security/tags"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->   
+    <cc:implementation>
+        <ui:fragment rendered="#{sec:areAnyGranted('ROLE_USER')}">
+
+            <ui:fragment rendered="#{orderService.countSurveyCompletedOrderDetailsByUser(currentUser) eq 0 and surveyService.countSurveyAnswersByUserSinceDate(currentUser, 1461) lt 100}">
+                <div id="actionReminders" class="alert-a">
+                    Üyelik işlemlerini tamamlamak için #{100 - surveyService.countSurveyAnswersByUserSinceDate(currentUser, 1461)} soru daha yanıtlaman gerekiyor.
+                </div>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{orderService.countSurveyCompletedOrderDetailsByUser(currentUser) gt 0}">
+                <ui:param name="_commentsCount" value="#{blogService.countCommentByUser(currentUser)}"/>
+                <ui:fragment rendered="#{_commentsCount gt 0}">
+                    <ui:param name="_prodCommentsCount" value="#{productService.countCommentByUser(currentUser)}"/>
+                    <ui:fragment rendered="#{_prodCommentsCount gt 0}">
+                        <ui:param name="_invitationsCount" value="#{userService.countInvitationByUser(currentUser)}"/>
+                        <ui:fragment rendered="#{_invitationsCount eq 0 and currentUser.age ge 18}">
+                            <div id="actionReminders" class="alert-a">
+                                Kimseyi bifincan'a davet etmedin, <h:link outcome="/user/invitation" value="davetiye göndererek"></h:link> daha fazla fi kazanabilirsin.
+                            </div>
+                        </ui:fragment>
+                    </ui:fragment> 
+                    <ui:fragment rendered="#{_prodCommentsCount eq 0}">
+                        <div id="actionReminders" class="alert-a">
+                            Hiçbir hediyeye yorum yapmadın, hediyelere <h:link outcome="/product/all" value="yorum yaparak"></h:link> daha fazla fi kazanabilirsin.
+                        </div>
+                    </ui:fragment>
+                </ui:fragment> 
+                <ui:fragment rendered="#{_commentsCount eq 0}">
+                    <div id="actionReminders" class="alert-a">
+                        Hiçbir bilog yazısına yorum yapmadın, bilog'da <h:link outcome="/fincanlog/home" value="yorum yaparak"></h:link> daha fazla fi kazanabilirsin.
+                    </div>
+                </ui:fragment>
+            </ui:fragment>
+
+        </ui:fragment>
+    </cc:implementation>
+</html>

@@ -1,0 +1,25 @@
+Whois:
+
+Registrant:
+         Serkan Durusoy  (fi@bifincan.com)
+        Bifincan Interaktif Tanitim ve Arastirma Hizmetleri A.S.
+        Goksuevleri Palmiye Cad. A54-b Anadolu Hisari
+        Istanbul, NONE  34810
+        TR
+        +902164658700
+
+Domain Name: bifincan.com
+
+Administrative, Technical, Billing Contact:
+         Serkan Durusoy  (fi@bifincan.com)
+        Bifincan Interaktif Tanitim ve Arastirma Hizmetleri A.S.
+        Goksuevleri Palmiye Cad. A54-b Anadolu Hisari
+        Istanbul, NONE  34810
+        TR
+        +902164658700
+
+ Record created on Jun 27 2010.
+ Record expires on Jun 27 2012.
+Domain servers:
+        ns1.dna-tr.com
+        ns2.dna-tr.com

@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:hh="http://balusc.net/jsf/html"
+                template="/resources/layouts/standard.xhtml">
+    <ui:define name="metadata">
+    </ui:define>
+
+    <ui:define name="browserTitle">blog comments - </ui:define>
+    <ui:define name="content">
+        <h:form id="mainForm">
+	<p:tabView dynamic="true" id="t1"
+		style="border-style:none; padding-left:0px; padding-right: 0px;">
+		<p:tab title="blog comments" id="t11">
+		   <br />	
+		   <p:messages id="messages" autoUpdate="true"/>
+             
+            <p:dataTable id="mainTable" var="comment" value="#{blogCommentAction.dataModel}" binding="#{blogCommentAction.dataTable}"
+                         style="height:85%" emptyMessage="No records found" paginator="true" paginatorPosition="bottom" 
+                         paginatorAlwaysVisible="true" rows="12" pageLinks="10">
+                
+                <p:column style="width:20%">
+                    <f:facet name="header">
+                        Post Title
+                    </f:facet>
+                    <h:outputText value="#{comment.post.title}"/>
+                </p:column>
+                <p:column style="width:35%">
+                    <f:facet name="header">
+                        Content
+                    </f:facet>
+                    <h:outputText value="#{comment.content}"/>
+                </p:column>				 
+                <p:column style="width:15%">
+                    <f:facet name="header">
+                        Commented At
+                    </f:facet>
+                    <h:outputText value="#{comment.commentedAt}"/>
+                </p:column>
+                <p:column style="width:20%">
+                    <f:facet name="header">
+                        By
+                    </f:facet>
+                      <h:outputText value="#{comment.user.name} (#{comment.user.age}, #{messages[comment.user.genderType.label].substring(0, 1).toUpperCase()}, " />
+                      <ui:fragment rendered="#{not empty comment.user.addresses}">
+                          #{comment.user.addresses.iterator().next().area.district.county.city.name}
+                      </ui:fragment>    
+                      <h:outputText value=")" />
+                </p:column>
+                <p:column style="width:10%;text-align:center">
+                    <f:facet name="header">
+                        Action
+                    </f:facet>
+                    <p:commandButton value="Edit" style="right:0px;"
+                       action="#{blogCommentAction.initEdit(comment)}"
+                       update=":editForm:commentGrid" onclick="dlg2.show();">
+                       <f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />
+                    </p:commandButton>   
+                </p:column>
+               </p:dataTable> 
+	         </p:tab>
+	      </p:tabView>                
+        </h:form>
+    </ui:define>
+    
+    <ui:define name="afterlayout">
+        <p:dialog header="Blog Comment" widgetVar="dlg2" modal="true"
+                  height="380" width="600">
+
+            <h:form id="editForm">
+                <h:panelGrid id="commentGrid" width="100%" >
+                	<h:panelGrid columns="4" width="100%" cellpadding="2" cellspacing="2">
+                        <h:outputText value="Username:" style="display:block; width:110px"/>
+                        <h:outputText value="#{blogCommentAction.currentComment.user.username}"/>
+
+                        <h:outputText value="Email:" style="display:block; width:110px"/>
+                        <h:outputText value="#{blogCommentAction.currentComment.user.email}"/>
+                        
+                        <h:outputText value="Firstname:" style="display:block; width:110px"/>
+                        <h:outputText value="#{blogCommentAction.currentComment.user.firstName}"/>
+                                                
+                        <h:outputText value="Lastname:" style="display:block; width:110px"/>
+                        <h:outputText value="#{blogCommentAction.currentComment.user.lastName}"/>
+                                                
+                        <h:outputText value="Gsm number:" style="display:block; width:110px"/>
+                        <h:outputText value="#{blogCommentAction.currentComment.user.gsmVerification.gsmPrefix.code} #{blogCommentAction.currentComment.user.gsmVerification.gsmNumber}"/> 
+                        
+                        <h:outputText value="Gender:" style="display:block; width:110px"/>
+                        <h:outputText value="#{messages[blogCommentAction.currentComment.user.genderType.label]}"/>                                                                    
+                    </h:panelGrid>
+                	<h:panelGrid columns="2" width="100%" cellpadding="2" cellspacing="2">
+                        <h:outputText value="Full address:" style="display:block; width:110px"/>
+                        <h:panelGroup>                        
+                        <h:outputText value="#{blogCommentAction.currentComment.user.mainAddress.streetName}, 
+                        		#{blogCommentAction.currentComment.user.mainAddress.area.name}, 
+                        		#{blogCommentAction.currentComment.user.mainAddress.area.district.name},
+                        		#{blogCommentAction.currentComment.user.mainAddress.area.district.county.name}, 
+                        		#{blogCommentAction.currentComment.user.mainAddress.area.district.county.city.name},
+                           		#{blogCommentAction.currentComment.user.mainAddress.area.district.county.city.localRegion.name}, 
+                           		#{blogCommentAction.currentComment.user.mainAddress.area.district.county.city.localRegion.country.name}"                    		
+                         		rendered="#{blogCommentAction.currentComment.user.mainAddress != null}"/>
+                        </h:panelGroup>                                                                   
+                    </h:panelGrid>   
+                                 	
+                    <h:inputTextarea  style="width:550px;height: 165px" value="#{blogCommentAction.currentComment.content}" required="true" />
+                    <p:spacer width="100%" height="15"/> 
+                    <f:facet name="footer"> 
+                        <p:commandButton value="Save" action="#{blogCommentAction.save}" 
+                             update=":mainForm:t1:mainTable" oncomplete="dlg2.hide()"/>	
+                        <p:commandButton value="Cancel" onclick="dlg2.hide();" type="button" />	
+                    </f:facet>     
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+    
+</ui:composition>

@@ -1,0 +1,20 @@
+Merhaba,
+
+Davetiyelerini buldum. Senin bilinçli bir tüketici olduğuna inanan, seni seven ve senin de mutlaka bifincan.com'a üye olup markalara görüş ve önerilerini ileterek bu markaların hediyeleri ile ödüllendirilmeye layık olduğuna inanan arkadaşların var, ne mutlu sana :)
+
+Ha unutmadan, hangi arkadaşının davetini kabul edersen, o arkadaşın sen üye olur olmaz bol bol "fi" kazanacak.
+
+#foreach( $item in $invitations )
+$item.firstName $item.lastName tarafından gelen daveti kabul etmek için tıklaman gereken bağlantı:
+
+$item.link
+
+#end
+
+Seni de bifincan'da görmek için sabırsızlanıyorum :)
+
+Sevgiler,
+"fi"
+
+www.bifincan.com
+

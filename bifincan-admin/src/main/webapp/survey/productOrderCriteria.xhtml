@@ -1,0 +1,216 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:hh="http://balusc.net/jsf/html"
+                template="/resources/layouts/standard.xhtml">
+    <ui:define name="metadata">
+    </ui:define>
+
+    <ui:define name="browserTitle">product order critria - </ui:define>
+    <ui:define name="content">
+        <h:form id="mainForm">
+            <p:tabView dynamic="true" id="t1"
+                       style="border-style:none; padding-left:0px; padding-right: 0px;">
+                <p:tab title="product order criteria" id="t11">
+                    <p:panel>
+                        <p:commandButton value="New" style="right:0px;"
+                                         action="#{productOrderCriteriaAction.initAdd()}"
+                                         update=":editForm:prodGrid" onclick="dlg2.show();">
+                            <f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />              
+                        </p:commandButton>                 
+                    </p:panel>		
+                    <p:messages id="messages" autoUpdate="true"/>	
+					<p:dataTable id="mainTable" var="criterion" value="#{productOrderCriteriaAction.dataModel}" binding="#{productOrderCriteriaAction.dataTable}"
+								style="height:85%" emptyMessage="No records found" paginator="true" paginatorPosition="bottom" 
+								paginatorAlwaysVisible="true" rows="12" pageLinks="10">                                  
+                        <p:column style="width:30%">
+                            <f:facet name="header" style="background-color:red">
+                                Product
+                            </f:facet>
+                            <h:outputText value="#{criterion.product.name}, #{criterion.product.category.name}, #{criterion.product.category.parent.name}, #{criterion.product.category.parent.parent.name}" />
+                        </p:column>
+                        <p:column style="width:10%">
+                            <f:facet name="header" style="background-color:red">
+                                Property Type
+                            </f:facet>
+                            <h:outputText value="#{messages[criterion.propertyType.label]}" />
+                        </p:column>	                        
+                        <p:column style="width:10%">
+                            <f:facet name="header" style="background-color:red">
+                                Operator Type
+                            </f:facet>
+                            <h:outputText value="#{messages[criterion.operatorType.label]}" />
+                        </p:column>				
+                        <p:column style="width:10%">
+                            <f:facet name="header" style="background-color:red">
+                                Operand Value
+                            </f:facet>
+                            <h:outputText value="#{productOrderCriteriaAction.displayLabelValue(criterion)}" />
+                        </p:column>	
+                        <p:column style="width:10%">
+                            <f:facet name="header" style="background-color:red">
+                                Operand Value Type
+                            </f:facet>
+                            <h:outputText value="#{messages[criterion.operatorValueType.label]}" />
+                        </p:column>
+                        <p:column style="width:10%">
+                            <f:facet name="header" style="background-color:red">
+                                Survey option
+                            </f:facet>
+                            <h:outputText value="#{criterion.fullDescription}" />
+                        </p:column>	         														
+                        <p:column style="width:10%;text-align:center">
+                            <f:facet name="header">
+                                Action
+                            </f:facet>
+                            <p:commandButton value="Edit"
+                                             action="#{productOrderCriteriaAction.initEdit(criterion)}"
+                                             update=":editForm:prodGrid" onclick="dlg2.show();">
+                                <f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />              
+                            </p:commandButton>                 
+
+                            <p:commandButton value="Delete"
+                                             action="#{productOrderCriteriaAction.initEdit(criterion)}"
+                                             onclick="dlg3.show();"/>					
+                        </p:column>
+                    </p:dataTable>
+
+                </p:tab>
+            </p:tabView>
+
+        </h:form>
+    </ui:define>
+
+    <ui:define name="afterlayout">
+        <p:dialog header="Product order criterion" widgetVar="dlg2" modal="true"
+                  height="260" width="500">
+            <h:form id="editForm" enctype="multipart/form-data" acceptcharset="UTF-8">
+                <h:panelGrid id="prodGrid" columns="2" width="100%">
+                
+					<h:outputText value="Product:" />
+					<p:autoComplete value="#{productOrderCriteriaAction.currentProductOrderCriteria.product}" converter="#{entityConverter}" style="width:250px"
+                    		var="r"  itemValue="#{r}" itemLabel="#{r.name}, #{r.category.name}, #{r.category.parent.name}, #{r.category.parent.parent.name}"
+                    		completeMethod="#{utilsBean.completeProduct}" minQueryLength="2" forceSelection="true"
+                    		required="true" requiredMessage="The product field is required"/> 
+                    		
+                    <h:outputText value="Property type:" />				
+                    <h:selectOneMenu value="#{productOrderCriteriaAction.currentProductOrderCriteria.propertyType}" style="height:27px">
+                        <f:selectItems value="#{utilsBean.criteriaPropertyTypes}" var="r" itemLabel="#{messages[r.label]}"/>
+                        <f:ajax render="valuePane opvt valtypePane" event="change" listener="#{productOrderCriteriaAction.updateExpessionParts}" />
+                    </h:selectOneMenu> 
+                    
+                    <h:outputText value="Operator type:" />				
+                    <h:selectOneMenu id="opvt" value="#{productOrderCriteriaAction.currentProductOrderCriteria.operatorType}" style="height:27px">
+                        <f:selectItems value="#{productOrderCriteriaAction.operatorTypes}" var="r" itemLabel="#{messages[r.label]}"/>
+                    </h:selectOneMenu>                   
+                      
+                    <h:outputText value="Operand value:" />		
+                    <h:panelGroup id="valuePane">		
+                      <p:autoComplete value="#{productOrderCriteriaAction.selectedCity}" converter="#{entityConverter}" style="width:250px"
+                    		var="r"  itemValue="#{r}" itemLabel="#{r.name}, #{r.localRegion.name}"
+                    		completeMethod="#{utilsBean.completeCity}" minQueryLength="2" forceSelection="true"
+                    		rendered="#{productOrderCriteriaAction.currentProductOrderCriteria.propertyType == 'ADDRESS'}"/> 
+                    		
+                      <h:selectOneMenu value="#{productOrderCriteriaAction.currentProductOrderCriteria.operatorValue}" style="height:27px"
+                      		rendered="#{productOrderCriteriaAction.currentProductOrderCriteria.propertyType == 'AGE'}">
+                        <f:selectItems value="#{utilsBean.ageOptions}" />
+                      </h:selectOneMenu>  
+                             
+                      <h:selectOneMenu value="#{productOrderCriteriaAction.currentProductOrderCriteria.operatorValue}" style="height:27px"
+                      		rendered="#{productOrderCriteriaAction.currentProductOrderCriteria.propertyType == 'EDUCATION'}">
+                        <f:selectItems value="#{utilsBean.educationOptions}"  var="r" itemLabel="#{messages[r.label]}" itemValue="#{r.ordinal()}"/>
+                      </h:selectOneMenu>  
+                        
+                      <h:selectOneMenu value="#{productOrderCriteriaAction.currentProductOrderCriteria.operatorValue}" style="height:27px"
+                      		rendered="#{productOrderCriteriaAction.currentProductOrderCriteria.propertyType == 'EMPLOYMENT_STATUS'}">
+                        <f:selectItems value="#{utilsBean.employmentStatusOptions}"  var="r" itemLabel="#{messages[r.label]}" itemValue="#{r.ordinal()}"/>
+                      </h:selectOneMenu>     
+                      
+                      <h:selectOneMenu value="#{productOrderCriteriaAction.currentProductOrderCriteria.operatorValue}" style="height:27px"
+                      		rendered="#{productOrderCriteriaAction.currentProductOrderCriteria.propertyType == 'GENDER'}">
+                        <f:selectItems value="#{utilsBean.genderOptions}"  var="r" itemLabel="#{messages[r.label]}" itemValue="#{r.ordinal()}"/>
+                      </h:selectOneMenu> 
+                      
+                      <h:selectOneMenu value="#{productOrderCriteriaAction.currentProductOrderCriteria.operatorValue}" style="height:27px"
+                      		rendered="#{productOrderCriteriaAction.currentProductOrderCriteria.propertyType == 'HAS_CHILDREN'}">
+                        <f:selectItems value="#{utilsBean.hasChildrenOptions}"  var="r" itemLabel="#{messages[r.label]}" itemValue="#{r.ordinal()}"/>
+                      </h:selectOneMenu>                      
+
+                      <h:selectOneMenu value="#{productOrderCriteriaAction.currentProductOrderCriteria.operatorValue}" style="height:27px"
+                      		rendered="#{productOrderCriteriaAction.currentProductOrderCriteria.propertyType == 'MARITAL_STATUS'}">
+                       <f:selectItems value="#{utilsBean.maritalStatusOptions}"  var="r" itemLabel="#{messages[r.label]}" itemValue="#{r.ordinal()}"/>
+                      </h:selectOneMenu>
+                        
+                      <h:selectOneMenu value="#{productOrderCriteriaAction.currentProductOrderCriteria.operatorValue}" style="height:27px"
+                      		rendered="#{productOrderCriteriaAction.currentProductOrderCriteria.propertyType == 'MONTHLY_INCOME'}">
+                       <f:selectItems value="#{utilsBean.monthlyIncomeOptions}"  var="r" itemLabel="#{messages[r.label]}" itemValue="#{r.ordinal()}"/>                        
+                      </h:selectOneMenu>   
+                      
+                      <h:panelGroup rendered="#{productOrderCriteriaAction.currentProductOrderCriteria.propertyType == 'PAST_PRODUCT_QUANTITY' or 
+                      		productOrderCriteriaAction.currentProductOrderCriteria.propertyType == 'PAST_PRODUCT_POINT_VALUE'}">
+                      <h:inputText value="#{productOrderCriteriaAction.currentProductOrderCriteria.operatorValue}" maxlength="11" required="true"
+                      		requiredMessage="You should define a value" validatorMessage="You should provide an integer value greater than zero" 
+                      		converterMessage="You should provide an integer value">
+                      		<f:validateLongRange minimum="1" />
+                      </h:inputText>		
+                      </h:panelGroup>
+                      		
+                      <h:selectOneMenu value="#{productOrderCriteriaAction.currentProductOrderCriteria.operatorValue}" style="height:27px"
+                      		rendered="#{productOrderCriteriaAction.currentProductOrderCriteria.propertyType == 'ID_VERIFICATION'}">
+                       	<f:selectItem itemLabel="#{messages['option.true']}" itemValue="true"/>                        
+                      </h:selectOneMenu>  
+                      
+                      <h:selectOneMenu value="#{productOrderCriteriaAction.currentProductOrderCriteria.operatorValue}" style="height:27px"
+                      		rendered="#{productOrderCriteriaAction.currentProductOrderCriteria.propertyType == 'ACTIVITY_LEVEL'}">
+                       	<f:selectItem itemLabel="1" itemValue="1"/>  
+                       	<f:selectItem itemLabel="2" itemValue="2"/>  
+                       	<f:selectItem itemLabel="3" itemValue="3"/>                         
+                      </h:selectOneMenu> 
+                                           		                                                                                                               		
+                    </h:panelGroup>
+                     
+                    <h:outputText value="Operand value type:" />				
+                    <h:selectOneMenu id="valtypePane" value="#{productOrderCriteriaAction.currentProductOrderCriteria.operatorValueType}" style="height:27px">
+                        <f:selectItems value="#{productOrderCriteriaAction.operandValueTypes}" var="r" itemLabel="#{messages[r.label]}"/>
+                    </h:selectOneMenu>  
+                                    
+					<h:outputText value="Survey option:" />
+					<p:autoComplete value="#{productOrderCriteriaAction.currentProductOrderCriteria.surveyOption}" converter="#{entityConverter}" style="width:250px"
+                    		var="r"  itemValue="#{r}" itemLabel="#{r.title}, #{r.question.title}"
+                    		completeMethod="#{utilsBean.completeSurveyOption}" minQueryLength="1" forceSelection="true"/> 
+                    		                                                                                                                                                                                                                                                                    					
+                    <p:spacer width="100%" height="15"/> 
+                    <f:facet name="footer">
+                        <p:commandButton value="Save" action="#{productOrderCriteriaAction.save}"
+                                         update=":mainForm:t1:mainTable" 
+                                         oncomplete="dlg2.hide();" ajax="false" />
+                        <p:commandButton value="Cancel" 
+                                         onclick="dlg2.hide();" type="button" />	
+                    </f:facet> 
+ 
+                
+             </h:panelGrid>   
+            </h:form>
+        </p:dialog>
+
+        <p:confirmDialog message="Are you sure to delete the product order criterion?"
+                         header="Initiating deletion process" severity="alert"
+                         widgetVar="dlg3">
+            <h:form id="confirmForm">
+                <p:commandButton value="Yes" actionListener="#{productOrderCriteriaAction.delete}"
+                                 update=":mainForm:t1:mainTable" oncomplete="dlg3.hide()"/>
+                <p:commandButton value="No" onclick="dlg3.hide();" type="button" />
+            </h:form>
+        </p:confirmDialog>	
+    </ui:define>
+
+</ui:composition>
+
+
+
+
+

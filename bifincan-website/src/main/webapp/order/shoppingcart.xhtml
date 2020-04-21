@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:fi="http://java.sun.com/jsf/composite/components/product"
+                template="/resources/layouts/product-list.xhtml">
+
+    <ui:define name="metadata"></ui:define>
+
+    <ui:define name="headIncludes"></ui:define>
+
+    <ui:define name="title">#{messages['infobox.cart']} - bifincan</ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="#{messages['infobox.cart']} - bifincan" />
+    </ui:define>
+
+    <ui:define name="pageTitle">#{messages['infobox.cart']}</ui:define>
+    
+    <ui:define name="tabMenu">
+        <ul class="tabs-a">
+            <li><h:outputLink value="/product/available.xhtml">#{messages['product.availableproducts']}</h:outputLink></li>
+            <li><h:outputLink value="/product/other.xhtml">#{messages['product.otherproducts']}</h:outputLink></li>
+            <li><h:outputLink value="/product/outofstock.xhtml">#{messages['product.outofstockproducts']}</h:outputLink></li>
+            <li class="active"><h:outputLink value="/order/shoppingcart.xhtml">#{messages['infobox.cart']}</h:outputLink></li>
+        </ul>
+    </ui:define>
+
+    <ui:define name="tabContent">
+        <h:panelGroup rendered="#{currentUser.shoppingCart.size gt 0 and currentUser.activityLevel ne 1}">
+            <h:form prependId="false">
+                <!-- we just pass the values into the UI component's attributes -->
+                <ui:repeat value="#{shoppingCartAction.products}" var="product" > 
+                    <fi:product-display productName="#{product.productName}"
+                                        productBrand="#{product.brandName}"
+                                        productPointValue="#{product.productPointValue}" 
+                                        productMoneyValue="#{product.productMoneyValue}"
+                                        productShortDescription="#{product.productShortDescription}" 
+                                        productSlug="#{product.productSlug}"
+                                        available="#{product.available}"
+                                        removable="#{product.removable}"
+                                        classifier="#{product.classifier}"/>
+                </ui:repeat>
+
+                <c:set var="productsInCart">#{currentUser.shoppingCart.size - currentUser.noOfOrderableProducts}</c:set>
+                
+                <ui:remove>
+                <c:if test="#{productsInCart lt 0}">
+                        <p>siparişini vermeden önce fincanına #{currentUser.noOfOrderableProducts - currentUser.shoppingCart.size} hediye daha ekleyebilirsin</p>
+                </c:if>
+                </ui:remove>
+                
+                <c:if test="#{currentUser.shoppingCart.totalPointsOfProducts gt currentUser.pointsBalance}">
+                    <p>fincanındaki hediyelerin toplam fi değeri maalesef biriktirdiğin fi'lerinden fazla</p>
+                </c:if>
+                <p style="font-size: 160%">
+                    bu hediyeni bende <h:outputText style="font-weight: bold" value="#{shoppingCartAction.primaryAddress.area.name}, #{shoppingCartAction.primaryAddress.streetName} No:#{shoppingCartAction.primaryAddress.buildingNumber}/#{shoppingCartAction.primaryAddress.apartmentNumber} #{shoppingCartAction.primaryAddress.area.district.name}, #{shoppingCartAction.primaryAddress.area.district.postalCode} #{shoppingCartAction.primaryAddress.area.district.county.name} - #{shoppingCartAction.primaryAddress.area.district.county.city.name}" /> şeklinde kayıtlı olan ana adresine göndereceğim, bu adresi değiştirmek istiyorsan hemen şimdi <h:link style="font-weight: bold;" outcome="/user/information.xhtml" value="#{messages['infobox.myinfo']}" /> sayfasından güncellemelisin.
+                </p>
+                <p class="rightText">
+                
+                <h:commandButton action="#{shoppingCartAction.placeOrder}" value="hediyelerim gelsin" 
+                	rendered="#{ (currentUser.shoppingCart.size gt 0 and currentUser.shoppingCart.size le currentUser.noOfOrderableProducts) and
+                			(currentUser.shoppingCart.totalPointsOfProducts le currentUser.pointsBalance) }"/>
+                </p>
+            </h:form>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{currentUser.shoppingCart.size == 0}">
+
+            <ui:fragment rendered="#{orderStatusAction.cartDisplay != null and orderStatusAction.cartDisplay eq 'preparing'}">
+                <p class="centerText"><h:graphicImage value="/resources/images/global/cartstatus/preparing.png"/></p>
+                <p class="centerText"><h:outputText value="son hediye siparişini aldım ve hazırlıyorum, yeni hediyeler sipariş edebilmek için önce son siparişinin eline ulaşmış olması gerekiyor."/></p>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{orderStatusAction.cartDisplay != null and orderStatusAction.cartDisplay eq 'indelivery'}">
+                <p class="centerText"><h:graphicImage value="/resources/images/global/cartstatus/indelivery.png"/></p>
+                <p class="centerText"><h:outputText value="son hediye siparişin şu anda yolda sana geliyor, yeni hediyeler sipariş edebilmek için önce son siparişinin eline ulaşmış olması gerekiyor."/></p>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{orderStatusAction.cartDisplay != null and orderStatusAction.cartDisplay eq 'surveywaiting'}">
+                <p class="centerText"><h:graphicImage value="/resources/images/global/cartstatus/surveywaiting.png"/></p>
+                <p class="centerText"><h:outputText value="son hediyene özel anketin #{orderStatusAction.remainingDaysForSurveys} gün içinde başlayacak. yeni hediye siparişi verebilmek için önce bu anketi tamamlaman gerekiyor."/></p>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{orderStatusAction.cartDisplay != null and orderStatusAction.cartDisplay eq 'surveyongoing'}">
+                <p class="centerText"><h:graphicImage value="/resources/images/global/cartstatus/surveyongoing.png"/></p>
+                <p class="centerText"><h:outputText value="yeni hediye siparişi verebilmek için önce son hediyene ait soruları yanıtlaman gerekiyor. soruların şu anda ana sayfanda seni bekliyor."/></p>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{orderStatusAction.cartDisplay != null and orderStatusAction.cartDisplay eq 'shouldwait'}">
+                <p class="centerText"><h:graphicImage value="/resources/images/global/cartstatus/shouldwait.png"/></p>
+                <p class="centerText"><h:outputText value="yeni hediye siparişi verebilmek için #{orderStatusAction.remainingDaysForNextOrder} gün daha beklemen gerekiyor."/></p>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{orderStatusAction.cartDisplay == null and currentUser.activityLevel eq 1}">
+                <p class="centerText"><h:graphicImage value="/resources/images/global/cartstatus/sade.png"/></p>
+                <p class="centerText"><h:outputText value="sade üyelik seviyesinde sipariş veremiyorsun maalesef. bu hafta bitmeden daha çok soru yanıtlar ve yorumlar yaparak fi kazanırsan pazartesiye orta olarak girebilirsin."/></p>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{orderStatusAction.cartDisplay == null and currentUser.activityLevel ne 1}">
+                <ui:fragment rendered="#{surveyService.countSurveyAnswersByUserSinceDate(currentUser, 1) lt 50}">
+                    <p class="centerText"><h:graphicImage value="/resources/images/global/cartstatus/should-answer-50-questions.png"/></p>
+                    <p class="centerText"><h:outputText value="hediye siparişi verebilmek için son 24 saat içinde 50 soru yanıtlamış olman gerekiyor."/></p>
+                    <p class="centerText"><h:outputText value="sen son 24 saat içerisinde #{surveyService.countSurveyAnswersByUserSinceDate(currentUser, 1)} soru yanıtladın, kaldı #{50-surveyService.countSurveyAnswersByUserSinceDate(currentUser, 1)} ;)"/></p>
+                </ui:fragment>
+                <ui:fragment rendered="#{surveyService.countSurveyAnswersByUserSinceDate(currentUser, 1) ge 50}">
+                    <p class="centerText"><h:graphicImage value="/resources/images/global/noimage/no-products-found.png"/></p>
+                    <p class="centerText"><h:outputText value="fincanında şu anda hiç hediye yok. uygun hediyeler arasından fi'lerinin yettiği hediyeyi fincanına ekleyebilirsin."/></p>
+                </ui:fragment>
+            </ui:fragment>
+
+        </h:panelGroup>
+
+    </ui:define>
+
+</ui:composition>

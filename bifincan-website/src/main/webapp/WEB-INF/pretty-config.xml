@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pretty-config xmlns="http://ocpsoft.com/prettyfaces/3.3.2" 
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+               xsi:schemaLocation="http://ocpsoft.com/prettyfaces/3.3.2
+                                   		http://ocpsoft.com/xml/ns/prettyfaces/ocpsoft-pretty-faces-3.3.2.xsd">
+
+    <rewrite match="" trailingSlash="remove" toCase="lowercase"/>
+    <rewrite match="/index\.xhtml" substitute="/" redirect="301"/> 
+    <rewrite match="/bigorus" substitute="/bisoru" redirect="301"/> 
+    <rewrite match="/user/home\.xhtml" substitute="/bisoru" redirect="301"/> 
+    <rewrite match="/blog" substitute="/bilog" redirect="301" outbound="false"/> 
+
+    <url-mapping id="homePublic">
+        <pattern value="/"/>  
+        <view-id value="/index.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping id="homeUser">
+        <pattern value="/bisoru"/>  
+        <view-id value="/user/home.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping id="login" >
+        <pattern value="/giris"/>
+        <view-id value="/login.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping parentId="login" id="loginerror">
+        <pattern value="/hata/#{loginerror}"/>
+        <view-id value="/login.xhtml"/>
+    </url-mapping>
+
+   <url-mapping id="blogHome" >
+        <pattern value="/bilog"/>
+        <view-id value="/fincanlog/home.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping id="blogPost" >
+        <pattern value="/bilog/#{slug}"/>
+        <view-id value="/fincanlog/post.xhtml"/>
+    </url-mapping>
+
+    <url-mapping id="allProductsPublic" >
+        <pattern value="/tum-hediyeler"/>   
+        <view-id value="/product/all.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping id="allProductsAvailable" >
+        <pattern value="/uygun-hediyeler"/>   
+        <view-id value="/product/available.xhtml"/>
+    </url-mapping>
+
+    <url-mapping id="allProductsOther" >
+        <pattern value="/diger-hediyeler"/>   
+        <view-id value="/product/other.xhtml"/>
+    </url-mapping>
+
+    <url-mapping id="allProductsOutofstock" >
+        <pattern value="/biten-hediyeler"/>   
+        <view-id value="/product/outofstock.xhtml"/>
+    </url-mapping>
+
+    <url-mapping id="productDetail" >
+        <pattern value="/hediyeler/#{slug}"/>   
+        <view-id value="/product/details.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping id="pointHistory" >
+        <pattern value="/filerim"/>   
+        <view-id value="/transaction/history.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping id="scoreboard" >
+        <pattern value="/fiseverler"/>   
+        <view-id value="/scoreboard.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping id="scoreboardMoneyValue" >
+        <pattern value="/hediyeseverler"/>   
+        <view-id value="/scoreboard-moneyvalue.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping id="orderHistory" >
+        <pattern value="/hediyelerim"/>   
+        <view-id value="/order/history.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping id="shoppingCart" >
+        <pattern value="/fincanim"/>   
+        <view-id value="/order/shoppingcart.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping id="invitations" >
+        <pattern value="/davetlerim"/>   
+        <view-id value="/user/invitation.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping id="changeInformation" >
+        <pattern value="/bilgilerim"/>   
+        <view-id value="/user/information.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping id="imageBrandLogo" >
+        <pattern value="/gorseller/marka-logolari/#{brandslug}-logo.png"/>   
+        <view-id value="/productimage"/>
+    </url-mapping>
+    
+    <url-mapping id="imageProduct" >
+        <pattern value="/gorseller/hediye-resimleri/#{productslug}-#{size}-resim.jpg"/>   
+        <view-id value="/productimage"/>
+    </url-mapping>
+    
+    <url-mapping id="imageBlogPost" >
+        <pattern value="/gorseller/bilog-yazilari/#{blogslug}-#{size}-resim.jpg"/>   
+        <view-id value="/blogimage"/>
+    </url-mapping>
+    
+    <url-mapping id="imageHomePageChart" >
+        <pattern value="/gorseller/grafikler/bisoru/yuzde-#{percentage}.png"/>   
+        <view-id value="/homepagechart"/>
+    </url-mapping>
+    
+    <url-mapping id="rssFeed" >
+        <pattern value="/rss-feed"/>   
+        <view-id value="/spring/rss"/>
+    </url-mapping>
+    
+    <url-mapping id="googleSitemap" >
+        <pattern value="/sitemap.xml"/>   
+        <view-id value="/spring/sitemap"/>
+    </url-mapping>
+    
+    <url-mapping id="contact" >
+        <pattern value="/mesajim-var"/>   
+        <view-id value="/contact.xhtml"/>
+    </url-mapping>
+
+    <url-mapping id="retrieveInvitations" >
+        <pattern value="/davetiyelerimi-kaybettim"/>   
+        <view-id value="/retrieveinvitations.xhtml"/>
+    </url-mapping>
+
+    <url-mapping id="resetPassword" >
+        <pattern value="/unuttum-neydi"/>   
+        <view-id value="/resetpassword.xhtml"/>
+    </url-mapping>
+
+    <url-mapping id="resetPasswordSuccess" >
+        <pattern value="/sifre-degisikligi-sonucu"/>   
+        <view-id value="/resetpasswordsuccess.xhtml"/>
+    </url-mapping>
+
+    <url-mapping id="signup" >
+        <pattern value="/yeni-uye/#{email}/#{invitedid}/#{confirmationkey}"/>   
+        <view-id value="/signup.xhtml"/>
+    </url-mapping>
+
+    <url-mapping id="verifyEmail" >
+        <pattern value="/eposta-dogrula/#{username}/#{confirmationkey}"/>   
+        <view-id value="/verifyemail.xhtml"/>
+    </url-mapping>
+
+    <url-mapping id="optout" >
+        <pattern value="/davetiyenin-hatirlatilmasini-istemiyorum/#{type}/#{email}/#{invitedid}/#{confirmationkey}"/>   
+        <view-id value="/optinvitation.xhtml"/>
+    </url-mapping>
+
+    <url-mapping id="optoutemail" >
+        <pattern value="/e-posta-istemiyorum/#{type}/#{email}/#{campaign}/#{confirmationkey}"/>   
+        <view-id value="/optemail.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping id="browserWarning" >
+        <pattern value="/bu-tarayici-biraz-eski-sanki"/>   
+        <view-id value="/browser.xhtml"/>
+    </url-mapping>
+
+    <url-mapping id="browserWarningMobile" >
+        <pattern value="/bu-mobil-tarayicida-maalesef-calisamiyorum"/>   
+        <view-id value="/browser-mobile.xhtml"/>
+    </url-mapping>
+
+    <url-mapping id="wantToBeMember" >
+        <pattern value="/uye-olayim"/>   
+        <view-id value="/staticpages/wanttobemember.xhtml"/>
+    </url-mapping>
+
+    <url-mapping id="whatIsIT" >
+        <pattern value="/bi-ney"/>   
+        <view-id value="/staticpages/whatisit.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping id="faqPages" >
+        <pattern value="/bazen-sorulan-sorular-ve-hic-okunmayan-yanitlari"/>   
+        <view-id value="/staticpages/faq.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping id="termsAndConditions" >
+        <pattern value="/kullanim-kosullari"/>   
+        <view-id value="/staticpages/terms.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping id="aboutbifincan" >
+        <pattern value="/bifincan-hakkinda"/>   
+        <view-id value="/staticpages/about.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping id="bifincanteam" >
+        <pattern value="/bifincan-ekibi"/>   
+        <view-id value="/staticpages/team.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping id="contactinfo" >
+        <pattern value="/iletisim-bilgileri"/>   
+        <view-id value="/staticpages/contact.xhtml"/>
+    </url-mapping>
+    
+    <url-mapping id="fbMembership" >
+        <pattern value="/facebook-tab/bifincan-uyeligi"/>   
+        <view-id value="/facebooktabs/membership.xhtml"/>
+    </url-mapping>
+
+    <url-mapping id="fbTerms" >
+        <pattern value="/facebook-tab/sayfa-kurallari"/>   
+        <view-id value="/facebooktabs/terms.xhtml"/>
+    </url-mapping>
+
+    <url-mapping id="clientPresentation" >
+        <pattern value="/marka-sunumu"/>   
+        <view-id value="/client-presentation/index.html"/>
+    </url-mapping>
+
+    <url-mapping id="clientPresentationJsonGeneral" >
+        <pattern value="/marka-sunumu/realtimedata/metrics.js"/>   
+        <view-id value="/client-presentation/data/json-general.xhtml"/>
+    </url-mapping>
+
+    <url-mapping id="clientPresentationJsonImages" >
+        <pattern value="/marka-sunumu/realtimedata/images.js"/>   
+        <view-id value="/client-presentation/data/json-images.xhtml"/>
+    </url-mapping>
+
+    <url-mapping id="clientPresentationJsonChart" >
+        <pattern value="/marka-sunumu/realtimedata/charts.js"/>   
+        <view-id value="/client-presentation/data/json-charts.xhtml"/>
+    </url-mapping>
+
+</pretty-config>

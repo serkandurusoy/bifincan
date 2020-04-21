@@ -1,0 +1,14 @@
+Sevgili ${userfirstname},
+
+Demek eposta adresini değiştirmek istiyorsun. Tamam, sorun değil. Ama bundan sonra sana ulaşabileceğimden emin olmalıyım ki yeniliklerden habersiz kalma.
+
+Adresini doğrulamak için aşağıdaki bağlantıya tıklar mısın?
+
+${link}
+
+Yeni eposta adresin hayırlı olsun bu arada, güle güle kullan :)
+
+Sevgiler,
+"fi"
+
+${baseurl}

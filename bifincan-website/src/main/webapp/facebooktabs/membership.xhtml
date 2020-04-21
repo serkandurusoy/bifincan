@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xml:lang="#{utilsBean.applicationLocale}"
+      lang="#{utilsBean.applicationLocale}" >
+    <f:view contentType="text/html"
+            encoding="UTF-8"
+            locale="#{utilsBean.applicationLocale}">
+
+        <h:head>
+            <title>bifincan üyeliği</title>
+
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+            <meta name="robots" content="NOINDEX, NOFOLLOW" />
+            <meta http-equiv="pragma" content="no-cache" />
+
+            <link rel="shortcut icon" href="/fi/resources/images/global/favicons/favicon.ico" type="image/x-icon" />
+            <link rel="icon" href="/fi/resources/images/global/favicons/favicon.ico" type="image/x-icon" />
+            <link rel="apple-touch-startup-image" href="/fi/resources/images/global/favicons/touch-icon-iphone.png" />
+            <link rel="apple-touch-icon" href="/fi/resources/images/global/favicons/touch-icon-iphone.png" />
+            <link rel="apple-touch-icon" sizes="72x72" href="/fi/resources/images/global/favicons/touch-icon-ipad.png" />
+            <link rel="apple-touch-icon" sizes="114x114" href="/fi/resources/images/global/favicons/touch-icon-iphone4.png" />
+
+            <link type="text/css" rel="stylesheet" href="/fi/resources/scripts/facebooktabs/facebooktab.css" />
+
+            <script type="text/javascript" src="/fi/resources/scripts/jquery-1.7.2.min.js"></script>
+            <script type="text/javascript" src="/fi/resources/scripts/facebooktabs/facebooktab.js"></script>
+
+            <script type="text/javascript">
+                window.fbAsyncInit = function() {
+                    FB.Canvas.setSize({height: 600});
+                }
+                // Do things that will sometimes call sizeChangeCallback()
+                function sizeChangeCallback() {
+                    FB.Canvas.setSize({height: 600});
+                }
+            </script>
+        </h:head>
+
+        <h:body>
+            <div id="root" class="fbbody">
+                <p>Öncelikle, bifincan bir bedava ürün, kampanya, yarışma, çekiliş vb sitesi değil.</p>
+                <p>Bilinçli tüketicilerin tüketici dostu markaların ürünlerini ücretsiz deneme imkanı bularak, deneyimleri sonucu elde ettikleri beklenti, istek ve görüşlerini paylaşabildikleri, bu sayede bu ürün ve hizmetlerin daha da kaliteli hale gelmesine katkıda bulundukları bir sosyal platform bifincan.</p>
+                <p>Bifincan'ı henüz incelemediysen <a href="https://www.bifincan.com/fi/" rel="external">bifincan.com</a>'u ziyaret ederek başlayabilirsin.</p>
+                <p>Üyelik, yalnızca mevcut bir üyenin daveti ile gerçekleşebiliyor. Bifincan üyeleri, tanıdıkları, bilinçli tüketici olduklarına güvendikleri, bifincan kural ve işleyişine uygun davranacaklarına bir anlamda kefil oldukları kişileri üyeliğe davet edebiliyorlar.</p>
+                <p class="fbgreybox">Yorum alanlarında yapılan davetiye istekleri otomatik olarak siliniyor.</p>
+                <p>Bunun birkaç sebebi var. Birincisi, e-posta adresini internette alenen yayınlamamalısın. Zaten gerçek bir bilinçli tüketici, bunu kesinlikle yapmaz. İkincisi, bifincan üyeleri, yalnızca tanıdıkları ve güvendikleri kişileri davet ediyorlar. Ve son olarak, facebook sayfasındaki yorum alanları, o paylaşımla ilgili yorum yapılabilmesi için varlar. Bu alanı davetiye isteği gibi farklı amaçlarla kullanmak o paylaşımın amacına saygısızlık olur ki, bilinçli tüketici duyarlı, saygılı ve özenlidir.</p>
+                <p>Eğer sen de bifincan üyesi olmak istiyorsan ancak bifincan'a üye bir arkadaşın yoksa, yapman gereken şey beklemek. Bifincan'a çok kısıtlı sayıda yeni üye kabul ediliyor ve sıranın sana gelmesi, senin de bir arkadaşının bifincan üyesi olarak seni davet edebilmesi uzun bir süre alabilir, sabırlı olman gerekiyor.</p>
+                <p>Tabi gerçek bir bilinçli tüketici, bifincan tam olarak nedir, üyelerinden neler bekliyor, onlara neler sunuyor öğrenmeden bifincan'a üye olmayı istemez, düşünmez bile. Bunun, yani bifincan'ı tanımak için de, <a href="https://www.bifincan.com/fi/bazen-sorulan-sorular-ve-hic-okunmayan-yanitlari" rel="external">soru cevap</a> sayfasını dikkatlice okur.</p>
+                <p class="fbgreybox">Sen de tam bir bilinçli tüketiciysen ve markalara daha kaliteli ürün ve hizmetler için yol göstermek istiyorsan, önümüzdeki aylarda seni de bifincan üyelerinin arasında görmekten mutlu olurum.</p>
+            </div>
+
+            <div id="fb-root"></div>
+            <script src="https://connect.facebook.net/en_US/all.js"></script>
+            <script>
+                FB.init({
+                    appId: '380542895302133',
+                    status: true, // check login status
+                    cookie: true, // enable cookies to allow the server to access the session
+                    xfbml: true // parse XFBML
+                });
+            </script>
+        </h:body>
+    </f:view>
+</html>

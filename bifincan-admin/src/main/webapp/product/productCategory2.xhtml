@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/resources/layouts/standard.xhtml">
+    <ui:define name="metadata">
+    </ui:define>
+
+    <ui:define name="browserTitle">product categories (level two) - </ui:define>
+    <ui:define name="content">
+	<h:form id="mainForm">
+      <p:tabView dynamic="true" id="t1"
+			style="border-style:none; padding-left:0px; padding-right: 0px;">
+			<p:tab title="product categories (level two)" id="t11">
+		<p:panel>
+		<p:commandButton value="New" style="right:0px;"
+					action="#{prodCatLevel2Action.initAdd()}"
+					update=":editForm:prodCatGrid" onclick="dlg2.show();">
+			<f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />		
+		</p:commandButton>			
+		</p:panel>		
+		<p:messages id="messages" autoUpdate="true"/>	
+		<p:dataTable id="mainTable" var="category" value="#{prodCatLevel2Action.categories}"
+			style="height:85%" emptyMessage="No records found" paginator="true" paginatorPosition="bottom" 
+			paginatorAlwaysVisible="true" rows="12" pageLinks="10">
+			<p:column style="width:45%">
+				<f:facet name="header" style="background-color:red">
+	                        Name
+	                    </f:facet>
+				<h:outputText value="#{category.name}" />
+			</p:column>
+			<p:column style="width:45%">
+				<f:facet name="header" style="background-color:red">
+	                        Parent Category
+	                    </f:facet>
+				<h:outputText value="#{category.parent.name}" />
+			</p:column>			
+			<p:column style="width:10%;text-align:center">
+				<f:facet name="header">
+	                        Action
+	                    </f:facet>
+				<p:commandButton value="Edit"
+					action="#{prodCatLevel2Action.initEdit(category)}"
+					update=":editForm:prodCatGrid" onclick="dlg2.show();">
+					<f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />
+				</p:commandButton>	
+					
+				<p:commandButton value="Delete"
+					action="#{prodCatLevel2Action.initEdit(category)}"
+					 onclick="dlg3.show();"/>					
+			</p:column>
+		</p:dataTable>
+
+	  </p:tab>
+	  </p:tabView>
+	
+	 </h:form>
+    </ui:define>
+
+    <ui:define name="afterlayout">
+	<p:dialog header="Product Category Level Two" widgetVar="dlg2" modal="true"
+		height="135" width="450">
+		<h:form id="editForm">
+			<h:panelGrid id="prodCatGrid" columns="2" width="100%">
+				<h:outputText value="Name:" />
+				<h:inputText value="#{prodCatLevel2Action.currentCategory.name}" style="width:98%" maxlength="250" required="true" requiredMessage="The category's name is required"/>
+                <h:outputText value="Parent category:"/>
+                <h:selectOneMenu value="#{prodCatLevel2Action.currentCategory.parent}" converter="#{entityConverter}" required="true" requiredMessage="The parent category field is required">
+                        <f:selectItems value="#{productCategoryService.findProductCategoriesLevelOne()}" var="r" itemLabel="#{r.name}"/>
+                </h:selectOneMenu>				
+				<p:spacer width="100%" height="15"/> 
+				<f:facet name="footer">
+					<p:commandButton value="Save" action="#{prodCatLevel2Action.save}"
+						update=":mainForm:t1:mainTable" 
+						oncomplete="dlg2.hide();" />
+					<p:commandButton value="Cancel" 
+						onclick="dlg2.hide();" type="button" />	
+				</f:facet>
+			</h:panelGrid>
+		</h:form>
+	</p:dialog>
+	
+	<p:confirmDialog message="Are you sure to delete the product category?"
+		header="Initiating deletion process" severity="alert"
+		widgetVar="dlg3">
+		<h:form id="confirmForm">
+			<p:commandButton value="Yes" actionListener="#{prodCatLevel2Action.delete}"
+				update=":mainForm:t1:mainTable" oncomplete="dlg3.hide()"/>
+			<p:commandButton value="No" onclick="dlg3.hide();" type="button" />
+		</h:form>
+	</p:confirmDialog>	
+    </ui:define>
+    
+</ui:composition>
+
+
+
+
+

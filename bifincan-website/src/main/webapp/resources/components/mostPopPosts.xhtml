@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <div class="most-pop-posts">
+            <h5>popüler yazılar</h5>
+            <dl>
+                <ui:repeat value="#{blogService.findMostPopPosts()}" var="post" varStatus="status">
+                    <li style="#{status.last ? 'margin-bottom:0px':''}"><span class="boldText">&#187; </span>#{post.comments.size()} yorum ile <h:link outcome="/fincanlog/post" value="#{post.title}"><f:param name="slug" value="#{post.slug}"/></h:link></li>
+                </ui:repeat>    
+            </dl>
+        </div>
+    </cc:implementation>
+</html>

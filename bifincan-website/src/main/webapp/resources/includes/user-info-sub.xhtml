@@ -1,0 +1,11 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:h="http://java.sun.com/jsf/html">
+    
+    <h3>
+     <h:form id="fnform">
+       <h:outputText id="_fullname" value="#{currentUser.firstName} #{currentUser.lastName}" />
+     </h:form>  
+    </h3>
+    <ui:include src="/resources/includes/user-info-common.xhtml"/>
+</ui:composition>

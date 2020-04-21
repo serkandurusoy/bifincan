@@ -1,0 +1,122 @@
+/*
+ * CSS to use in facebook tabs
+ * 
+ */
+
+/* Default Facebook CSS */
+.fbbody
+{
+    font-family: "lucida grande" ,tahoma,verdana,arial,sans-serif;
+    font-size: 11px;
+    color: #333333;
+}
+
+/* Default Anchor Style */
+.fbbody a
+{
+    color: #3b5998;
+    outline-style: none;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: bold;
+}
+.fbbody a:hover
+{
+    text-decoration: underline;
+}
+
+/* Facebook Box Styles */
+.fbgreybox
+{
+    background-color: #f7f7f7;
+    border: 1px solid #cccccc;
+    color: #333333;
+    padding: 10px;
+    font-size: 13px;
+    font-weight: bold;
+    z-index: 1;
+}
+.fbbluebox
+{
+    background-color: #eceff6;
+    border: 1px solid #d4dae8;
+    color: #333333;
+    padding: 10px;
+    font-size: 13px;
+    font-weight: bold;
+    z-index: 1;
+}
+.fbinfobox
+{
+    background-color: #fff9d7;
+    border: 1px solid #e2c822;
+    color: #333333;
+    padding: 10px;
+    font-size: 13px;
+    font-weight: bold;
+    z-index: 1;
+}
+.fberrorbox
+{
+    background-color: #ffebe8;
+    border: 1px solid #dd3c10;
+    color: #333333;
+    padding: 10px;
+    font-size: 13px;
+    font-weight: bold;
+    z-index: 1;
+}
+
+/* Content Divider on White Background */
+.fbcontentdivider
+{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 520px;
+    height: 1px;
+    background-color: #d8dfea;
+}
+
+.fbincludebox {
+    height: 240px;
+    padding: 8px;
+    margin-top: -13px;
+    border-top: none;
+    border-left: 1px solid #cccccc;
+    border-right: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
+    overflow: auto;
+    z-index: 0;
+}
+
+.faqbox {
+    font-size: 100%;
+}
+
+.termsbox {
+    font-size: 80%;
+}
+
+ul#faq {
+    margin: 0 0 36px 0;
+    padding: 0;
+}
+
+ul#faq li {
+    list-style: none;
+    padding: 6px 0 6px 0;
+    border-bottom: 1px solid #d9dfdf;
+}
+
+ul#faq li a {
+    font-size: 100%;
+    cursor: default;
+}
+
+ul#faq li div {
+    display: none;
+}
+
+ul#faq li.active div {
+    display: block;
+}

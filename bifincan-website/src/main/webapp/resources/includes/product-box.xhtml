@@ -1,0 +1,22 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:h="http://java.sun.com/jsf/html">
+
+    <div class="product-a">
+        <h2><ui:insert name="productName"/> <span><ui:insert name="productPointValue"/></span></h2>
+        <div class="description">
+            <p><ui:insert name="productDescription"/></p>
+            <p class="price"><span>değeri</span> &#160;<ui:insert name="productMoneyValue"/> TL</p>
+            <ul class="social">
+                <li class="fb"><h:outputLink rel="external">feyste paylaş</h:outputLink></li>
+                <li class="tw"><h:outputLink rel="external">tivitle</h:outputLink></li>
+            </ul>
+            <p class="image"><h:graphicImage value="/resources/images/temp/image-a.jpg" alt="" width="143" height="103"/></p>
+        </div>
+        <ul class="details">
+            <li><h:outputLink>detaylı <span>bilgi</span></h:outputLink></li>
+            <li><h:outputLink>fincana <span>ekle</span></h:outputLink></li>
+        </ul>
+    </div>
+
+</ui:composition>

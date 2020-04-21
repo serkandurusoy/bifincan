@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:fi="http://java.sun.com/jsf/composite/components"
+                xmlns:sec="http://www.springframework.org/security/tags"
+                template="/resources/layouts/primary-content.xhtml">
+
+    <ui:define name="metadata"></ui:define>
+
+    <ui:define name="headIncludes"></ui:define>
+
+    <ui:define name="title">üye olayım - bifincan</ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="üye olayım - bifincan" />
+    </ui:define>
+
+    <ui:define name="pageTitle">üye olayım</ui:define>
+
+    <ui:define name="pageContent">
+        
+        <p>
+            Bifincan üyeliği yalnızca bir başka üyenin seni davet etmesi ile olabiliyor.
+        </p>
+        <p>
+            Eğer bifincan üyesi olmak istiyor ve davetiye almamışsan, arkadaşlarına bir sor istersen, belki de bir arkadaşın zaten bifincan üyesidir ve seni davet etmek isteyebilir ;)
+        </p>
+        <p>
+            Bunun yanısıra, bifincan üyeleri yalnızca tanıdıkları, bilinçli tüketici olduklarına inandıkları ve bifincan'daki kural ve işleyişe uygun hareket edeceklerine güvenerek bir anlamda kefil oldukları arkadaşlarını davet ediyorlar. Twitter ve facebook gibi sosyal mecralarda davetiye arayışlarını da açıkçası pek hoş karşılamıyorlar.
+        </p>
+        <p>
+            Ayrıca maalesef ben de davetiye gönderemiyorum :(
+        </p>
+        <p>
+            Eğer daha önce davetiye aldıysan ve <h:link outcome="/retrieveinvitations.xhtml" value="davetiyelerimi kaybettim" styleClass="boldText" /> diyorsan sorun değil, <h:link outcome="/retrieveinvitations.xhtml" value="buraya tıklayarak" title="davetiyelerimi kaybettim" /> davetiyelerinin sana tekrar iletilmesini sağlayabilirsin.
+        </p>
+        <p>
+            Bifincan hakkında merak ettiklerini <h:link outcome="/staticpages/faq.xhtml" value="bazen sorulan sorular ve hiç okunmayan yanıtları" styleClass="boldText" /> sayfasından öğrenebilir, üyelikle ilgili konular dışında bana sormak veya benden destek almak istediğin herhangi bir konuda bana <h:link outcome="/contact.xhtml" value="mesajım var" styleClass="boldText" /> sayfasından mesaj da bırakabilirsin.
+        </p>
+
+    </ui:define>
+</ui:composition>

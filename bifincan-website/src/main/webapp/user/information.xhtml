@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/resources/layouts/product-list.xhtml">
+    <ui:define name="metadata"></ui:define>
+
+    <ui:define name="jquery"></ui:define>
+    <ui:define name="headIncludes">
+        <link type="text/css" rel="stylesheet" href="/fi/resources/scripts/jqueryui/jquery-ui-1.8.20.custom.css" />
+        <script type="text/javascript" src="/fi/resources/scripts/infoupdate/tabber.js"></script>
+        <script>
+            String.prototype.toProperCase = function() {
+                return this.replace(/([^\s:/.\(\)\[\],\\\-])([^\s:/.\(\)\[\],\\\-]*)/g,function($0,$1,$2){
+                    return $1.toUpperCase()+$2.toLowerCase();
+                });
+            }
+        </script>
+    </ui:define>
+
+    <ui:define name="title">bilgilerim - bifincan</ui:define>
+    <ui:define name="titleog">
+        <meta property="og:title" content="bilgilerim - bifincan" />
+    </ui:define>
+    
+    <ui:define name="pageTitle">bilgilerim</ui:define>
+
+    <ui:define name="tabMenu">
+        <ul class="tabs-a">
+            <li id="tab1" rel="tabcontent1" class="tab active"><a>adreslerim</a></li>
+            <li id="tab2" rel="tabcontent2" class="tab"><a>profilim</a></li>
+            <li id="tab3" rel="tabcontent3" class="tab"><a>e-posta adresim</a></li>
+            <li id="tab4" rel="tabcontent4" class="tab"><a>cep telefonum</a></li>
+            <li id="tab5" rel="tabcontent5" class="tab"><a>şifrem</a></li>
+            <li id="tab6" rel="tabcontent6" class="tab"><a>tercihlerim</a></li>
+        </ul>
+    </ui:define>
+
+    <ui:define name="tabContent">
+
+        <div id="tabcontent1" class="tabcontent active">
+            <h:form id="addrListForm" prependId="false">
+                <h3>adres tanımlama ve bilgi güncelleme</h3>
+                <p>sen de benim gibi yerinde duramayan biriysen, kah orada, kah şuradaysan, evin, işyerin, yazlığın için farklı adresler tanımlayabilirsin. ama dikkat et, hediye siparişlerini o anda ana adresin olarak nereyi tanımlamışsan oraya göndereceğim.</p>
+                
+                <div style="margin-bottom: 12px">
+                <h:commandLink action="#{userInfoAction.addAddress}" value="yeni #{messages['user.add']}" style="font-size: 140%; font-weight: bold">
+                    <f:ajax render="@form :addrForm" execute="@form" event="action" />
+                </h:commandLink>
+                </div>
+
+                <div class="floatleft boldText width50" style="font-size: 140%;">ana</div>
+                <div class="floatleft boldText width200" style="font-size: 140%;">hangisi</div>
+                <div class="floatleft boldText width250" style="font-size: 140%;">neresi</div>
+                <div class="floatleft boldText width100" style="font-size: 140%;">işlem</div>
+                <div class="floatclear">&#160;</div>
+                
+                <ui:repeat value="#{userInfoAction.addresses}" var="address">
+                    <div class="floatleft width50" style="font-size: 120%;">
+                        #{address.primary ? messages['user.yes'] : messages['user.no'] }
+                    </div>
+                    <div class="floatleft width200" style="font-size: 120%;">
+                        #{address.addressType.name}: #{address.shortName}
+                    </div>
+                    <div class="floatleft width250" style="font-size: 120%;">
+                        #{address.area.district.county.city.name} - #{address.area.district.county.name}
+                    </div>
+                    <div class="floatleft width100" style="font-size: 120%;">
+                        <h:commandLink action="#{userInfoAction.makeAdressPrimary}" value="ana" title="bunu ana adresin yap">
+                            <f:setPropertyActionListener target="#{flash.addressId}" value="#{address.id}" />
+                            <f:ajax render="@form :addrForm" execute="@form" event="action"  />
+                        </h:commandLink>
+                        &#160;
+                        <h:commandLink action="#{userInfoAction.findAddress}" value="düzenle" title="adres bilgilerini değiştir">
+                            <f:setPropertyActionListener target="#{flash.addressId}" value="#{address.id}" />
+                            <f:ajax render="@form :addrForm" execute="@form" event="action"  />					    
+                        </h:commandLink>
+                        &#160;
+                        <h:commandLink action="#{userInfoAction.deleteAddress}" value="sil" title="bu adresi sil">
+                            <f:setPropertyActionListener target="#{flash.addressId}" value="#{address.id}" />
+                            <f:ajax render="@form :addrForm" execute="@form" event="action"  />					    
+                        </h:commandLink>
+                    </div>
+                    <div class="floatclear">&#160;</div>
+                </ui:repeat>
+                
+                <h:messages globalOnly="true" id="addrErrors" styleClass="error" style="font-size: 180% !important"/>
+                
+            </h:form>
+
+            <h:form id="addrForm" prependId="false">
+                <ui:fragment id="addrinfo" rendered="#{userInfoAction.address != null}">
+
+                    <h:panelGrid columns="3" cellspacing="0" cellpadding="0" columnClasses="formColumn1,formColumn2,formColumn3">
+                        <h:panelGroup>
+                            #{messages['signup.addressType']}<br />
+                            <h:selectOneMenu id="addressType" value="#{userInfoAction.address.addressType}" converter="#{entityConverter}" styleClass="#{!component.valid ? 'signupInputError' : ''}">
+                                <f:validator validatorId="notNullValidator" />
+                                <f:selectItem itemValue="" itemLabel="#{messages['selectItems.noSelection']}"/>
+                                <f:selectItems value="#{userInfoAction.addressTypes}"  var="v" itemLabel="#{v.name}"></f:selectItems>
+                            </h:selectOneMenu>
+                        </h:panelGroup>
+
+                        <h:panelGroup>
+                            #{messages['signup.addressShortName']}<br />
+                            <h:inputText id="addressShortName" value="#{userInfoAction.address.shortName}" maxlength="250" required="true" styleClass="#{!component.valid ? 'signupInputError' : ''}" onblur="if(this.value){this.value=this.value.toProperCase(); return false;}">								
+                            </h:inputText>
+                        </h:panelGroup>
+
+                        <h:panelGroup>
+                            #{messages['signup.city']}<br />
+                            <h:selectOneMenu id="addressCity" value="#{userInfoAction.city}" converter="#{entityConverter}" required="true" styleClass="#{!component.valid ? 'signupInputError' : ''}">
+                                <f:selectItem itemValue=""  itemLabel="#{messages['selectItems.noSelection']}"/>
+                                <f:selectItems value="#{userInfoAction.cities}"  var="v" itemLabel="#{v.name}"></f:selectItems>
+                                <f:ajax render="@none" listener="#{userInfoAction.cityChangeEvent}" execute="@this" event="change" />
+                            </h:selectOneMenu>
+                        </h:panelGroup>
+
+			<h:panelGroup>
+                            ilçe ve semtin<br />
+                            <p:autoComplete value="#{userInfoAction.address.area}" converter="#{entityConverter}" id="adresarainfo"
+                                            var="r"  itemValue="#{r}" itemLabel="#{r.district.county.name} #{r.district.name} #{r.name}"
+                                            completeMethod="#{userInfoAction.completeArea}"
+                                            minQueryLength="2" forceSelection="true"
+                                            required="true" />
+                                <p:watermark value="ilini seçip adres ara..."  for="adresarainfo"/>
+                    	</h:panelGroup>     
+
+                        <h:panelGroup>
+                            #{messages['signup.addressStreetName']}<br />
+                            <h:inputText id="addressStreetName" value="#{userInfoAction.address.streetName}" maxlength="250" required="true" styleClass="#{!component.valid ? 'signupInputError' : ''}" onblur="if(this.value){this.value=this.value.toProperCase(); return false;}">								
+                            </h:inputText>
+                        </h:panelGroup>
+
+                        <h:panelGroup>
+                            #{messages['signup.addressBuildingNumber']}<br />
+                            <h:inputText id="addressBuildingNumber" value="#{userInfoAction.address.buildingNumber}" maxlength="250" required="true" styleClass="#{!component.valid ? 'signupInputError' : ''}" onblur="if(this.value){this.value=this.value.toProperCase(); return false;}">								
+                            </h:inputText>
+                        </h:panelGroup>
+
+                        <h:panelGroup>
+                            #{messages['signup.addressAppartmentNumber']}<br />
+                            <h:inputText id="addressAppartmentNumber" value="#{userInfoAction.address.apartmentNumber}" maxlength="250" required="true" styleClass="#{!component.valid ? 'signupInputError' : ''}" onblur="if(this.value){this.value=this.value.toProperCase(); return false;}">								
+                            </h:inputText>
+                        </h:panelGroup>
+
+                        <h:panelGroup>
+                            <span style="font-style: italic">#{messages['signup.phoneNumber']}</span><br />
+                            <h:inputText id="phoneNumber" value="#{userInfoAction.address.phoneNumber}" maxlength="7" label="#{messages['signup.phoneNumber']}" converterMessage="#{messages['signup.number.error']}" styleClass="#{!component.valid ? 'signupInputError' : ''}"/>
+                        </h:panelGroup>
+
+                        <h:panelGroup>
+                            <span style="font-style: italic">#{messages['signup.phoneExtension']}</span><br />
+                            <h:inputText id="phoneExtension" value="#{userInfoAction.address.phoneExtension}" maxlength="4" label="#{messages['signup.phoneExtension']}" converterMessage="#{messages['signup.number.error']}" styleClass="#{!component.valid ? 'signupInputError' : ''}"/>
+                        </h:panelGroup>
+
+
+                    		
+                    </h:panelGrid>
+
+                    <p style="text-align:right">
+                        <h:commandButton value="vazgeç" immediate="true">
+                            <f:ajax render="@form" execute="@form" event="action" listener="#{userInfoAction.cancelEditAdrress}" />
+                        </h:commandButton>
+                        &#160;
+                        <h:commandButton value="kaydet">
+                            <f:ajax render="@form :addrListForm" execute="@form" event="action" listener="#{userInfoAction.saveOrUpdateAddress}" />
+                        </h:commandButton>							
+                    </p>
+
+                </ui:fragment>  		
+
+            </h:form>
+        </div>					
+
+        <div id="tabcontent2" class="tabcontent">
+            <h:form id="infoForm" prependId="false">
+                <h3>profil bilgileri güncelleme</h3>
+                <p>hayat durmuyor, her gün yenilikler ve güzellikler oluyor. senin yaşamında yenilikler oldukça profil bilgilerini güncellemelisin ki ben de sana en uygun, en çok keyif alacağın hediyeleri rahatlıkla seçip sana önerebileyim. yalnız bazı bilgileri buradan güncellemene imkan tanıyamıyorum maalesef çünkü bunlar zaten mutlaka ama mutlaka hatasız kaydetmiş olman gereken bilgiler ;)</p>
+                <ui:fragment rendered="#{!currentUser.idVerified}">
+                    <p><h:graphicImage value="/resources/images/global/kimlik.png" style="float: left"/>kimliğini henüz teyid etmedin. bu kesinlikle zorunlu değil, ama yaparsan tabii ki faydası var. kimlik teyidi nedir, nedendir gibi sorularının yanıtlarını <h:link outcome="/staticpages/faq.xhtml" value="bu sayfada" /> bulabilirsin.</p>
+                </ui:fragment>
+
+                <h:panelGrid columns="3" cellspacing="0" cellpadding="0" columnClasses="formColumn1,formColumn2,formColumn3">
+
+                    <h:panelGroup>    
+                        <h:outputLabel for="firstname" value="#{messages['signup.user.firstname']}" /><br/>
+                        <h:inputText id="firstname" value="#{userInfoAction.userInfo.firstname}"  maxlength="32" required="true" readonly="true" style="background-color: #eeeeee"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup>    
+                        <h:outputLabel for="lastname" value="#{messages['signup.user.lastname']}" /><br/>
+                        <h:inputText id="lastname" value="#{userInfoAction.userInfo.lastname}"  maxlength="32" required="true" readonly="true" style="background-color: #eeeeee"/>
+                    </h:panelGroup>				
+
+                    <h:panelGroup>    
+                        <h:outputLabel for="birthDate" value="#{messages['signup.user.birthDate']}" /><br/>
+                        <h:inputText id="birthDate" label="#{messages['signup.user.birthDate']}" value="#{userInfoAction.userInfo.dateOfBirth}" required="true" readonly="true" style="background-color: #eeeeee"/>
+                    </h:panelGroup>	
+
+                    <h:panelGroup>    
+                        <h:outputLabel for="gender" value="#{messages['signup.user.gender']}" /><br/>
+                        <h:inputText id="genderView" value="#{userInfoAction.userInfo.gender eq 'MALE' ? 'erkek' : 'kadın'}"  readonly="true" style="background-color: #eeeeee"/>
+                        <h:inputHidden id="gender" value="#{userInfoAction.userInfo.gender}" />
+                    </h:panelGroup>	
+
+                    <h:panelGroup>    
+                        <h:outputLabel for="maritalStatus" value="#{messages['signup.user.maritalStatus']}" />
+                        <h:selectOneMenu id="maritalStatus" value="#{userInfoAction.userInfo.maritalStatus}" required="true" styleClass="#{!component.valid ? 'signupInputError' : ''}">
+                            <f:validateLength minimum="1" />
+                            <f:selectItem itemValue="" itemLabel="#{messages['selectItems.noSelection']}"/>
+                            <f:selectItem itemValue="MARRIED" itemLabel="#{messages['signup.marital.married']}"/>
+                            <f:selectItem itemValue="SINGLE" itemLabel="#{messages['signup.marital.single']}"/>	
+                        </h:selectOneMenu>
+                    </h:panelGroup>
+
+                    <h:panelGroup>    
+                        <h:outputLabel for="hasChildren" value="#{messages['signup.user.hasChildren']}" />
+                        <h:selectOneMenu id="hasChildren" value="#{userInfoAction.userInfo.hasChildren}" required="true" styleClass="#{!component.valid ? 'signupInputError' : ''}">
+                            <f:validateLength minimum="1" />
+                            <f:selectItem itemValue="" itemLabel="#{messages['selectItems.noSelection']}"/>
+                            <f:selectItem itemValue="NO" itemLabel="#{messages['signup.children.no']}"/>
+                            <f:selectItem itemValue="YES" itemLabel="#{messages['signup.children.yes']}"/>	
+                        </h:selectOneMenu>
+                    </h:panelGroup>
+
+                    <h:panelGroup>    
+                        <h:outputLabel for="education" value="#{messages['signup.user.education']}" /><br/>
+                        <h:selectOneMenu id="education" value="#{userInfoAction.userInfo.education}" required="true" styleClass="#{!component.valid ? 'signupInputError' : ''}">
+                            <f:validateLength minimum="1" />
+                            <f:selectItem itemValue="" itemLabel="#{messages['selectItems.noSelection']}"/>
+                            <f:selectItem itemValue="NONE" itemLabel="#{messages['signup.education.none']}"/>
+                            <f:selectItem itemValue="PRIMARY_SCHOOL" itemLabel="#{messages['signup.education.school']}"/>	
+                            <f:selectItem itemValue="HIGH_SCHOOL" itemLabel="#{messages['signup.education.highSchool']}"/>	
+                            <f:selectItem itemValue="HIGHER_EDUCATION" itemLabel="#{messages['signup.education.higherEducation']}"/>	
+                            <f:selectItem itemValue="UNIVERSITY" itemLabel="#{messages['signup.education.university']}"/>	
+                            <f:selectItem itemValue="GRADUATE" itemLabel="#{messages['signup.education.graduate']}"/>	
+                            <f:selectItem itemValue="DOCTORATE" itemLabel="#{messages['signup.education.doctorate']}"/>	
+                        </h:selectOneMenu>
+                    </h:panelGroup>
+
+                    <h:panelGroup>    
+                        <h:outputLabel for="employmentStatus" value="#{messages['signup.user.employmentStatus']}" />
+                        <h:selectOneMenu id="employmentStatus" value="#{userInfoAction.userInfo.employmentStatus}" required="true" styleClass="#{!component.valid ? 'signupInputError' : ''}">
+                            <f:validateLength minimum="1" />
+                            <f:selectItem itemValue="" itemLabel="#{messages['selectItems.noSelection']}"/>
+                            <f:selectItem itemValue="UNEMPLOYED" itemLabel="#{messages['signup.employment.unemployed']}"/>
+                            <f:selectItem itemValue="PART_TIME" itemLabel="#{messages['signup.employment.parttime']}"/>	
+                            <f:selectItem itemValue="FULLTIME" itemLabel="#{messages['signup.employment.fulltime']}"/>	
+                            <f:selectItem itemValue="SELF_EMPLOYED" itemLabel="#{messages['signup.employment.selfEmployed']}"/>	
+                        </h:selectOneMenu>
+                    </h:panelGroup>
+
+                    <h:panelGroup>    
+                        <h:outputLabel for="monthlyTLIncome" value="#{messages['signup.user.monthlyTLIncome']}" />
+                        <h:selectOneMenu id="monthlyTLIncome" value="#{userInfoAction.userInfo.montlyNetIncome}" required="true" styleClass="#{!component.valid ? 'signupInputError' : ''}">
+                            <f:validateLength minimum="1" />
+                            <f:selectItem itemValue="" itemLabel="#{messages['selectItems.noSelection']}"/>
+                            <f:selectItem itemValue="NONE" itemLabel="#{messages['signup.income.none']}"/>
+                            <f:selectItem itemValue="TL_0_1000" itemLabel="#{messages['signup.income.0_1000']}"/>	
+                            <f:selectItem itemValue="TL_1001_2000" itemLabel="#{messages['signup.income.1001_2000']}"/>	
+                            <f:selectItem itemValue="TL_2001_3000" itemLabel="#{messages['signup.income.2001_3000']}"/>	
+                            <f:selectItem itemValue="TL_3001_5000" itemLabel="#{messages['signup.income.3001_5000']}"/>	
+                            <f:selectItem itemValue="TL_Above_5000" itemLabel="#{messages['signup.income.above_5000']}"/>
+                        </h:selectOneMenu>
+                    </h:panelGroup>
+
+                </h:panelGrid>
+                <p>
+                    <h:messages globalOnly="true" id="infoErrors" styleClass="error" style="font-size: 180% !important"/>
+                </p>
+                <p style="text-align: right">
+                    <h:commandButton value="kaydet">
+                        <f:ajax render="@form :fnform:_fullname" execute="@form" event="action" listener="#{userInfoAction.changeGeneralInfo}" />
+                    </h:commandButton>
+                </p>
+            </h:form>
+        </div>		
+
+        <div id="tabcontent3" class="tabcontent">
+            <h:form id="emailForm" prependId="false">
+                <h3>e-posta adresi güncelleme</h3>
+                <p>kayıtlı e-posta adresini artık kullanmıyor veya bana yeni aldığın gıcır gıcır bir başka adresini vermek istiyor olabilirsin.</p>
+                <p>yeni adresini kaydettiğinde her ihtimale karşı sana bir doğrulama mesajı göndereceğim. bu mesajın içinde bir doğrulama bağlantısı olacak, o bağlantıya tıklayarak adresini doğrulayabilirsin.</p>
+                <ui:fragment rendered="#{currentUser.emailVerification.emailVerified == false}">
+                    <p>aman dikkat, yeni e-posta adresini doğrulamadan önce hediye siparişi veremeyeceksin, bir an önce doğrulayıp aradan çıkart istersen ;)</p>
+                </ui:fragment>
+
+                <p>
+                    <h:outputLabel for="email" value="#{messages['user.email']}"/><br/>
+                    <h:inputText id="email" value="#{userInfoAction.userInfo.email}" style="width:250px"
+                                    required="true" requiredMessage="#{messages['field.required']}" maxlength="250"
+                                    validatorMessage="#{messages['signup.invalidEmail.error']}" >
+                        <f:validateRegex pattern="^(([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}){1,25})+([;.](([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}){1,25})+)*$"/>
+                    </h:inputText>
+                </p>
+
+                <p>
+                    <h:message for="email" styleClass="error" style="font-size: 120% !important"/>
+                    <h:messages globalOnly="true" id="emailErrors" styleClass="error" style="font-size: 180% !important"/>
+                </p>
+
+                <p style="text-align: right">
+                    <h:commandButton value="doğrulama mesajı gelmedi" rendered="#{currentUser.emailVerification.emailVerified == false}">
+                        <f:ajax render="@form" execute="@form" event="action" listener="#{userInfoAction.reSendVerificationEmail}" />
+                    </h:commandButton>
+                    &#160;		      
+                    <h:commandButton value="kaydet">
+                        <f:ajax render="@form" execute="@form" event="action" listener="#{userInfoAction.changeEmail}" />
+                    </h:commandButton>
+                </p>
+            </h:form>
+        </div>	
+
+        <div id="tabcontent4" class="tabcontent">
+            <h:form id="gsmForm" prependId="false">
+                <h3>cep telefonu güncelleme</h3>
+                <p>kayıtlı cep telefonunu artık kullanmıyor veya bana yeni aldığın gıcır gıcır bir başka numarayı vermek istiyor olabilirsin.</p>
+                <p>yeni numaranı kaydettiğinde her ihtimale karşı sana bir doğrulama mesajı göndereceğim. bu mesajın içinde bir onay kodu olacak, o kodu bu sayfada girerek doğrulamanı yapabilirsin.</p>
+                <ui:fragment rendered="#{userInfoAction.userInfo.gsmVerified == false}">
+                    <p>aman dikkat, yeni cep telefonunu doğrulamadan önce hediye siparişi veremeyeceksin, bir an önce doğrulayıp aradan çıkart istersen ;)</p>
+                </ui:fragment>
+
+                <h:panelGrid columns="3" cellspacing="0" cellpadding="0" columnClasses="formColumn1,formColumn2,formColumn3">
+
+                    <h:panelGroup>
+                        <h:outputLabel for="gsmOperator" value="#{messages['signup.user.gsmOperator']}" /><br/>
+                        <h:selectOneMenu id="gsmOperator" value="#{userInfoAction.userInfo.gsmOperator}" converter="#{entityConverter}" styleClass="#{!component.valid ? 'signupInputError' : ''}" >
+                            <f:validator validatorId="notNullValidator" />
+                            <f:selectItem itemValue="" itemLabel="#{messages['selectItems.noSelection']}"/>
+                            <f:selectItems value="#{userInfoAction.gsmOperators}"  var="v" itemLabel="#{v.name}"></f:selectItems>
+                        </h:selectOneMenu>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputLabel for="gsmPrefix" value="#{messages['signup.user.gsmPrefix']}" />
+                        <h:selectOneMenu id="gsmPrefix" value="#{userInfoAction.userInfo.gsmPrefix}"  converter="#{entityConverter}" styleClass="#{!component.valid ? 'signupInputError' : ''}">
+                            <f:validator validatorId="notNullValidator" />
+                            <f:selectItem itemValue="" itemLabel="#{messages['selectItems.noSelection']}"/>
+                            <f:selectItems value="#{userInfoAction.gsmPrefixs}" var="v" itemLabel="#{v.code}"></f:selectItems>
+                        </h:selectOneMenu>
+                    </h:panelGroup>
+
+                    <h:panelGroup>   
+                        <h:outputLabel for="gsmNumber" value="#{messages['signup.user.gsmNumber']}" />
+                        <h:inputText id="gsmNumber" value="#{userInfoAction.userInfo.gsmNumber}" maxlength="7" required="true" styleClass="#{!component.valid ? 'signupInputError' : ''}" >
+                            <f:validateLength minimum="7" maximum="7" />
+                            <f:validateRegex pattern="(^[0-9]{7}$)" />
+                        </h:inputText>
+                    </h:panelGroup>
+
+                </h:panelGrid>
+                
+                <p>
+                    <ui:fragment rendered="#{userInfoAction.userInfo.gsmVerified == false}">
+                        <h:outputLabel for="gsmConfirmationCode" value="#{messages['signup.user.gsmConfirmationCode']}" /><br/>
+                    </ui:fragment>
+
+                    <ui:fragment rendered="#{userInfoAction.userInfo.gsmVerified == false}">   
+                        <h:inputText id="gsmConfirmationCode" value="#{userInfoAction.userInfo.gsmConfirmationCode}" maxlength="6" required="true"
+                                     label="#{messages['signup.user.gsmConfirmationCode']}"
+                                     requiredMessage="#{messages['field.required']}"
+                                     validatorMessage="#{messages['signup.invalidGsmConfirmCode.error']}"
+                                     style="font-family: monospace; font-weight: bold;"
+                                     styleClass="#{!component.valid ? 'signupInputError' : ''}" >
+                            <f:validateLength minimum="6" maximum="6"></f:validateLength>
+                        </h:inputText>
+                        &#160;
+                        <h:commandLink  value="tekrar gönder" immediate="true">
+                            <f:ajax render="@form" execute="@form" event="action" listener="#{userInfoAction.resendGsmConfirmationCode}" />
+                        </h:commandLink>
+                        &#160;
+                        <h:commandLink value="onayla" rendered="#{userInfoAction.userInfo.gsmVerified == false}">
+                            <f:ajax render="@form" execute="gsmConfirmationCode" event="action" listener="#{userInfoAction.verifyGsmConfirmationCode}" />
+                        </h:commandLink>	
+
+                    </ui:fragment>
+                </p>
+                
+                <p>
+                    <h:message for="gsmConfirmationCode" styleClass="error" style="font-size: 120% !important"/>
+                    <h:message for="gsmNumber" styleClass="error" style="font-size: 120% !important"/>
+                    <h:messages globalOnly="true" id="gsmErrors" styleClass="error" style="font-size: 180% !important"/>
+                </p>
+                <p style="text-align: right">
+                    <h:commandButton value="kaydet" >
+                        <f:ajax render="@form" execute="gsmOperator gsmPrefix gsmNumber" event="action" listener="#{userInfoAction.changeGSMInfo}" />
+                    </h:commandButton>
+                </p>
+            </h:form>
+        </div>		
+
+        <div id="tabcontent5" class="tabcontent">
+            <h:form id="passwordForm" prependId="false">
+                <h3>şifre güncelleme</h3>
+                <p>şifreni güncellemek için aşağıda iki kere, o da ola ki hatalı yazarsan canın sıkılmasın diye, yazıp kaydetmen yeterli.</p>
+                <p>şifrenin 6 ile 20 karakter arasında olması gerekiyor, küçük harf ve rakamlar kullanabilirsin, ama Türkçe karakter ve noktalama işaretleri kullanmamalısın.</p>
+                <p>kullanıcı adını ise maalesef buradan değiştiremiyorsun, ama istersen <h:outputLink value="/contact.xhtml" styleClass="boldText" title="bana mesaj yazmak için buraya tıklayabilirsin" >bana mesaj yazabilirsin</h:outputLink> ve ben de senin için seve seve güncellerim.</p>
+
+                <h:panelGrid columns="3" cellspacing="4" cellpadding="0" columnClasses="formColumn1,formColumn2,formColumn3">
+
+                    <h:panelGroup>    
+                        <h:outputLabel for="username" value="kullanıcı adın" /><br/>
+                        <h:inputText id="username" value="#{userInfoAction.userInfo.username}"  maxlength="20" required="true" readonly="true" style="background-color: #eeeeee"/>
+                    </h:panelGroup>			  		
+
+                    <h:panelGroup>    
+                        <h:outputLabel for="password" value="#{messages['signup.user.password']}" /><br/>
+                        <h:inputSecret id="password" value="#{userInfoAction.userInfo.password}"  maxlength="20" required="true" styleClass="#{!component.valid ? 'signupInputError' : ''}">
+                            <f:validateLength minimum="6" maximum="20"></f:validateLength>
+                            <f:validateRegex pattern="#{utilsBean.passwordRegexp}"></f:validateRegex>
+                        </h:inputSecret>
+                    </h:panelGroup>
+
+                    <h:panelGroup>    
+                        <h:outputLabel for="confirmPassword" value="#{messages['signup.user.confirmPassword']}" /><br/>
+                        <h:inputSecret id="confirmPassword" value="#{userInfoAction.userInfo.confirmedPassword}"  maxlength="20" required="true" styleClass="#{!component.valid ? 'signupInputError' : ''}">
+                            <f:validateLength minimum="6" maximum="20"></f:validateLength>
+                            <f:validateRegex pattern="#{utilsBean.passwordRegexp}"></f:validateRegex>
+                        </h:inputSecret>
+                    </h:panelGroup>			  		
+
+                </h:panelGrid>
+
+                <p>
+                    <h:messages globalOnly="true" id="passwordErrors" styleClass="error" style="font-size: 180% !important"/>
+                </p>
+                <p style="text-align: right">
+                    <h:commandButton value="kaydet">
+                        <f:ajax render="@form" execute="@form" event="action" listener="#{userInfoAction.changePassword}" />
+                    </h:commandButton>
+                </p>
+            </h:form>
+        </div>
+
+        <div id="tabcontent6" class="tabcontent">
+            <h:form id="optForm" prependId="false">
+                <h3>ileti tercihleri güncelleme</h3>
+                <p>tüm bifincan üyelerine düzenli aralıklarla, ama tabii ki taciz de etmeden, yeni hediyelerden ve güncel bilgilerden haberdar olabilmeleri için e-posta mesajı iletiyorum. zaman zaman da özellikle senin profiline ve değişik sorulara verdiğin yanıtlara göre belirlediğim, markaların senin için özel hazırladığı fırsatlar, kampanyalar, hediyeler hakkında onlar adına sms veya e-posta ile mesajlar iletiyorum.</p>
+                <p>ama merak etme, bu mesajların tümü sana benden geliyor, kesinlikle, ama kesinlikle senin ismini ve iletişim bilgilerini hiçbir kimseyle paylaşmıyorum.</p>
+                <p>ufak bir not, bu ayar hediyelerini aldığında girmen gereken onay kodu ve bir süre sonra yanıtlaman gereken hediyelerine özel sorularla ilgili hatırlatmalarımı kapsamıyor, bunlar mutlaka ama mutlaka yapman gereken şeyler olduğu için bu ayarına bakmaksızın bu iki konuda mutlaka hatırlatma yapıyor olacağım.</p>
+
+                <p>
+                    <h:selectBooleanCheckbox id="mailofss" value="#{userInfoAction.userInfo.subscriptionOption.acceptSiteMail}" />
+                    <h:outputLabel for="mailofss" value="#{messages['signup.acceptMailFromUs']}: " />
+                </p>
+                <p>
+                    <h:selectBooleanCheckbox id="mailofothers" value="#{userInfoAction.userInfo.subscriptionOption.acceptThirdpartyMail}" />
+                    <h:outputLabel for="mailofothers" value="#{messages['signup.acceptMailFromThirdParties']}: " />
+                </p>
+                <p>
+                    <h:selectBooleanCheckbox id="gsmofothers" value="#{userInfoAction.userInfo.subscriptionOption.acceptThirdpartySms}" />
+                    <h:outputLabel for="gsmofothers" value="#{messages['signup.acceptSMSFromThirdParties']}: " /> 
+                </p>
+
+                <p>
+                    <h:messages globalOnly="true" id="optErrors" styleClass="error" style="font-size: 180% !important"/>
+                </p>
+                <p style="text-align: right">
+                    <h:commandButton value="kaydet" >
+                        <f:ajax render="@form" execute="mailofss mailofothers gsmofothers" event="action" listener="#{userInfoAction.changeGsmMailPreferences}" />
+                    </h:commandButton>
+                </p>
+
+            </h:form>
+        </div>		
+
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,469 @@
+﻿NETWORK SOLUTIONS SPECIFIC INSTRUCTIONS WITHOUT PORTECLE UTILITY
+
+This explains how to create a CSR (Certificate Signing Request) and install an SSL on a server running Tomcat Web Server.
+There are 3 parts to the SSL installation.
+1. The keystore - where the basic information for the CSR and SSL are stored. Each keystore is unique to each CSR/SSL.
+2. The CSR (Certificate Signing Request - This is submitted to issue the SSL. It contains information generated specifically by the server creating it.
+3. The SSL - The SSL and CA (Certificate Authority) certs are installed to the keystore that generated the CSR. The keystore stores all of the certificates.
+
+Make sure to use a new domain keystore name so as not to overwrite the current one!!!
+Do this in a new directory and then move the keystore file into place...
+Make sure to copy current keystore and save it to avoid overwriting and messing up the web site...
+
+We will be creating new domain key file called domainYYYY.key (where YYYY is the current year)
+
+1) Generate KEY-PAIRS
+-------------------------------------------------------
+IMPORTANT NOTE: Do not forget to alias the generated key as "tomcat"....this is important for import
+of the signed domain cert file...
+
+keytool -genkey -keysize 2048 -keyalg RSA -alias tomcat -keypass changeit -keystore domainYYYY.key -storepass changeit -validity 360
+    first and last name?    BLAH.DOMAIN.COM
+    organization unit?    Your Organization Unit
+    organization?        Your Organization
+    City or Locality?    Anytown
+    State or Province?    IL
+    2-letter country code?    US
+
+
+2) Create Certificate Signing Request and upload to Netsolutions Web site...
+------------------------------------------------------------------------------
+To create the CSR: domainYYYY.CSR
+Type or copy/paste the following command into the terminal window for Tomcat, replacing YYYY with the year for the SSL issued.
+keytool -certreq -alias tomcat -keyalg RSA -file domain2011.CSR -keystore domainYYYY.key
+
+Browse to where the CSR is located and open it up using a text editor like Notepad.
+Copy and paste the entire text of the CSR by going to Network Solutions Account Manager>My SSL Certificates and Seals and paste the CSR into the provided field, selecting the appropriate web server software used to generate the CSR.
+
+The SSL certificate will be issued and you will receive an email informing you that the issue is complete.
+
+Go to Network Solutions Account Manager>My SSL Certificates and Seals and download the certificates in a zip file. The file will contain 4 files when uncompressed.
+
+Unzip the cert files. They will be imported in the following order:
+
+   1. AddTrustExternalCARoot.crt (Root)
+   2. UTNAddTrustServer_CA.crt (Intermediate CA)
+   3. NetworkSolutions_CA_crt (Intermediate CA)
+   4. <yourdomainname>.crt (domain/site certificate)
+
+Using the following examples in the following order, you will now use the commands below to import the certificates. These can be typed or copy/pasted into the command window. Replace YYYY with the same year used above to create the CSR.
+
+1) Root Certificate:
+keytool -import -trustcacerts -alias root -file AddTrustExternalCARoot.crt  -keystore domainYYYY.key
+
+2) Intermediate Certificate:
+keytool -import -trustcacerts -alias utnaddtrustserverca -file UTNAddTrustServer_CA.crt  -keystore domainYYYY.key
+
+3) Intermediate Certificate:
+keytool -import -trustcacerts -alias networksolutionsca -file NetworkSolutions_CA.crt  -keystore domainYYYY.key
+
+4) Domain Certificate:
+keytool -import -trustcacerts -alias tomcat -file BLAH.DOMAIN.crt  -keystore domainYYYY.key
+
+If Tomcat has not yet been configured to use SSL connections, Tomcat will first need a SSL Connector configured before it can accept secure connections.
+
+Note: By default Tomcat will look for your Keystore with the file name .keystore in the home directory with the default password 'changeit'. The home directory is generally /home/user_name/ on Unix and Linux systems, and C:\Documents and Settings\user_name\ on Microsoft Windows systems. -- It is possible to change the filename, password, and even location that Tomcat looks for the keystore. If you need to do this, pay special attention to #8 of Option 1 or #5 of Option 2 below.
+
+Option 1 -- Add an SSL Connector using admintool:
+
+1.       Start Tomcat
+
+2.       Enter 'http://localhost:8080/admin' in a local browser to start admintool
+
+3.       Type a username and password with administrator rights
+
+4.       On the left select 'Service' (Java Web Services Developer Pack)
+
+5.       Select 'Create New Connector' from the drop-down list on the right
+
+6.       Choose 'HTTPS' in the 'Type' field
+
+7.       In the 'Port' field, enter '443'. This defines the TCP/IP port number on which Tomcat will listen for secure connections
+
+8.       Enter the Keystore Name and Keystore Password if (a.) your keystore is named something other than .keystore, (b.) if .keystore is located in a directory other than the home directory of the machine on which Tomcat         is running, or if (c.) the password is something other than the default value of 'changeit'. If you have used the default values, you can leave these fields blank.
+
+9.       Select 'Save' to save the new Connector
+
+10.     Select 'Commit Changes' to save the new Connector information to the server.xml file so that it is available the next time Tomcat is          started.
+
+Update Tomcat
+-----------------------------------
+1) put new domainYYYYkey in c:\tomcat folder ( or the directory where Tomcat is located)
+2) update c:\tomcat\conf\server.xml and change the 8443 connector to point at this new keystore file (or the directory where Tomcate is located)
+3) restart Tomcat
+
+Option 2 --  If Tomcat has already been previously configured to accept SSL connections or has had an SSL previously installed, configure the SSL Connector in server.xml:
+1.       Copy your keystore file (your_domain.key) to the home directory (see the Note above)
+2.       Open the file Home_Directory/conf/server.xml in a text editor
+3.       Uncomment the 'SSL Connector' Configuration
+4.       Make sure that the 'Connector Port' is 443
+5.       If your keystore filename is something other than the default file name (.keystore) and/or your keystore password is something other      than default ('changeit') then you will need to specify the correct keystore filename and/or password in your connector configuration --      ex. keypass="newpassword". When you are done your connector should look something like this:
+     <Connector port="443" maxHttpHeaderSize="8192" maxThreads="150" minSpareThreads="25" maxSpareThreads="75" enableLookups="false"      disableUploadTimeout="true" acceptCount="100" scheme="https" secure="true" clientAuth="false" sslProtocol="TLS"      keystoreFile="/home/user_name/your_domain.key" keypass="your_keystore_password"/>
+6.       Save the changes to server.xml
+7.       Restart Tomcat
+
+ALTERNATE METHOD TO COMMAND LINE USING PORTECLE JAVA TOOL
+
+Java Keytool is a key and certificate management utility. It allows users to manage their own public/private key pairs and certificates. It also allows users to cache certificates. Java Keytool stores the keys and certificates in what is called a keystore. By default the Java keystore is implemented as a file. It protects private keys with a password. A Keytool keystore contains the private key and any certificates necessary to complete a chain of trust and establish the trustworthiness of the primary certificate.
+
+Each certificate in a Java keystore is associated with a unique alias. When creating a Java keystore you will first:
+1. create the .jks file that will initially only contain the private key.
+2. You will then generate a CSR and have a certificate generated from it.
+3. Then you will import the certificate to the keystore including any root certificates.
+
+For ease in managing keystores, CSRs, and certificates, try using Portecle. This is a Java applet which will require you to have Java installed on your machine. Portecle is a user friendly GUI application for creating, managing and examining keystores, keys, certificates, certificate requests, certificate revocation lists and more. Portecle can be launched directly with Java Web Start (Java 1.6 or later with Web Start required).
+
+Using Portecle:
+Click "Launch"
+Windows may propmpt you on how to handle the file. Click "Open With" Java(TM) Web Start Launcher. The application will load. Here is how to do various tasks with the application. I will show the Portecle method along with the applicable command line method. These commands allow you to generate a new Java Keytool keystore file, create a CSR, and import certificates. Any root or intermediate certificates will need to be imported before importing the primary certificate for your domain. In the following example please replace the example keystore name 'domain.key' with your keystore name.
+
+To create a new keystore: (Most of the time you will pick JKS: Java Keystore (Oracle's Keystore format)
+COMMAND LINE: Generate a Java keystore and key pair
+    keytool -genkey -alias nameofyouralias -keyalg RSA -keystore nameofyourkeystore -keysize 2048
+PORTECLE:
+    From the File menu, choose New Keystore. Alternatively click on the New Keystore toolbar button:
+    New keystore icon
+    The New Keystore Type dialog is displayed. Select the desired keystore type using the radio buttons:
+        JKS: Java Keystore (Oracle's Keystore format)
+        PKCS #12: Public-Key Cryptography Standards #12 Keystore (RSA's Personal Information Exchange Syntax Standard)
+        JCEKS: Java Cryptography Extension Keystore (More secure version of JKS)
+        JKS (case sensitive): Case sensitive JKS
+        BKS: Bouncy Castle Keystore (Bouncy Castle's version of JKS)
+        UBER: Bouncy Castle UBER Keystore (More secure version of BKS)
+        GKR: GNU Keyring keystore (requires GNU Classpath version 0.90 or later installed)
+    Press the OK button.
+    The title bar will change to display the text Untitled and the status bar will change to display the chosen keystore type.
+Shortcut key: Ctrl-N.
+
+How to open a keystore
+PORTECLE:
+Note: Portecle supports the following keystore types: JKS (normal and case sensitive version), PKCS #12, JCEKS, BKS, UBER, and GNU Keyring. Attempts to open keystore files of any other type will result in an error. See How to create a new keystore for more information about keystore types.
+
+To open a keystore from file:
+     From the File menu, choose Open Keystore. Alternatively click on the Open Keystore toolbar button:
+    Open keystore icon
+    The Open Keystore dialog will appear.
+    Select the folder where the keystore file is stored.
+    Click on the required keystore file or type the filename into the File Name text box.
+    Click on the Open button.
+    The Password for Keystore... dialog will appear.
+    Type in the keystore's password and press the OK button.
+    The title bar will change to display the keystore's filename and the keystore entries table will be populated with the keystore's entries.
+Shortcut key: Ctrl-O.
+
+To save a keystore to file:
+PORTECLE:
+    From the File menu, choose Save Keystore. Alternatively click on the Save Keystore toolbar button:
+    Save keystore icon
+    If the keystore is not Untitled then it will be saved immediately. Otherwise...
+    If you have yet to set a password for your Untitled keystore:
+        The Set Keystore Password dialog is displayed.
+        Enter the password to protect the keystore with, confirm it and press the OK button.
+    The Save Keystore As dialog is displayed.
+    Select the folder where the keystore file is to be saved.
+    Type the filename into the File Name text box.
+    Click on the Save button.
+Shortcut key: Ctrl-S.
+
+To save a keystore to file with a different name:
+PORTECLE:
+    From the File menu, choose Save Keystore As.
+    The Set Keystore Password dialog is displayed.
+    Enter the password to protect the keystore with, confirm it and press the OK button.
+    The Save Keystore As dialog is displayed.
+    Select the folder where the keystore file is to be saved.
+    Type the filename into the File Name text box.
+    Click on the Save button.
+
+To change a keystore's type:
+PORTECLE:
+    From the Tools menu, choose the Change Keystore Type sub-menu.
+    From this menu you can choose between supported keystore types (see How to create a new keystore for information about keystore types).
+    Choose the menu item corresponding to the required type. Note that the current type will be disabled.
+    The keystore type will now be changed.
+        If the current keystore type is not PKCS #12, any of the keystore's entries are of type Key Pair and you have yet to supply the password for the entry then the Key Pair Entry Password dialog will be displayed for each of the key pair entries. Enter the key pair entry's password and acknowledge the dialog by pressing OK.
+        If the current keystore type is PKCS #12 then any key pair entries will have their password set to 'password'.
+        Keystore entries of type Key will be lost in the change if the action is confirmed.
+        When converting from a keystore type that supports case sensitive entry aliases to one that does not, an option to abort the action is offered if a potential problem is detected.
+
+To set a keystore's password:
+PORTECLE:
+    From the Tools menu, choose Set Keystore Password. Alternatively click on the Set Keystore Password toolbar button:
+    Set keystore password icon
+    The Set Keystore Password dialog will be displayed.
+    Enter the password to protect the keystore with, confirm it and press the OK button.
+Shortcut key: Ctrl-P.
+
+To produce a keystore report:
+PORTECLE:
+    From the Tools menu, choose Keystore Report. Alternatively click on the Keystore Report toolbar button:
+    Keystore report icon
+    The Keystore Report dialog will be displayed with details of the keystore in tree form including all entries and attached certificates.
+    The report can be copied to clipboard in two formats:
+        Press the Copy button to copy a plain-text report to the clipboard.
+        Press the Copy as XML button to copy an XML report to the clipboard.
+    After viewing the report acknowledge the dialog by pressing the OK button.
+Shortcut key: Ctrl-R.
+
+To generate a key pair entry in a keystore:
+PORTECLE:
+    From the Tools menu, choose Generate Key Pair. Alternatively click on the Generate Key Pair toolbar button:
+    Generate key pair icon
+    The Generate Key Pair dialog will be displayed. Select a Key Algorithm and Key Size and press the OK button. Key pair generation will start in the background.
+    The Generate Certificate dialog will be displayed.
+    Enter the certificate details and press the OK button.
+    If key pair generation is still in progress, the Generating Key Pair dialog will be displayed and will remain visible until key pair generation has completed. Depending on the key size chosen and the speed of your computer it may take some time for this step to complete. You therefore have the option to abort the key pair generation by pressing the cancel button on this dialog. Note however that at this time, aborting the key pair generation will only cancel the generation window and will let you continue using the user interface; the actual key pair generation will continue to run to completion in the background.
+    The Key Pair Entry Alias dialog will be displayed.
+    Enter the alias for the new key pair entry and press the OK button.
+    If the current keystore type is not PKCS #12:
+    The Key Pair Entry Password dialog will be displayed.
+    Enter the password to protect the new key pair entry with, confirm it and press the OK button.
+    The new key pair entry will appear in the keystore entries table.
+Shortcut key: Ctrl-G.
+
+To examine a certificate file:
+PORTECLE:
+    From the Examine menu, choose Examine Certificate. Alternatively click on the Examine Certificate toolbar button:
+    Examine certificate icon
+    The Examine Certificate dialog will appear.
+    Select the folder where the certificate file is stored.
+    Click on the required certificate file or type the filename into the File Name text box.
+    Click on the Examine button.
+    The Certificate Details dialog will appear.
+    After viewing the details acknowledge the dialog by pressing the OK button.
+Shortcut key: Ctrl-E.
+
+To examine an SSL/TLS connection:
+PORTECLE:
+    From the Examine menu, choose Examine SSL/TLS Connection.
+    The Examine SSL/TLS Connection dialog will appear.
+    Enter the host name or IP address for the connection to be examined, for example sourceforge.net.
+    Enter the port number for the connection to be examined, for example 443 for HTTPS.
+    Click on the Examine button.
+    The Certificate Details for SSL/TLS Connection dialog will appear.
+    After viewing the details acknowledge the dialog by pressing the OK button.
+Shortcut key: Ctrl-I.
+
+To examine a CSR file:
+PORTECLE:
+    From the Examine menu, choose Examine Certification Request.
+    The Examine CSR dialog will appear.
+    Select the folder where the CSR file is stored.
+    Click on the required CSR file or type the filename into the File Name text box.
+    Click on the Examine button.
+    The Certification Request Details dialog will appear.
+    After viewing the details acknowledge the dialog by pressing the OK button.
+Shortcut key: Ctrl-Q.
+
+To examine a CRL file:
+PORTECLE:
+    From the Examine menu, choose Examine CRL. Alternatively click on the Examine CRL toolbar button:
+    Examine CRL icon
+    The Examine CRL dialog will appear.
+    Select the folder where the CRL file is stored.
+    Click on the required CRL file or type the filename into the File Name text box.
+    Click on the Examine button.
+    The CRL Details dialog will appear.
+    After viewing the details acknowledge the dialog by pressing the OK button.
+Shortcut key: Ctrl-L.
+
+To import a trusted certificate into a keystore from file:
+COMMAND LINE: Import a root or intermediate CA certificate to an existing Java keystore
+keytool -import -trustcacerts -alias root -file Netsol.crt -keystore keystore.jks
+In the following example please replace the example keystore name 'domain.key' with your keystore name.
+keytool -import -trustcacerts -alias root -file AddTrustExternalCARoot.crt -keystore domain.key
+Use the same process for the UTNAddTrustServer_CA.crt  file, the NetworkSolutionsUTNServerCA.crt  file, and the NetworkSolutionsEVSSLCA.crt  file using the keytool commands:
+keytool -import -trustcacerts -alias INTER1 -file UTNAddTrustServer_CA.crt -keystore domain.key
+keytool -import -trustcacerts -alias INTER2 -file NetworkSolutionsUTNServerCA.crt -keystore domain.key
+keytool -import -trustcacerts -alias INTER3 -file NetworkSolutionsEVSSLCA.crt -keystore domain.key
+Import a signed primary certificate to an existing Java keystore
+    keytool -import -trustcacerts -alias mydomain -file mydomain.crt -keystore keystore.jks
+Use the same process for the site domain certificate using the keytool command. If you are using an alias then please include the alias command in the string. Example:
+keytool -import -trustcacerts -alias "yyy" -file "DOMAINNAME.COM".crt -keystore domain.key
+(where "yyy" is the alias specified during CSR creation and"DOMAINNAME.COM" is your domain)
+PORTECLE:
+    From the Tools menu, choose Import Trusted Certificate. Alternatively click on the Import Trusted Certificate toolbar button:
+    Import trusted certificate icon
+    The Import Trusted Certificate dialog will appear.
+    Select the folder where the certificate file is stored.
+    Click on the required certificate file or type the filename into the File Name text box.
+    Click on the Import button.
+    If Portecle cannot establish a trust path from the certificate in the file to an existing self-signed trusted certificate in your keystore (or the CA certs keystore if it is enabled):
+        The Certificate Details dialog will be displayed.
+        After viewing the details acknowledge the dialog by pressing the OK button.
+        A further dialog will appear asking if you wish accept the certificate.
+        Press the Yes button if you wish to trust the certificate and import it and No if you do not. If you answer No the import will abort.
+    The Trusted Certificate Alias dialog will appear.
+    Enter the alias of the new trusted certificate and press OK.
+    The new trusted certificate entry will appear in the keystore Entries table with the chosen alias.
+Shortcut key: Ctrl-T.
+
+To import a key pair into a keystore from a PKCS #12 keystore or PEM bundle file:
+PORTECLE:
+    From the Tools menu, choose Import Key Pair. Alternatively click on the Import Key Pair toolbar button:
+    Import key pair icon
+    The Choose Key Pair File for Import dialog will appear.
+    Select the folder where the required PKCS #12 or PEM bundle file is stored.
+    Click on the required PKCS #12 or PEM bundle file or type the filename into the File Name text box.
+    Click on the Choose button.
+    If the selected file was a PEM bundle containing encrypted private keys, one or more Password for Private Key X dialogs will appear, one fore each such key. Enter the private key password into the dialog and press OK.
+    If the selected file was not a PEM bundle containing key pairs, the PKCS #12 Keystore Password dialog will appear. Enter the PKCS #12 keystore's password into the dialog and press OK.
+    The Import Key Pair dialog will appear populated with the aliases of all key pairs present in the loaded PKCS #12 keystore or PEM bundle.
+    When you select a key pair its algorithm will be displayed. You may also view each key pair's certificate details by pressing the Certificate Details button.
+    Select the required key pair and press the Import button.
+    The Key Pair Entry Alias dialog will appear.
+    Enter the alias of the new key pair and press OK.
+    If the current keystore type is not PKCS #12:
+        The Key Pair Entry Password dialog will be displayed.
+        Enter the key entry's password into the dialog and press OK.
+    The new key pair entry will appear in the keystore entries table with the chosen alias.
+Shortcut key: Ctrl-K.
+
+To delete a keystore entry:
+PORTECLE:
+    Right-click on the keystore entry in the keystore entries table. Select the Delete item from the resultant pop-up menu.
+    The entry will disappear from the keystore entries table.
+
+To export a keystore entry:
+PORTECLE:
+    Right-click on the keystore entry in the keystore entries table. Select the Export item from the resultant pop-up menu.
+    The Export Keystore Entry dialog is displayed. The options available depend on the type of entry you chose to export and are detailed below:
+        Key pair export types
+            Head Certificate (export formats: DER, PEM, PKCS #7 or PkiPath)
+            Certificate Chain (export formats: PKCS #7 or PkiPath)
+            Private Key and Certificates (export formats: PEM or PKCS #12)
+        Trusted certificate export types
+            Head Certificate (export formats: DER, PEM, PKCS #7 or PkiPath)
+    Choose your preferred Export Type and Export Format and press the OK button.
+    If the current keystore type is not PKCS #12, the export is for Private Key and Certificates and you have yet to supply the password for the entry:
+        The Key Pair Entry Password dialog will be displayed.
+        Enter the key pair entry's password and acknowledge the dialog by pressing OK.
+    If the export is for a Private Key and Certificates:
+        The PKCS #12 Keystore Password dialog will be displayed.
+        Enter the password to protect the keystore with, confirm it and press the OK button.
+    The Export dialog is displayed.
+    Select the folder to export to.
+    Type the filename into the File Name text box.
+    Click on the Export button.
+
+To rename a keystore entry:
+PORTECLE:
+    Right-click on the keystore entry in the keystore entries table. Select the Rename item from the resultant pop-up menu.
+    The New Entry Alias dialog will appear.
+    Enter the new alias into the dialog and acknowledge it by pressing the OK button.
+    If the current keystore type is not PKCS #12, the entry is of type Key Pair and you have yet to supply the password for the entry:
+        The Key Pair Entry Password dialog will be displayed.
+        Enter the Key Pair entry's password and press the OK button.
+    The entry will be renamed in the keystore entries table.
+
+To examine a keystore entry's certificate:
+PORTECLE:
+    Right-click on the keystore entry in the keystore entries table. Select the Certificate Details item from the resultant pop-up menu. Alternatively, simply double-click on the keystore entry.
+    The Certificate Details dialog will appear. After viewing the details acknowledge the dialog by pressing the OK button.
+
+To clone (make an exact copy of) a keystore key pair entry:
+PORTECLE:
+    Right-click on the key pair keystore entry in the keystore entries table. Select the Clone item from the resulting pop-up menu.
+    If you have yet to supply the password for the entry and the current keystore type is not PKCS #12:
+        The Key Pair Entry Password dialog will be displayed.
+        Enter the key pair entry's password and press the OK button.
+    The Cloned Key Pair Entry Alias dialog will be displayed.
+    Enter the alias for the new key pair and press the OK button.
+    If the current keystore type is not PKCS #12:
+        The Cloned Key Pair Entry Password dialog will be displayed.
+        Enter the password to protect the key pair with, confirm it and press the OK button.
+    The cloned key pair entry will appear in the keystore entries table.
+
+Note that PKCS #12 keystore's do not require passwords for their key pair entries. This functionality is therefore not available for PKCS #12 keystores. To set a keystore key pair entry's password:
+
+    Right-click on the key pair keystore entry in the keystore entries table. Select the Set Password item from the resultant pop-up menu.
+    The Set Key Pair Entry Password dialog will appear. Fill out the dialog's fields with the old password, and new password and new password confirmation. If you have already supplied a password for the key pair entry then the old password field will have already been filled out for you. Press the OK button to confirm the dialog.
+
+To generate a CSR for a keystore key pair entry:
+COMMAND LINE: keytool -certreq -alias tomcat -keyalg RSA -file domainYYYY.CSR -keystore domainYYYY.key
+PORTECLE:
+    Right-click on the key pair keystore entry in the keystore entries table. Select the Generate CSR item from the resultant pop-up menu.
+    If the current keystore type is not PKCS #12 and you have yet to supply the password for the entry:
+        The Key Pair Entry Password dialog will be displayed.
+        Enter the key pair entry's password and press the OK button.
+    The Generate CSR dialog is displayed. Select the folder to generate the CSR in.
+    Type the filename into the File Name text box.
+    Click on the Generate button.
+
+To import a CA reply into a keystore key pair entry:
+COMMAND LINE: Generate a certificate signing request (CSR) for an existing Java keystore
+    keytool -certreq -alias nameofyouralias -keystore nameofyouralias -file mydomain.csr
+PORTECLE:
+    Right-click on the key pair keystore entry in the keystore Entries table. Select the Import CA Reply item from the resultant pop-up menu.
+    The Import CA Reply dialog will appear.
+    Select the folder where the CA reply certificate file is stored.
+    Click on the required CA reply certificate file or type the filename into the File Name text box.
+    Click on the Import button.
+    What happens next depends on whether the CA reply certificate file contains a single certificate or a chain or certificates:
+        If the CA reply file contains a single certificate:
+            If Portecle can establish a trust path between the certificate and an existing self-signed Trusted Certificate in your keystore (or the CA certs keystore if it is enabled) then the import will continue. Otherwise it will fail at this point.
+        Alternatively the CA reply file may contain a chain of certificates:
+            Portecle will attempt to match the reply's root CA to an existing trusted certificate in your keystore (or the CA certs keystore if it is enabled).
+            If it cannot then the Certificate Details dialog will appear displaying the details of the reply's root CA certificate for you to verify.
+            After viewing the details acknowledge the dialog by pressing the OK button.
+            A further dialog will appear asking if you wish accept the certificate.
+            Press the Yes button if you wish to trust the certificate and import the CA reply and No if you do not. If you reply No the import will fail at this point.
+    If the current keystore type is not PKCS #12:
+        The Key Pair Entry Password dialog will be displayed.
+        Enter the key entry's password into the dialog and press OK.
+    The keystore key pair entry will be updated to reflect the content of the CA reply.
+
+Extra certificates from a CA certs keystore can be considered when forming trust paths and attempting to match root certificates. This is relevant when importing trusted certifcates and CA replies. To use a CA certs keystore:
+PORTECLE:
+    From the Tools menu, choose Options.
+    The Options dialog will be displayed. Select the CA Certs Keystore tab.
+    Tick the Use CA Certs Keystore check box.
+    The default CA Certs Keystore is the cacerts file bundled with Java. To change to another keystore:
+        Press the Browse button.
+        The Choose CA Certs Keystore dialog will appear.
+        Select the folder where the keystore file is located.
+        Type the filename into the File Name text box.
+        Click on the Choose button.
+    Press the OK button to save your settings and dismiss the Options dialog.
+    The use of the CA certs keystore is now enabled. The first time that you attempt to import a trusted certificate or CA Reply in a Portecle session you will be prompted for the CA certs keystore password. The default password for cacerts file bundled with Java is changeit.
+
+
+HELPERS:
+---------------
+    To list all entries in keystore:
+    keytool -list -keystore domain2008.key
+   
+Java Keytool Commands for Checking
+
+If you need to check the information within a certificate, or Java keystore, use these commands.
+
+    Check a stand-alone certificate
+    keytool -printcert -v -file mydomain.crt
+
+    Check which certificates are in a Java keystore
+    keytool -list -v -keystore keystore.jks
+
+    Check a particular keystore entry using an alias
+    keytool -list -v -keystore keystore.jks -alias mydomain
+
+Other Java Keytool Commands
+
+    Delete a certificate from a Java Keytool keystore
+    keytool -delete -alias mydomain -keystore keystore.jks
+
+    Change a Java keystore password
+    keytool -storepasswd -new new_storepass -keystore keystore.jks
+
+    Export a certificate from a keystore
+    keytool -export -alias mydomain -file mydomain.crt -keystore keystore.jks
+
+    List Trusted CA Certs
+    keytool -list -v -keystore $JAVA_HOME/jre/lib/security/cacerts
+
+    Import New CA into Trusted Certs
+    keytool -import -trustcacerts -file /path/to/ca/ca.pem -alias CA_ALIAS -keystore $JAVA_HOME/jre/lib/security/cacerts
+
+If you need to move a certificate from Java Keytool to Apache or another type of system, check out these instructions for converting a Java Keytool keystore using OpenSSL. For more information, check out the Java Keytool documentation or check out our Tomcat SSL Installation Instructions which use Java Keytool.
+	
+  
+	

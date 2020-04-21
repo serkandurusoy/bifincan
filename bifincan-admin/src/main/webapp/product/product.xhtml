@@ -1,0 +1,278 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:hh="http://balusc.net/jsf/html"
+                template="/resources/layouts/standard.xhtml">
+    <ui:define name="metadata">
+    </ui:define>
+
+    <ui:define name="browserTitle">products - </ui:define>
+    <ui:define name="content">
+        <h:form id="mainForm">
+            <p:tabView dynamic="true" id="t1"
+                       style="border-style:none; padding-left:0px; padding-right: 0px;">
+                <p:tab title="products" id="t11">
+                    <p:panel>
+                        <p:commandButton value="New" style="right:0px;"
+                                         action="#{productAction.initAdd()}"
+                                         update=":editForm:prodGrid" onclick="dlg2.show();">
+                             <f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />             
+                        </p:commandButton>                 
+                    </p:panel>		
+                    <p:messages id="messages" autoUpdate="true"/>	
+					<p:dataTable id="mainTable" var="product" value="#{productAction.dataModel}" binding="#{productAction.dataTable}"
+								style="height:85%" emptyMessage="No records found" paginator="true" paginatorPosition="bottom" 
+								paginatorAlwaysVisible="true" rows="12" pageLinks="10">                                  
+                        <p:column>
+                            <f:facet name="header" style="background-color:red">
+                                Brand
+                            </f:facet>
+                            <h:outputText value="#{product.brand.name}" />
+                        </p:column>	                        
+                        <p:column>
+                            <f:facet name="header" style="background-color:red">
+                                Name
+                            </f:facet>
+                            <h:outputText value="#{product.name}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header" style="background-color:red">
+                                Stock
+                            </f:facet>
+                            <h:outputText value="#{product.stockQuantity}" />
+                        </p:column>				
+                        <p:column>
+                            <f:facet name="header" style="background-color:red">
+                                Order
+                            </f:facet>
+                            <h:outputText value="#{product.orderQuantity}" />
+                        </p:column>				
+                        <p:column>
+                            <f:facet name="header" style="background-color:red">
+                                Loss
+                            </f:facet>
+                            <h:outputText value="#{product.loss}" />
+                        </p:column>				
+                        <p:column>
+                            <f:facet name="header" style="background-color:red">
+                                Price
+                            </f:facet>
+                            <h:outputText value="#{product.priceMoney}" />
+                        </p:column>				
+                        <p:column>
+                            <f:facet name="header" style="background-color:red">
+                                Point
+                            </f:facet>
+                            <h:outputText value="#{product.pricePoints}" />
+                        </p:column>				
+                        <p:column>
+                            <f:facet name="header" style="background-color:red">
+                                Class
+                            </f:facet>
+                            <h:outputText value="#{product.classifier}" />
+                        </p:column>				
+                        <p:column>
+                            <f:facet name="header" style="background-color:red">
+                                Ordl.
+                            </f:facet>
+                            <h:outputText value="#{product.orderableProduct eq true ? 'Yes' : 'No'}" />
+                        </p:column>				
+                        <p:column>
+                            <f:facet name="header" style="background-color:red">
+                                Surp.
+                            </f:facet>
+                            <h:outputText value="#{product.surpriseProduct eq true ? 'Yes' : 'No'}" />
+                        </p:column>				
+                        <p:column>
+                            <f:facet name="header" style="background-color:red">
+                                Wlcm.
+                            </f:facet>
+                            <h:outputText value="#{product.welcomeProduct eq true ? 'Yes' : 'No'}" />
+                        </p:column>				
+                        <p:column>
+                            <f:facet name="header" style="background-color:red">
+                                Actv.
+                            </f:facet>
+                            <h:outputText value="#{product.active eq true ? 'Yes' : 'No'}" />
+                        </p:column>				
+         														
+                        <p:column style="text-align:center">
+                            <f:facet name="header">
+                                Action
+                            </f:facet>
+                            <p:commandButton value="Edit"
+                                             action="#{productAction.initEdit(product)}"
+                                             update=":editForm:prodGrid" onclick="dlg2.show();">
+                                 <f:actionListener type="com.dna.bifincan.admin.util.ResetFormListener" />             
+                            </p:commandButton>                 
+
+                            <p:commandButton value="Delete"
+                                             action="#{productAction.initEdit(product)}"
+                                             onclick="dlg3.show();"/>					
+                        </p:column>
+                    </p:dataTable>
+
+                </p:tab>
+            </p:tabView>
+
+        </h:form>
+    </ui:define>
+
+    <ui:define name="afterlayout">
+        <p:dialog header="Product" widgetVar="dlg2" modal="true"
+                  height="600" width="640">
+            <h:form id="editForm" enctype="multipart/form-data" acceptcharset="UTF-8">
+                <h:panelGrid id="prodGrid" columns="2" width="100%">
+
+                    <h:outputText value="Name:" />
+                    <h:inputText value="#{productAction.currentProduct.name}" style="width:98%" maxlength="255" required="true" requiredMessage="The product's name is required"/>
+                    
+                    <h:outputText value="Barcode:" />				
+                    <h:inputText value="#{productAction.currentProduct.barcode}" style="width:98%" maxlength="250" required="true" requiredMessage="The barcode field is required"/>
+       
+                    <h:outputText value="Brand:" />				
+                    <h:selectOneMenu value="#{productAction.currentProduct.brand}" converter="#{entityConverter}" style="width:60%;height:27px" required="true" requiredMessage="The brand field is required">
+                        <f:selectItems value="#{brandService.getBrands()}" var="r" itemLabel="#{r.name}, #{r.company.name}"/>
+                    </h:selectOneMenu>  
+                         
+                    <h:outputText value="Country:" />				
+                    <h:selectOneMenu value="#{productAction.currentProduct.country}" converter="#{entityConverter}" style="width:60%;height:27px" required="true" requiredMessage="The country field is required">
+                        <f:selectItems value="#{addressService.findCountries()}" var="r" itemLabel="#{r.name}, #{r.globalRegion.name}"/>
+                    </h:selectOneMenu>
+                                                                                                                                      						
+                    <h:outputText value="Category:" />				
+                    <h:selectOneMenu value="#{productAction.currentProduct.category}" converter="#{entityConverter}" style="width:100%;height:27px" required="true" requiredMessage="The category field is required">
+                        <f:selectItems value="#{productCategoryService.findProductCategoriesLevelThree()}" var="r" itemLabel="#{r.name}, #{r.parent.name}, #{r.parent.parent.name}"/>
+                    </h:selectOneMenu>  
+                    
+                    <h:outputText value="Price source:" />				
+                    <h:selectOneMenu value="#{productAction.currentProduct.priceSource}" converter="#{entityConverter}" style="width:60%;height:27px" required="true" requiredMessage="The price source field is required">
+                        <f:selectItems value="#{productService.findProductPriceSources()}" var="r" itemLabel="#{r.name}"/>
+                    </h:selectOneMenu>  
+                      
+                    <h:outputText value="Image small:" />
+					<hh:inputFile id="file1" value="#{productAction.imageSmall}" />
+					
+                    <h:outputText value="Image large:" />
+					<hh:inputFile id="file2" value="#{productAction.imageLarge}" />
+
+                    <h:outputText value="Image detail:" />
+					<hh:inputFile id="file3" value="#{productAction.imageDetail}" />
+
+                    <h:outputText value="Slug:" />				
+                    <h:inputText value="#{productAction.currentProduct.slug}" style="width:98%" maxlength="250" required="true" requiredMessage="The slug field is required"/>
+                                         
+                    <h:outputText value="Meta Keywords:" />
+                    <h:inputTextarea value="#{productAction.currentProduct.keywords}" style="width:98%;height:45px" required="true"
+                                     requiredMessage="The short description field is required"
+                                     validatorMessage="Short description must not be more than 255 characters" >
+                        <f:validateLength maximum="255"/>
+                    </h:inputTextarea>
+                     
+                    <h:outputText value="Short description:" />
+                    <h:inputTextarea value="#{productAction.currentProduct.shortDescription}" style="width:98%;height:45px" required="true"
+                                     requiredMessage="The short description field is required"
+                                     validatorMessage="Short description must not be more than 255 characters" >
+                        <f:validateLength maximum="255"/>
+                    </h:inputTextarea>
+                     
+                    <h:outputText value="Description:" />
+                    <p:editor value="#{productAction.currentProduct.description}"  />
+                    	
+                    <h:outputText value="Stock entry quantity:" />				
+                    <h:inputText value="#{productAction.currentProduct.stockQuantity}" style="width:50%" maxlength="9" required="true" requiredMessage="The strock entry quantity field is required"
+                    	validatorMessage="The stock entry quantity value accepts only positive numbers" converterMessage="The stock entry quantity value accepts only integers">
+                      <f:validateLongRange minimum="0"/>
+                    </h:inputText>
+
+                    <h:outputText value="Order quantity:" />	
+                    <h:outputText value="#{productAction.currentProduct.orderQuantity}" />				
+                                             
+                    <h:outputText value="Loss quantity:" />				
+                    <h:inputText value="#{productAction.currentProduct.loss}" style="width:50%" maxlength="9"  required="true" requiredMessage="The loss quantity field is required"
+                    	validatorMessage="The loss quantity value accepts only positive numbers" converterMessage="The loss quantity value accepts only integers">
+                      <f:validateLongRange minimum="0"/>
+                    </h:inputText>
+                       
+                    <h:outputText value="Price money:" />				
+                    <h:inputText value="#{productAction.currentProduct.priceMoney}" style="width:50%" maxlength="9"  required="true" requiredMessage="The price money field is required"
+                    	validatorMessage="The price money value accepts only positive numbers" converterMessage="The price money value accepts only numbers">
+                      <f:validateDoubleRange minimum="0"/>
+                    </h:inputText>
+                      
+                    <h:outputText value="Price points:" />				
+                    <h:inputText value="#{productAction.currentProduct.pricePoints}" style="width:50%" maxlength="9" required="true" requiredMessage="The price points field is required"
+                    	validatorMessage="The price points value accepts only positive numbers" converterMessage="The price points value accepts only integers">
+                      <f:validateLongRange minimum="0"/>
+                    </h:inputText>
+                      
+                    <h:outputText value="Points per question:" />				
+                    <h:inputText value="#{productAction.currentProduct.pointsGainedPerQuestion}" style="width:50%" maxlength="9" required="true" requiredMessage="The points per question field is required"
+                    	validatorMessage="The points per question value accepts only positive numbers" converterMessage="The points per question value accepts only integers">
+                      <f:validateLongRange minimum="0"/>
+                    </h:inputText>
+                        
+                    <h:outputText value="Classifier:" />				
+                    <h:selectOneMenu value="#{productAction.currentProduct.classifier}" style="height:27px" converter="#{classifierConverter}" required="true" requiredMessage="The classifier field is required">
+                        <f:selectItems value="#{utilsBean.classifiers}"/>
+                    </h:selectOneMenu>  
+                                            
+                    <h:outputText value="Active:" />				
+                    <h:selectOneMenu value="#{productAction.currentProduct.active}" style="height:27px" required="true" requiredMessage="The active field is required">
+                        <f:selectItem itemLabel="Yes" itemValue="true" />
+                        <f:selectItem itemLabel="No" itemValue="false" />
+                    </h:selectOneMenu>  
+                     
+                    <h:outputText value="Surprise product:" />				
+                    <h:selectOneMenu value="#{productAction.currentProduct.surpriseProduct}" style="height:27px" required="true" requiredMessage="The surprise product field is required">
+                        <f:selectItem itemLabel="Yes" itemValue="true" />
+                        <f:selectItem itemLabel="No" itemValue="false" />
+                    </h:selectOneMenu>  
+                     
+                    <h:outputText value="Orderable product:" />				
+                    <h:selectOneMenu value="#{productAction.currentProduct.orderableProduct}" style="height:27px" required="true" requiredMessage="The orderable product field is required">
+                        <f:selectItem itemLabel="Yes" itemValue="true" />
+                        <f:selectItem itemLabel="No" itemValue="false" />
+                    </h:selectOneMenu>  
+                        
+                    <h:outputText value="Welcome product:" />				
+                    <h:selectOneMenu value="#{productAction.currentProduct.welcomeProduct}" style="height:27px" required="true" requiredMessage="The welcome product field is required">
+                        <f:selectItem itemLabel="Yes" itemValue="true" />
+                        <f:selectItem itemLabel="No" itemValue="false" />
+                    </h:selectOneMenu> 
+                                                                                                                                                                                                                            					
+                    <p:spacer width="100%" height="15"/> 
+                    <f:facet name="footer">
+                        <p:commandButton value="Save" action="#{productAction.save}"
+                                         update=":mainForm:t1:mainTable" 
+                                         oncomplete="dlg2.hide();" ajax="false" />
+                        <p:commandButton value="Cancel" 
+                                         onclick="dlg2.hide();" type="button" />	
+                    </f:facet> 
+ 
+                
+             </h:panelGrid>   
+            </h:form>
+        </p:dialog>
+
+        <p:confirmDialog message="Are you sure to delete the product?"
+                         header="Initiating deletion process" severity="alert"
+                         widgetVar="dlg3">
+            <h:form id="confirmForm">
+                <p:commandButton value="Yes" actionListener="#{productAction.delete}"
+                                 update=":mainForm:t1:mainTable" oncomplete="dlg3.hide()"/>
+                <p:commandButton value="No" onclick="dlg3.hide();" type="button" />
+            </h:form>
+        </p:confirmDialog>	
+    </ui:define>
+
+</ui:composition>
+
+
+
+
+

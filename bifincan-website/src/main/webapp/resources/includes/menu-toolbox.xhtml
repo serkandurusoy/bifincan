@@ -1,0 +1,16 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:c="http://java.sun.com/jsp/jstl/core"    
+                 xmlns:pretty="http://ocpsoft.com/prettyfaces"    
+                 xmlns:sec="http://www.springframework.org/security/tags"
+                 xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+    <ui:fragment rendered="#{sec:areNotGranted('ROLE_USER')}">
+        <li><h:link outcome="/staticpages/wanttobemember.xhtml" value="üye olayım" /></li>
+    </ui:fragment>
+    <li><h:link outcome="/contact.xhtml" value="mesajım var" /></li>
+    <li><h:outputLink rel="external" value="https://twitter.com/bifincancom" title="bifincan'ın twitter profiline bak">tivitleyeyim</h:outputLink></li>
+    <li><h:outputLink rel="external" value="https://facebook.com/bifincancom" title="bifincan'ın facebook sayfasına bak">feysten bakayım</h:outputLink></li>
+
+</ui:composition>
